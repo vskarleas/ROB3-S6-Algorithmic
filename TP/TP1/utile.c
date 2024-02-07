@@ -1,5 +1,6 @@
 #include <stdlib.h>
 #include <stdio.h>
+#include <string.h>
 #include <time.h>
 #include "utile.h"
 #include <stdbool.h>
@@ -58,65 +59,66 @@ int get_length(int n)
         n /= 10;
         count++;
     }
+
+    return count;
 }
 
 /* suppression de tous les �l�ments de la liste chainne, renvoie la liste L vide */
-void clean(Liste_Point L)
+Liste_Point clean(Liste_Point L)
 {
     Elt *el = L.first;
 
     while (el)
-	{
-		Elt *suiv = el->suiv;
-		free(el);
-		el = suiv;
-	}
-	L.first = L.last = NULL;
-	L.taille = 0;
-	return L;
+    {
+        Elt *suiv = el->suiv;
+        free(el);
+        el = suiv;
+    }
+    L.first = L.last = NULL;
+    L.taille = 0;
+    return L;
 }
-
 
 /* cr�er une s�quence de points sous forme d'un tableau de points
    � partir de la liste de points L */
 Tableau_Point sequence_points_liste_vers_tableau(Liste_Point L)
 {
-	Tableau_Point T;
+    Tableau_Point T;
 
-	/* taille de T = taille de L */
-	T.taille = L.taille;
+    /* taille de T = taille de L */
+    T.taille = L.taille;
 
-	/* allocation dynamique du tableau de Point */
-	T.data = malloc(sizeof(int) * T.taille);
-	if (T.data == NULL)
-	{
-		/* allocation impossible : arret du programme avec un message */
-		fprintf(stderr, "sequence_points_liste_vers_tableau : ");
-		fprintf(stderr, " allocation impossible\n");
+    /* allocation dynamique du tableau de Point */
+    T.data = malloc(sizeof(int) * T.taille);
+    if (T.data == NULL)
+    {
+        /* allocation impossible : arret du programme avec un message */
+        fprintf(stderr, "sequence_points_liste_vers_tableau : ");
+        fprintf(stderr, " allocation impossible\n");
 #ifdef __APPLE__
-		system("killall afplay");
+        system("killall afplay");
 #endif
-		exit(-1);
-	}
+        exit(-1);
+    }
 
-	/* remplir le tableau de points T en parcourant la liste L */
-	int k = 0;						   /* indice de l'�l�ment dans T.tab */
-	Elt *el = L.first; /* pointeur sur l'�l�ment dans L */
-	while (el)
-	{
-		T.data[k] = el->data;
-		k++;		   /* incr�menter k */
-		el = el->suiv; /* passer � l'�lement suivant dans la liste chainee */
-	}
+    /* remplir le tableau de points T en parcourant la liste L */
+    int k = 0;         /* indice de l'�l�ment dans T.tab */
+    Elt *el = L.first; /* pointeur sur l'�l�ment dans L */
+    while (el)
+    {
+        T.data[k] = el->data;
+        k++;           /* incr�menter k */
+        el = el->suiv; /* passer � l'�lement suivant dans la liste chainee */
+    }
 
-	return T;
+    return T;
 }
 
 /* Clearing the terminal screen for more optimised visualisations */
 void clearScreen()
 {
-	const char *CLEAR_SCREEN_ANSI = "\e[1;1H\e[2J";
-	write(STDOUT_FILENO, CLEAR_SCREEN_ANSI, 12);
+    const char *CLEAR_SCREEN_ANSI = "\e[1;1H\e[2J";
+    write(STDOUT_FILENO, CLEAR_SCREEN_ANSI, 12);
 }
 
 /* Gives a user the choice of the exercise */

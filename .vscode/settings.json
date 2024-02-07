@@ -1,0 +1,13 @@
+{
+    "files.associations": {
+        "stdlib.h": "c",
+        "tri.h": "c",
+        "utile.h": "c",
+        "stdbool.h": "c",
+        "__locale": "c",
+        "stdio.h": "c",
+        "string.h": "c",
+        "ctype.h": "c",
+        "time.h": "c",
+    }
+}

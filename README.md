@@ -14,3 +14,4 @@
 # Change log
 
 * V1.0 Important functions were created on utile.c and main structure of main.c is added as well
+* V1.1 Bug fixes

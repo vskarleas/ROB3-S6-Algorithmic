@@ -15,30 +15,43 @@ int main(int argc, char **argv)
     {
     case 1:
         clearScreen();
-        printf("Exercise 1:\n\n");
+        printf("\nExercise 1:\n\n");
+
+        break;
 
     case 2:
         clearScreen();
-        printf("Exercise 2:\n\n");
+        printf("\nExercise 2:\n\n");
+
+        break;
 
     case 3:
         clearScreen();
-        printf("Exercise 3:\n\n");
+        printf("\nExercise 3:\n\n");
+
+        break;
 
     case 4:
         clearScreen();
-        printf("Exercise 4:\n\n");
+        printf("\nExercise 4:\n\n");
+
+        break;
 
     case 5:
         clearScreen();
-        printf("Exercise 5:\n\n");
+        printf("\nExercise 5:\n\n");
+
+        break;
 
     case 6:
         clearScreen();
-        printf("Exercise 6:\n\n");
+        printf("\nExercise 6:\n\n");
+
+        break;
 
     default:
         printf("\n\n=====================================================\nProgram has been terminared\n\n");
+        break;
     }
 
     return 0;

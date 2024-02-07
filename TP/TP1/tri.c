@@ -23,9 +23,11 @@ void tri_fusion_bis(int* tab,int deb,int fin)
 	/*TODO*/
 }
 
+/*
 void tri_fusion(int* tab, int n){
   tri_fusion_bis(tab,0,n-1);
 }
+*/
 
 
 /*EXERCICE 4 : TRI PAR ENUMERATION */

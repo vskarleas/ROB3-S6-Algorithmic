@@ -42,7 +42,7 @@ void get_max(int* tab, int n, int* max);
 /* Compte le nombre de chiffre dans un nombre */
 int get_length(int n);
 
-void clean(Liste_Point L);
+Liste_Point clean(Liste_Point L);
 
 /* cr�er une s�quence de points sous forme d'un tableau de points
    � partir de la liste de points L */
