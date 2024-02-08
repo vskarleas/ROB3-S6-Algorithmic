@@ -50,13 +50,22 @@ void init_tab(int *tab, int n, int Bmin, int Bmax)
 /*EXERCICE 4*/
 void get_min_max(int *tab, int n, int *min, int *max)
 {
-    /*TODO*/
+    for (int i = 1; i < n; i++) {
+        if (tab[i] < *min) *min = tab[i];
+        if (tab[i] > *max) *max = tab[i];
+    }
 }
 
 /*EXERCICE 5*/
 void get_max(int *tab, int n, int *max)
 {
-    /*TODO*/
+    for (int i = 0; i < n; i++)
+    {
+        if (tab[i] > *max)
+        {
+            *max = tab[i];
+        }
+    }
 }
 
 int get_length(int n)
@@ -103,9 +112,6 @@ Tableau_Point sequence_points_liste_vers_tableau(Liste_Point L)
         /* allocation impossible : arret du programme avec un message */
         fprintf(stderr, "sequence_points_liste_vers_tableau : ");
         fprintf(stderr, " allocation impossible\n");
-#ifdef __APPLE__
-        system("killall afplay");
-#endif
         exit(-1);
     }
 
@@ -134,7 +140,7 @@ void clearScreen()
 int menu_mode()
 {
     char userInput[20];
-    char *msg[1] = {"Choose an option (Exo1, Exo2, Exo3, Exo4, Exo5 or Exo6). Your choice: "};
+    char *msg[1] = {"Choose an option (Exo1, Exo2, Exo3, Exo4, Exo5 or Exo4-V2). Your choice: "};
     char *msg_attention[1] = {"You can only choose from Exo1, Exo2, Exo3, Exo4, Exo5 or Exo6."};
 
     while (true)
@@ -168,7 +174,7 @@ int menu_mode()
         {
             return 5;
         }
-        else if (strcmp(userInput, "exo6") == 0)
+        else if (strcmp(userInput, "exo4-v2") == 0)
         {
             return 6;
         }
@@ -179,4 +185,72 @@ int menu_mode()
         }
     }
     return 0;
+}
+
+int main_menu()
+{
+    char userInput[20];
+    char *msg[1] = {"Choose what operation you need to excecute. You can choose between Single or All. Single gives you the option to choose a specific algorithm to test and see its trace, or all gives an overall graph for the same analysis of all the algorithms. Your choice: "};
+    char *msg_attention[1] = {"You can only choose from Single or All."};
+
+    while (true)
+    {
+        printf("\n%s ", msg[0]);
+        scanf("%s", userInput);
+
+        // Convert input to lowercase for case-insensitive comparison and returns
+        for (int i = 0; i < strlen(userInput); i++)
+        {
+            userInput[i] = tolower(userInput[i]);
+        }
+
+        if (strcmp(userInput, "single") == 0)
+        {
+            return 1;
+        }
+        else if (strcmp(userInput, "all") == 0)
+        {
+            return 2;
+        }
+        else
+        {
+            clearScreen();
+            printf("\n\033[0;33mATTENTION!\033[1;0m: %s\n", msg_attention[0]);
+        }
+    }
+    return 0;
+}
+
+Elt *creer_element_liste_Point(int x)
+{
+	Elt *el;
+	el = (Elt *)malloc(sizeof(Elt));
+	if (el == NULL)
+	{
+		fprintf(stderr, "creer_element_liste_Point : allocation impossible\n");
+		exit(-1);
+	}
+	el->data = x;
+	el->suiv = NULL;
+	return el;
+}
+
+/* ajouter l'�l�ment e en fin de la liste L, renvoie la liste L modifi�e */
+void ajouter_element_liste_Point(Liste_Point *L, int x)
+{
+	Elt *el;
+
+	el = creer_element_liste_Point(x);
+	if (L->taille == 0)
+	{
+		/* premier �l�ment de la liste */
+		L->first = L->last = el;
+	}
+	else
+	{
+		L->last->suiv = el;
+		L->last = el;
+	}
+	L->taille++;
+	return;
 }

@@ -15,4 +15,5 @@
 
 * V1.0 Important functions were created on utile.c and main structure of main.c is added as well
 * V1.1 Bug fixes
-* V1.0 Until enumeration sort of TP1 is added. We also fixed some bugs on the utile.c
+* V1.2 Until enumeration sort of TP1 is added. We also fixed some bugs on the utile.c
+* V1.3 Code updated for graphs creation and bug fixes

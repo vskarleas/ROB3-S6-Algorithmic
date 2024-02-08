@@ -1,0 +1,13 @@
+// Loop until a valid number is entered
+    do
+    {
+        printf("\nPlease enter the desired length for the array that is at least 1 or bigger: ");
+        scanf("%d", &length);
+
+        // Check if the input is valid
+        if (length < 1)
+        {
+            clearScreen();
+            printf("\nError: The number must be at least 1.\n");
+        }
+    } while (length < 1);

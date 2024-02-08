@@ -40,7 +40,7 @@ INCLUDEOPTS = -I$(INCDIR)
 COMPILOPTS = -g -Wall $(INCLUDEOPTS)
 
 # liste des executables
-EXECUTABLES = main
+EXECUTABLES = tri
 
 #############################################################################
 # definition des regles
@@ -84,7 +84,7 @@ main.o : main.c utile.h tri.h
 ########################################################
 # regles explicites de creation des executables
 
-main : main.o tri.o utile.o
+tri : main.o tri.o utile.o
 	@echo ""
 	@echo "---------------------------------------------"
 	@echo "Creation de l'executable "$@

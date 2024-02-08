@@ -5,6 +5,8 @@ void tri_ins(int* tab, int n);
 
 void tri_enum(int* tab, int n);
 
+void tri_enum_v2(int *tab, int n);
+
 void tri_base(int* tab, int n);
 
 //Fusionne deux sous-tableaux de tab

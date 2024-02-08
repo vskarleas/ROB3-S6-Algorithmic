@@ -54,4 +54,10 @@ void clearScreen();
 /* Gives a user the choice of the exercise */
 int menu_mode();
 
+int main_menu();
+
+Elt *creer_element_liste_Point(int x);
+
+void ajouter_element_liste_Point(Liste_Point *L, int x);
+
 #endif
