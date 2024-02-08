@@ -1,6 +1,6 @@
 # Calendar
 
-1. 8/2/2023 TP1 started
+1. 7/2/2023 TP1 started
 
 # Goals
 
@@ -15,3 +15,4 @@
 
 * V1.0 Important functions were created on utile.c and main structure of main.c is added as well
 * V1.1 Bug fixes
+* V1.0 Until enumeration sort of TP1 is added. We also fixed some bugs on the utile.c

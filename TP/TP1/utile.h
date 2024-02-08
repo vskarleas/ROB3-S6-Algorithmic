@@ -24,7 +24,7 @@ typedef struct Tableau_Point_
 } Tableau_Point;
 
 /* Prints a givent table that is passed as argument */
-void affiche_tab(int* tab, int n);
+void affiche_tab(int *tab, int n, int mode, char *methode);
 
 /* Initialising the parameter for random numbers creation */
 void init_nb_aleatoire();

@@ -6,16 +6,24 @@
 #include <stdbool.h>
 #include <unistd.h>
 #include <ctype.h>
+#include <ncurses.h>
 
-void affiche_tab(int *tab, int n)
+void affiche_tab(int *tab, int n, int mode, char *methode)
 {
-    printf("Table: \n");
+    if (mode == 1)
+    {
+        printf("\nTable generated: \n");
+    }
+    else
+    {
+        printf("\nTable after treatment with %s: \n", methode);
+    }
     int i;
     for (i = 0; i < n - 1; i++)
     {
         printf(" %d |", tab[i]);
     }
-    printf("%d \n", tab[i + 1]);
+    printf(" %d \n", tab[n - 1]);
 }
 
 /* Starting the random engine */
@@ -117,8 +125,9 @@ Tableau_Point sequence_points_liste_vers_tableau(Liste_Point L)
 /* Clearing the terminal screen for more optimised visualisations */
 void clearScreen()
 {
-    const char *CLEAR_SCREEN_ANSI = "\e[1;1H\e[2J";
-    write(STDOUT_FILENO, CLEAR_SCREEN_ANSI, 12);
+    // const char *CLEAR_SCREEN_ANSI = "\e[1;1H\e[2J";
+    // write(STDOUT_FILENO, CLEAR_SCREEN_ANSI, 12);
+    printf("\e[1;1H\e[2J");
 }
 
 /* Gives a user the choice of the exercise */
