@@ -17,6 +17,8 @@ void tri_enum(int* tab, int n);
 
 void tri_enum_v2(int *tab, int n);
 
-void tri_base(int* tab, int n);
+void tri_base_bis(int* tab, int n);
+
+void tri_base(int *tab, int n);
 
 #endif

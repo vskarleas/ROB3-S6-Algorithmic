@@ -192,7 +192,7 @@ void tri_enum_v2(int *tab, int n)
    bucket for each possible value of that digit in general and it saves the elements of the
    array into the appropriate buckets. We merges the buckets back together to
    form the sorted table.*/
-void tri_base(int *tab, int n)
+void tri_base_bis(int *tab, int n)
 {
   int i, exp, m;
 
@@ -247,7 +247,7 @@ void tri_base(int *tab, int n)
   }
 }
 
-void tri_base_bis(int *tab, int n)
+void tri_base(int *tab, int n)
 {
   int nb_negatives =0;
   for (int i = 0; i<n;i++)
@@ -259,4 +259,33 @@ void tri_base_bis(int *tab, int n)
   }
   int tab_negatives[nb_negatives];
   int tab_positives[n-nb_negatives];
+  int i_n = 0, i_p =0;
+  for (int i = 0; i < n; i++)
+  {
+    if (tab[i]<0)
+    {
+      tab_negatives[i_n] = -tab[i]; //absolute value that will be trated
+      i_n++;
+    }
+    else 
+    {
+      tab_positives[i_p]=tab[i];
+      i_p++;
+    }
+  }
+
+  tri_base_bis(tab_negatives, nb_negatives);
+  tri_base_bis(tab_positives, n-nb_negatives);
+
+  i_p = 0;
+  for (int i = nb_negatives-1; i >= 0; i--)
+  {
+    tab[i_p] = -tab_negatives[i]; 
+    i_p++;
+  }
+  for (int i =0; i < n-nb_negatives; i++)
+  {
+    tab[i_p] = tab_positives[i];
+    i_p++;
+  }
 }

@@ -173,6 +173,56 @@ En fait la complexité semble être O(n x max_length), mais il faut noter que le
 
 On constate que cet algorithme est plus rapide que le tri fusion pour les limites des données que nous avons testées. D'aprés la quéstion precedent: on sait que la complexité du tri fusion est en O(n log n), indépendamment de la nature des données. Cépendant, la complexité du tri de base est O(d*n), où d est le nombre de chiffres dans les nombres à trier. Pour des ensembles de données où d est relativement petit par rapport à n, cette complexité peut être vue comme linéaire, ce qui peut rendre le tri de base plus rapide que le tri fusion (d <log(n) dans ce cas là).
 
+### Pour aller plus loin
+
+On a constaté qu'il y avait une erreur `bus_error` lorsque qu'on utilisait des valeurs négatives. C'est pourquoi on a ajouté une fonction qui permet de traiter les valeurs negatives.
+
+```c
+void tri_base(int *tab, int n)
+{
+  int nb_negatives =0;
+  for (int i = 0; i<n;i++)
+  {
+    if (tab[i]<0)
+    {
+      nb_negatives ++;
+    }
+  }
+  int tab_negatives[nb_negatives];
+  int tab_positives[n-nb_negatives];
+  int i_n = 0, i_p =0;
+  for (int i = 0; i < n; i++)
+  {
+    if (tab[i]<0)
+    {
+      tab_negatives[i_n] = -tab[i]; //absolute value that will be trated
+      i_n++;
+    }
+    else 
+    {
+      tab_positives[i_p]=tab[i];
+      i_p++;
+    }
+  }
+
+  tri_base_bis(tab_negatives, nb_negatives);
+  tri_base_bis(tab_positives, n-nb_negatives);
+
+  i_p = 0;
+  for (int i = nb_negatives-1; i >= 0; i--)
+  {
+    tab[i_p] = -tab_negatives[i]; 
+    i_p++;
+  }
+  for (int i =0; i < n-nb_negatives; i++)
+  {
+    tab[i_p] = tab_positives[i];
+    i_p++;
+  }
+}
+```
+
+
 ## Exercice 6
 
 La stratégie pour reponde au cahier des charges du jeu Horse-Racing Duals est la suivante:
