@@ -14,7 +14,7 @@ void tri_ins(int *tab, int n)
 
   int key, index;
   /* The idea is simple: If key is greater than the current element in the sorted sub-array, move forward.
-     If key is smaller than the current element, shift all elements from this position onwards one position
+     If key is smaller than the current element, move all elements from this position on theright one position
      to the right to create a space for key. */
   for (int i = 1; i < n; i++)
   { // Change to `i < n` to include the last element
@@ -245,4 +245,18 @@ void tri_base(int *tab, int n)
       tab[i] = sorted[i];
     }
   }
+}
+
+void tri_base_bis(int *tab, int n)
+{
+  int nb_negatives =0;
+  for (int i = 0; i<n;i++)
+  {
+    if (tab[i]<0)
+    {
+      nb_negatives ++;
+    }
+  }
+  int tab_negatives[nb_negatives];
+  int tab_positives[n-nb_negatives];
 }

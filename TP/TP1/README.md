@@ -84,7 +84,7 @@ for (int i = n - 1; i >= 0; i--) // We start from the end and we go back to the 
 
 #### tri_enum
 
-La compléxité de l'algorithme tri_enumeration est O(n + key) 
+La compléxité de l'algorithme tri_enumeration est O(n + key)
 
 ![1707481356044](image/README/1707481356044.png)
 
@@ -93,6 +93,8 @@ La compléxité de l'algorithme tri_enumeration est O(n + key)
 La compléxité de l'algorithme tri_enum_v2 est O(n + key)
 
 ![1707481363117](image/README/1707481363117.png)
+
+**Nota bene:** Ici la version 2 s'emble être la plus efficace (elle traite les cas négatives)
 
 ### Explication
 
@@ -147,11 +149,19 @@ Si Bmax et Bmin sont des constantes, c'est-à-dire que la différence entre ces 
 
 Donc au total on a `O(n) + O(n + k) => O(n + k)`
 
+### Comparaison
+
+La complexité du tri par énumération est O(n + k), où n est le nombre d'éléments et k est l'intervalle des valeurs. Lorsque k est relativement petit (c'est-à-dire lorsque les éléments à trier sont dans un petit intervalle), cette complexité peut être considérée comme linéaire, ce qui en fait un algorithme très rapide.
+
+À contrario, les autres méthodes, comme le tri par insertion (O(n²)), le tri fusion (O(n log n)), et le tri de base (O(d*n) où d est le nombre de chiffres), ont généralement des complexités plus élevées, surtout dans le cas de grands ensembles de données (ici ils pouraient être plus efficaces par rapport au tri par énumération).
+
 ## Exercice 5
 
 ### Complexité
 
 La compléxité de l'algorithme tri_base est O(n x max_length) avec max_length = longeur_du_numero_maximum_du_tableau
+
+![1707495546577](image/README/1707495546577.png)
 
 ### Explication
 
@@ -159,14 +169,16 @@ De  prime abord , la complexité du code semble être O(n^2) mais il faut essaye
 
 En fait la complexité semble être O(n x max_length), mais il faut noter que le nombre de chiffres dans le plus grand élément (`max_len`) est relativement petit par rapport au nombre total d'éléments n.
 
+### Comparaison
+
+On constate que cet algorithme est plus rapide que le tri fusion pour les limites des données que nous avons testées. D'aprés la quéstion precedent: on sait que la complexité du tri fusion est en O(n log n), indépendamment de la nature des données. Cépendant, la complexité du tri de base est O(d*n), où d est le nombre de chiffres dans les nombres à trier. Pour des ensembles de données où d est relativement petit par rapport à n, cette complexité peut être vue comme linéaire, ce qui peut rendre le tri de base plus rapide que le tri fusion (d <log(n) dans ce cas là).
 
 ## Exercice 6
 
 La stratégie pour reponde au cahier des charges du jeu Horse-Racing Duals est la suivante:
 
-   * En parcourant le tableau trié du début à la fin, calculez la différence entre chaque élément et son successeur. La plus petite différence trouvée durant ce parcours est la différence la plus faible entre les puissances de deux chevaux.
-   * Une fois que le tableau est trié, les puissances des chevaux sont organisées en ordre croissant. Pour trouver les deux puissances les plus proches, il suffit de calculer la différence entre chaque paire de valeurs consécutives. La plus petite de ces différences est la réponse au défi.
-
+* En parcourant le tableau trié du début à la fin, calculez la différence entre chaque élément et son successeur. La plus petite différence trouvée durant ce parcours est la différence la plus faible entre les puissances de deux chevaux.
+* Une fois que le tableau est trié, les puissances des chevaux sont organisées en ordre croissant. Pour trouver les deux puissances les plus proches, il suffit de calculer la différence entre chaque paire de valeurs consécutives. La plus petite de ces différences est la réponse au défi.
 
 Voici le code du jeu:
 
@@ -254,8 +266,24 @@ int main() {
     return 0;
 }
 ```
+
 ### Choix de l'algorithme de tri : Tri par fusion (Merge Sort)
 
 •⁠  ⁠*Pourquoi le Tri par fusion ?*
-  - *Complexité :* Le tri par fusion a une complexité temporelle de O(n log n) dans le pire des cas, ce qui est efficace pour les ensembles de données de grande taille.
-  - *Efficacité sur de Grandes Données :* Contrairement au tri par insertion (O(n²)) ou au tri énumératif (efficace pour des plages de valeurs limitées), le tri par fusion gère efficacement les grands ensembles de données, ce qui est important  étant donné la contrainte 1 < N < 100000 du problème.
+
+- *Complexité :* Le tri par fusion a une complexité de O(n log n) dans le pire des cas, ce qui est efficace pour les ensembles de données de grande taille.
+- *Efficacité sur de Grandes Données :* Contrairement au tri par insertion (O(n²)) ou au tri énumératif (efficace pour des plages de valeurs limitées), le tri par fusion gère efficacement les grands ensembles de données, ce qui est important  étant donné la contrainte 1 < N < 100000 du problème.
+
+## Conclusion
+
+En ce qui concerne Tri par Sélection, la complexité est O(n²) dans tous les cas. En general, il est simple à implémenter, mais inefficace pour les grands ensembles de données.
+
+Puis, pour le Tri par Énumération, on a montré que la complexité est de O(n + k), où k est la plage des valeurs. En general il est efficace avec des valeurs limitées. Par contre, il utilise plus de mémoire - moins efficace pour les grandes plages de valeurs. Ici c'est le plus rapide.
+
+Maintenant, concernant le Tri par Fusion, sa complexité est O(n log n). Il est assez efficace pour les grands ensembles de données. AInsi, il est stable et bon pour les données liées à la mémoire.
+
+Enfin, en ce qui concerne Tri de Base (Radix Sort), sa complexité est en O(d*n), où d est le nombre de chiffres. On pourrait dire qu'il est efficace lorsque le nombre de chiffres (d) est faible par rapport à la taille du tableau (n). En général, il peut être plus rapide que le tri par fusion pour certaines données mais moins efficace pour les données avec un grand nombre de chiffres.
+
+![1707496309029](image/README/1707496309029.png)
+
+Ici on n'affiche pas tri par insertion parce qu'il serait impossible de constater les differences pour les autres allgorithmes qui sont significativement plus rapides que le tri par insertion qui a une complexité de O(n^2).

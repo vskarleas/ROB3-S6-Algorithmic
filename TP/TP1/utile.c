@@ -50,9 +50,16 @@ void init_tab(int *tab, int n, int Bmin, int Bmax)
 /*EXERCICE 4*/
 void get_min_max(int *tab, int n, int *min, int *max)
 {
-    for (int i = 1; i < n; i++) {
-        if (tab[i] < *min) *min = tab[i];
-        if (tab[i] > *max) *max = tab[i];
+    for (int i = 1; i < n; i++)
+    {
+        if (tab[i] < *min)
+        {
+            *min = tab[i];
+        }
+        if (tab[i] > *max)
+        {
+            *max = tab[i];
+        }
     }
 }
 
@@ -190,7 +197,7 @@ int menu_mode()
 int main_menu()
 {
     char userInput[20];
-    char *msg[1] = {"Choose what operation you need to excecute. You can choose between Single or All. Single gives you the option to choose a specific algorithm to test and see its trace, or all gives an overall graph for the same analysis of all the algorithms. Your choice: "};
+    char *msg[1] = {"Choose what operation you need to excecute. You can choose between Single or All. Single gives you the option to choose a specific algorithm to test and see its trace, or all gives an overall graph for the same analysis of all the algorithms. Choose the option Create in order to combine files generated from the Single option.  Your choice: "};
     char *msg_attention[1] = {"You can only choose from Single or All."};
 
     while (true)
@@ -212,6 +219,10 @@ int main_menu()
         {
             return 2;
         }
+        else if (strcmp(userInput, "creat") == 0)
+        {
+            return 3;
+        }
         else
         {
             clearScreen();
@@ -223,34 +234,34 @@ int main_menu()
 
 Elt *creer_element_liste_Point(int x)
 {
-	Elt *el;
-	el = (Elt *)malloc(sizeof(Elt));
-	if (el == NULL)
-	{
-		fprintf(stderr, "creer_element_liste_Point : allocation impossible\n");
-		exit(-1);
-	}
-	el->data = x;
-	el->suiv = NULL;
-	return el;
+    Elt *el;
+    el = (Elt *)malloc(sizeof(Elt));
+    if (el == NULL)
+    {
+        fprintf(stderr, "creer_element_liste_Point : allocation impossible\n");
+        exit(-1);
+    }
+    el->data = x;
+    el->suiv = NULL;
+    return el;
 }
 
 /* ajouter l'�l�ment e en fin de la liste L, renvoie la liste L modifi�e */
 void ajouter_element_liste_Point(Liste_Point *L, int x)
 {
-	Elt *el;
+    Elt *el;
 
-	el = creer_element_liste_Point(x);
-	if (L->taille == 0)
-	{
-		/* premier �l�ment de la liste */
-		L->first = L->last = el;
-	}
-	else
-	{
-		L->last->suiv = el;
-		L->last = el;
-	}
-	L->taille++;
-	return;
+    el = creer_element_liste_Point(x);
+    if (L->taille == 0)
+    {
+        /* premier �l�ment de la liste */
+        L->first = L->last = el;
+    }
+    else
+    {
+        L->last->suiv = el;
+        L->last = el;
+    }
+    L->taille++;
+    return;
 }

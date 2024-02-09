@@ -17,3 +17,4 @@
 * V1.1 Bug fixes
 * V1.2 Until enumeration sort of TP1 is added. We also fixed some bugs on the utile.c
 * V1.3 Code updated for graphs creation and bug fixes
+* V1.4 Finsihing the coding for TP1 and bug fixes

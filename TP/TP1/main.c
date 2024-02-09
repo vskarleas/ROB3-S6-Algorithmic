@@ -21,9 +21,7 @@ int main(int argc, char **argv)
     clearScreen();
     int main_choice = main_menu();
     int lengths[NUM_POINTS] = {5, 25, 50, 100, 250, 500, 750, 1000, 10000, 35000, 50000, 80000, 120000, 150000};
-    double xvals[NUM_POINTS] = {5, 25, 50, 100, 250, 500, 750, 1000, 10000, 35000, 50000, 80000, 120000, 150000};
     double yvals[NUM_POINTS];
-    int index = 0;
     clock_t temps_initial; /* Temps initial en micro-secondes */
     clock_t temps_final;   /* Temps final en micro-secondes */
     float temps_cpu;       /* Temps total en secondes */
@@ -37,7 +35,7 @@ int main(int argc, char **argv)
 
         for (int i = 0; i < NUM_POINTS; i++) // creates the points automatically
         {
-            length = lengths[index];
+            length = lengths[i];
             int *tab;
             tab = malloc(length * sizeof(int));
             if (tab == NULL)
@@ -72,9 +70,9 @@ int main(int argc, char **argv)
                 temps_final = clock();
                 temps_cpu = (temps_final - temps_initial) * 1e-6;
 
-                yvals[index] = temps_cpu;
+                yvals[i] = temps_cpu;
 
-                printf("\n\e[0;36mProcess No %d | %d items OK\e[0m\n", index + 1, length);
+                printf("\n\e[0;36mProcess No %d | %d items OK\e[0m\n", i + 1, length);
                 if (length < 50 && length > 5)
                 {
                     affiche_tab(tab, length, 0, "INSERTION Sort");
@@ -95,9 +93,9 @@ int main(int argc, char **argv)
                 temps_final = clock();
                 temps_cpu = (temps_final - temps_initial) * 1e-6;
 
-                yvals[index] = temps_cpu;
+                yvals[i] = temps_cpu;
 
-                printf("\n\e[0;36mProcess No %d | %d items OK\e[0m\n", index + 1, length);
+                printf("\n\e[0;36mProcess No %d | %d items OK\e[0m\n", i + 1, length);
                 if (length < 50 && length > 5)
                 {
                     affiche_tab(tab, length, 0, "FUSION Sort");
@@ -119,9 +117,9 @@ int main(int argc, char **argv)
 
                 temps_cpu = (temps_final - temps_initial) * 1e-6;
 
-                yvals[index] = temps_cpu;
+                yvals[i] = temps_cpu;
 
-                printf("\n\e[0;36mProcess No %d | %d items OK\e[0m\n", index + 1, length);
+                printf("\n\e[0;36mProcess No %d | %d items OK\e[0m\n", i + 1, length);
                 if (length < 50 && length > 5)
                 {
                     affiche_tab(tab, length, 0, "ENUMARATION Sort");
@@ -142,9 +140,9 @@ int main(int argc, char **argv)
                 temps_final = clock();
                 temps_cpu = (temps_final - temps_initial) * 1e-6;
 
-                yvals[index] = temps_cpu;
+                yvals[i] = temps_cpu;
 
-                printf("\n\e[0;36mProcess No %d | %d items OK\e[0m\n", index + 1, length);
+                printf("\n\e[0;36mProcess No %d | %d items OK\e[0m\n", i + 1, length);
                 if (length < 50 && length > 5)
                 {
                     affiche_tab(tab, length, 0, "BASE Sort");
@@ -165,9 +163,9 @@ int main(int argc, char **argv)
                 temps_final = clock();
                 temps_cpu = (temps_final - temps_initial) * 1e-6;
 
-                yvals[index] = temps_cpu;
+                yvals[i] = temps_cpu;
 
-                printf("\n\e[0;36mProcess No %d | %d items OK\e[0m\n", index + 1, length);
+                printf("\n\e[0;36mProcess No %d | %d items OK\e[0m\n", i + 1, length);
                 if (length < 50 && length > 5)
                 {
                     affiche_tab(tab, length, 0, "ENUMARATION Sort V2");
@@ -182,7 +180,6 @@ int main(int argc, char **argv)
                 break;
             }
 
-            index++;
             free(tab);
         }
 
@@ -195,11 +192,11 @@ int main(int argc, char **argv)
         }
         else if (algo_choice == 2)
         {
-            char *commandsForGnuplot[] = {"set title \"INSERTION Sort\"", "set style line 1 lt 1 linecolor rgb 'green' lw 2 pt 1","plot 'data_insertion-sort.temp' using 1:2 ls 1 title '' with lines"};
+            char *commandsForGnuplot[] = {"set title \"INSERTION Sort\"", "set style line 1 lt 1 linecolor rgb 'blue' lw 2 pt 1", "plot 'data_insertion-sort.temp' using 1:2 ls 1 title '' with lines"};
             FILE *temp = fopen("data_insertion-sort.temp", "w");
             for (int i = 0; i < NUM_POINTS; i++)
             {
-                fprintf(temp, "%.6f %.6f \n", xvals[i], yvals[i]); // Write the data to a temporary file
+                fprintf(temp, "%.6d %.6f \n", lengths[i], yvals[i]); // Write the data to a temporary file
             }
             for (int i = 0; i < NUM_COMMANDS; i++)
             {
@@ -208,11 +205,11 @@ int main(int argc, char **argv)
         }
         else if (algo_choice == 3)
         {
-            char *commandsForGnuplot[] = {"set title \"FUSION Sort\"", "set style line 1 lt 1 linecolor rgb 'green' lw 2 pt 1","plot 'data_fusion-sort.temp' using 1:2 ls 1 title '' with lines"};
+            char *commandsForGnuplot[] = {"set title \"FUSION Sort\"", "set style line 1 lt 1 linecolor rgb 'blue' lw 2 pt 1", "plot 'data_fusion-sort.temp' using 1:2 ls 1 title '' with lines"};
             FILE *temp = fopen("data_fusion-sort.temp", "w");
             for (int i = 0; i < NUM_POINTS; i++)
             {
-                fprintf(temp, "%.6f %.6f \n", xvals[i], yvals[i]); // Write the data to a temporary file
+                fprintf(temp, "%.6d %.6f \n", lengths[i], yvals[i]); // Write the data to a temporary file
             }
             for (int i = 0; i < NUM_COMMANDS; i++)
             {
@@ -221,11 +218,11 @@ int main(int argc, char **argv)
         }
         else if (algo_choice == 4)
         {
-            char *commandsForGnuplot[] = {"set title \"ENUMERATION Sort\"", "set style line 1 lt 1 linecolor rgb 'green' lw 2 pt 1","plot 'data_enumeration-sort.temp' using 1:2 ls 1 title '' with lines"};
+            char *commandsForGnuplot[] = {"set title \"ENUMERATION Sort\"", "set style line 1 lt 1 linecolor rgb 'blue' lw 2 pt 1", "plot 'data_enumeration-sort.temp' using 1:2 ls 1 title '' with lines"};
             FILE *temp = fopen("data_enumeration-sort.temp", "w");
             for (int i = 0; i < NUM_POINTS; i++)
             {
-                fprintf(temp, "%.6f %.6f \n", xvals[i], yvals[i]); // Write the data to a temporary file
+                fprintf(temp, "%.6d %.6f \n", lengths[i], yvals[i]); // Write the data to a temporary file
             }
             for (int i = 0; i < NUM_COMMANDS; i++)
             {
@@ -234,11 +231,11 @@ int main(int argc, char **argv)
         }
         else if (algo_choice == 5)
         {
-            char *commandsForGnuplot[] = {"set title \"BASE Sort\"", "set style line 1 lt 1 linecolor rgb 'green' lw 2 pt 1","plot 'data_base-sort.temp' using 1:2 ls 1 title '' with lines"};
+            char *commandsForGnuplot[] = {"set title \"BASE Sort\"", "set style line 1 lt 1 linecolor rgb 'blue' lw 2 pt 1", "plot 'data_base-sort.temp' using 1:2 ls 1 title '' with lines"};
             FILE *temp = fopen("data_base-sort.temp", "w");
             for (int i = 0; i < NUM_POINTS; i++)
             {
-                fprintf(temp, "%.6f %.6f \n", xvals[i], yvals[i]); // Write the data to a temporary file
+                fprintf(temp, "%.6d %.6f \n", lengths[i], yvals[i]); // Write the data to a temporary file
             }
             for (int i = 0; i < NUM_COMMANDS; i++)
             {
@@ -247,11 +244,11 @@ int main(int argc, char **argv)
         }
         else if (algo_choice == 6)
         {
-            char *commandsForGnuplot[] = {"set title \"ENUMERATION Sort V2\"", "set style line 1 lt 1 linecolor rgb 'green' lw 2 pt 1","plot 'data_enumerationV2-sort.temp' using 1:2 ls 1 title '' with lines"};
+            char *commandsForGnuplot[] = {"set title \"ENUMERATION Sort V2\"", "set style line 1 lt 1 linecolor rgb 'blue' lw 2 pt 1", "plot 'data_enumerationV2-sort.temp' using 1:2 ls 1 title '' with lines"};
             FILE *temp = fopen("data_enumerationV2-sort.temp", "w");
             for (int i = 0; i < NUM_POINTS; i++)
             {
-                fprintf(temp, "%.6f %.6f \n", xvals[i], yvals[i]); // Write the data to a temporary file
+                fprintf(temp, "%.6d %.6f \n", lengths[i], yvals[i]); // Write the data to a temporary file
             }
             for (int i = 0; i < NUM_COMMANDS; i++)
             {
@@ -267,6 +264,7 @@ int main(int argc, char **argv)
     else if (main_choice == 2)
     {
         int algo;
+        int index;
         for (algo = 1; algo < 6; algo++)
         {
             printf("\n Algo %s\n", msg[algo]);
@@ -374,7 +372,7 @@ int main(int argc, char **argv)
                 FILE *temp = fopen("data_insertion-sort_all.temp", "w");
                 for (int i = 0; i < NUM_POINTS; i++)
                 {
-                    fprintf(temp, "%.6f %.6f \n", xvals[i], yvals[i]); // Write the data to a temporary file
+                    fprintf(temp, "%.6d %.6f \n", lengths[i], yvals[i]); // Write the data to a temporary file
                 }
             }
             else if (algo + 1 == 3)
@@ -382,7 +380,7 @@ int main(int argc, char **argv)
                 FILE *temp = fopen("data_fusion-sort_all.temp", "w");
                 for (int i = 0; i < NUM_POINTS; i++)
                 {
-                    fprintf(temp, "%.6f %.6f \n", xvals[i], yvals[i]); // Write the data to a temporary file
+                    fprintf(temp, "%.6d %.6f \n", lengths[i], yvals[i]); // Write the data to a temporary file
                 }
             }
             else if (algo + 1 == 4)
@@ -390,7 +388,7 @@ int main(int argc, char **argv)
                 FILE *temp = fopen("data_enumeration-sort_all.temp", "w");
                 for (int i = 0; i < NUM_POINTS; i++)
                 {
-                    fprintf(temp, "%.6f %.6f \n", xvals[i], yvals[i]); // Write the data to a temporary file
+                    fprintf(temp, "%.6d %.6f \n", lengths[i], yvals[i]); // Write the data to a temporary file
                 }
             }
             else if (algo + 1 == 5)
@@ -398,7 +396,7 @@ int main(int argc, char **argv)
                 FILE *temp = fopen("data_base-sort_all.temp", "w");
                 for (int i = 0; i < NUM_POINTS; i++)
                 {
-                    fprintf(temp, "%.6f %.6f \n", xvals[i], yvals[i]); // Write the data to a temporary file
+                    fprintf(temp, "%.6d %.6f \n", lengths[i], yvals[i]); // Write the data to a temporary file
                 }
             }
             else if (algo + 1 == 6)
@@ -406,7 +404,7 @@ int main(int argc, char **argv)
                 FILE *temp = fopen("data_enumerationV2-sort_all.temp", "w");
                 for (int i = 0; i < NUM_POINTS; i++)
                 {
-                    fprintf(temp, "%.6f %.6f \n", xvals[i], yvals[i]); // Write the data to a temporary file
+                    fprintf(temp, "%.6d %.6f \n", lengths[i], yvals[i]); // Write the data to a temporary file
                 }
             }
             else
@@ -417,8 +415,19 @@ int main(int argc, char **argv)
         }
         FILE *gnuplotPipe = popen("gnuplot -persistent", "w");
 
-        char *commandsForGnuplot[] = {"set title \"Sorting Algorithms Comprison\"", "set style line 1 lt 1 linecolor rgb 'yellow' lw 2 pt 1", "set style line 2 lt 1 linecolor rgb 'green' lw 2 pt 1", "set style line 3 lt 1 linecolor rgb 'blue' lw 2 pt 1", "set style line 4 lt 1 linecolor rgb 'cyan' lw 2 pt 1", "set style line 5 lt 1 linecolor rgb 'magenta' lw 2 pt 1","plot 'data_fusion-sort_all.temp' using 1:2 ls 2 title 'Fusion' with lines, \'data_enumeration-sort_all.temp' using 1:2 ls 3 title 'Enumeration' with lines, \'data_base-sort_all.temp' using 1:2 ls 4 title 'Base (Randix)' with lines, \'data_enumerationV2-sort_all.temp' using 1:2 ls 5 title 'EnumerationV2 (min,max)' with lines"};
-        //We are not printing 'data_insertion-sort_all.temp' using 1:2 ls 1 title 'one' with lines, \ because we can't see the differences of others on scale
+        char *commandsForGnuplot[] = {"set title \"Sorting Algorithms Comprison\"", "set style line 1 lt 1 linecolor rgb 'yellow' lw 2 pt 1", "set style line 2 lt 1 linecolor rgb 'green' lw 2 pt 1", "set style line 3 lt 1 linecolor rgb 'blue' lw 2 pt 1", "set style line 4 lt 1 linecolor rgb 'cyan' lw 2 pt 1", "set style line 5 lt 1 linecolor rgb 'magenta' lw 2 pt 1", "plot 'data_fusion-sort_all.temp' using 1:2 ls 2 title 'Fusion' with lines, \'data_enumeration-sort_all.temp' using 1:2 ls 3 title 'Enumeration' with lines, \'data_base-sort_all.temp' using 1:2 ls 4 title 'Base (Randix)' with lines, \'data_enumerationV2-sort_all.temp' using 1:2 ls 5 title 'EnumerationV2 (min,max)' with lines"};
+        // We are not printing 'data_insertion-sort_all.temp' using 1:2 ls 1 title 'one' with lines, \ because we can't see the differences of others on scale
+        for (int i = 0; i < NUM_COMMANDS_ALL; i++)
+        {
+            fprintf(gnuplotPipe, "%s \n", commandsForGnuplot[i]); // Send commands to gnuplot one by one.
+        }
+    }
+    else if (main_choice == 3)
+    {
+        FILE *gnuplotPipe = popen("gnuplot -persistent", "w");
+
+        char *commandsForGnuplot[] = {"set title \"Sorting Algorithms Comprison\"", "set style line 1 lt 1 linecolor rgb 'yellow' lw 2 pt 1", "set style line 2 lt 1 linecolor rgb 'green' lw 2 pt 1", "set style line 3 lt 1 linecolor rgb 'blue' lw 2 pt 1", "set style line 4 lt 1 linecolor rgb 'cyan' lw 2 pt 1", "set style line 5 lt 1 linecolor rgb 'magenta' lw 2 pt 1", "plot 'data_fusion-sort.temp' using 1:2 ls 2 title 'Fusion' with lines, \'data_enumeration-sort.temp' using 1:2 ls 3 title 'Enumeration' with lines, \'data_base-sort.temp' using 1:2 ls 4 title 'Base (Randix)' with lines, \'data_enumerationV2-sort.temp' using 1:2 ls 5 title 'EnumerationV2 (min,max)' with lines"};
+        // We are not printing 'data_insertion-sort_all.temp' using 1:2 ls 1 title 'one' with lines, \ because we can't see the differences of others on scale
         for (int i = 0; i < NUM_COMMANDS_ALL; i++)
         {
             fprintf(gnuplotPipe, "%s \n", commandsForGnuplot[i]); // Send commands to gnuplot one by one.
