@@ -222,7 +222,9 @@ void tri_base(int *tab, int n)
 }
 ```
 
-
+Ici, la fonction detecte le nombre de valeurs negatifs sur le tableau à trier, puis il sépare les nombres négatifs et positifs dans deux tableaux temporaires differents. Il faut noter que les nombres négatifs sont ici sauvegardées en valeurs absolues . 
+On appelle la fonction tri_base de base ( qui traite seulement les cas positifs) pour trier ces deux tableaux temporaires . 
+Enfin , on copie à l'envers le tableau des nombres négatifs triés ( tous en retirant la valeur absolue). On y ajoute egalement la partie positive . 
 ## Exercice 6
 
 La stratégie pour répondre au cahier des charges du jeu Horse-Racing Duals est la suivante:
