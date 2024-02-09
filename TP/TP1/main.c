@@ -195,7 +195,7 @@ int main(int argc, char **argv)
         }
         else if (algo_choice == 2)
         {
-            char *commandsForGnuplot[] = {"set title \"INSERTION Sort\"", "set style line 1 lt 1 linecolor rgb 'green' lw 2 pt 1","plot 'data_enumerationV2-sort.temp' using 1:2 ls 1 title '' with lines"};
+            char *commandsForGnuplot[] = {"set title \"INSERTION Sort\"", "set style line 1 lt 1 linecolor rgb 'green' lw 2 pt 1","plot 'data_insertion-sort.temp' using 1:2 ls 1 title '' with lines"};
             FILE *temp = fopen("data_insertion-sort.temp", "w");
             for (int i = 0; i < NUM_POINTS; i++)
             {
@@ -208,7 +208,7 @@ int main(int argc, char **argv)
         }
         else if (algo_choice == 3)
         {
-            char *commandsForGnuplot[] = {"set title \"FUSION Sort\"", "set style line 1 lt 1 linecolor rgb 'green' lw 2 pt 1","plot 'data_enumerationV2-sort.temp' using 1:2 ls 1 title '' with lines"};
+            char *commandsForGnuplot[] = {"set title \"FUSION Sort\"", "set style line 1 lt 1 linecolor rgb 'green' lw 2 pt 1","plot 'data_fusion-sort.temp' using 1:2 ls 1 title '' with lines"};
             FILE *temp = fopen("data_fusion-sort.temp", "w");
             for (int i = 0; i < NUM_POINTS; i++)
             {
@@ -221,7 +221,7 @@ int main(int argc, char **argv)
         }
         else if (algo_choice == 4)
         {
-            char *commandsForGnuplot[] = {"set title \"ENUMERATION Sort\"", "set style line 1 lt 1 linecolor rgb 'green' lw 2 pt 1","plot 'data_enumerationV2-sort.temp' using 1:2 ls 1 title '' with lines"};
+            char *commandsForGnuplot[] = {"set title \"ENUMERATION Sort\"", "set style line 1 lt 1 linecolor rgb 'green' lw 2 pt 1","plot 'data_enumeration-sort.temp' using 1:2 ls 1 title '' with lines"};
             FILE *temp = fopen("data_enumeration-sort.temp", "w");
             for (int i = 0; i < NUM_POINTS; i++)
             {
@@ -234,7 +234,7 @@ int main(int argc, char **argv)
         }
         else if (algo_choice == 5)
         {
-            char *commandsForGnuplot[] = {"set title \"BASE Sort\"", "set style line 1 lt 1 linecolor rgb 'green' lw 2 pt 1","plot 'data_enumerationV2-sort.temp' using 1:2 ls 1 title '' with lines"};
+            char *commandsForGnuplot[] = {"set title \"BASE Sort\"", "set style line 1 lt 1 linecolor rgb 'green' lw 2 pt 1","plot 'data_base-sort.temp' using 1:2 ls 1 title '' with lines"};
             FILE *temp = fopen("data_base-sort.temp", "w");
             for (int i = 0; i < NUM_POINTS; i++)
             {

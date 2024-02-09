@@ -6,6 +6,8 @@
 
 La compléxité de l'agorithm tri_insertion est O(n^2)
 
+![1707481323760](image/README/1707481323760.png)
+
 ### Explication
 
 Selon le code en C et les notions théoriques on a:
@@ -29,11 +31,13 @@ void tri_ins(int *tab, int n)
 // => (n x O(n)) + O(1) = O(n^2)
 ```
 
-## Exercise 3
+## Exercice 3
 
 ### Complexité
 
 La compléxité de l'algorithm tri_fusion est O(n log(n))
+
+![1707481340827](image/README/1707481340827.png)
 
 ### Explication
 
@@ -61,7 +65,7 @@ Dans notre cas:
 
 `T(n) = 2T(n/2) + O(n)` selon tri_fusion_bis. Alors, a = 2, b = 2 et *f* (n) = O(n). On remarque qu'on est dans le cas numéro 2. Ainsi n^log b(a)  <=> O(n) et n^1 <=> O(n), dès lors T(n) = O(n log(n)).
 
-## Exercise 4 
+## Exercice 4
 
 On a crée deux differents versions de la même base d'algorithm d'énumeration. L'un utilise le min et le max du tableau passé (tri_enum_v2) en argument et l'autre utilise un traitment lineaire (tri_enum) selon le numero de fois qu'on element etait trouvé sur le tableau original, tout en calculant la nouvelle position via:
 
@@ -80,11 +84,15 @@ for (int i = n - 1; i >= 0; i--) // We start from the end and we go back to the 
 
 #### tri_enum
 
-La compléxité de l'algorithm tri_base est O(n + c) => O(n)
+La compléxité de l'algorithm tri_enumeration est O(n + key) avec key avec une pire de cas très cas donc il impact le temps de traitment selon les opérations bit par bit qu'il faut faire.
+
+![1707481356044](image/README/1707481356044.png)
 
 #### tri_enum_v2
 
-La compléxité de l'algorithm tri_base est O(n + c) => O(n^2)
+La compléxité de l'algorithm tri_enum_v2 est O(n^2)
+
+![1707481363117](image/README/1707481363117.png)
 
 ### Explication
 
@@ -139,12 +147,111 @@ Si Bmax et Bmin sont des constantes, c'est-à-dire que la différence entre ces 
 
 Donc au total on a `O(n) + O(n^2) => O(n^2)`
 
-## Exercise 5
+## Exercice 5
 
 ### Complexité
 
+La compléxité de l'algorithm tri_base est O(n x max_length) avec max_length = longeur_du_numero_maximum_du_tableau
+
 ### Explication
 
-## Exercise 6
+D'un premier point de vue, la complexité du code semble d'être O(n^2) mais il faut essayer d'aller un peu plu sloin. Elle itère en fonction du nombre maximum de chiffres dans n'importe quel élément `max_len` (maximum length). Il est vraie q'il y a trois boucles imbriquées, chacune itérant n fois mais ceux boucles là ne sont pas imbriquées directement les unes dans les autres.
 
-Voici les résultats du jeu:
+En fait la complexité semble d'être O(n x max_length), mais il faut noter que le nombre de chiffres dans le plus grand élément (`max_len`) est relativement petit par rapport au nombre total d'éléments n.
+
+## Exercice 6
+
+La stratégie pour reponde au cahier des charges du jeu Horse-Racing Duals est la suivante:
+
+1. Trier le tableau des nombres
+2. Examiner couple par couple pour trouver la difference le plus petite difference
+   * En parcourant le tableau trié du début à la fin, calculez la différence entre chaque élément et son successeur. La plus petite différence trouvée durant ce parcours est la différence la plus faible entre les puissances de deux chevaux.
+   * Une fois que le tableau est trié, les puissances des chevaux sont organisées en ordre croissant. Pour trouver les deux puissances les plus proches, il suffit de calculer la différence entre chaque paire de valeurs consécutives. La plus petite de ces différences est la réponse au défi.
+3. On retourne ce difference là
+
+Voici le code du jeu:
+
+```c
+void merge(int tab[], int l, int m, int r) {
+    int i, j, k;
+    int n1 = m - l + 1;
+    int n2 = r - m;
+
+    // Créer des tableaux temporaires
+    int L[n1], R[n2];
+
+    // Copier les données dans les tableaux temporaires L[] et R[]
+    for (i = 0; i < n1; i++)
+        L[i] = tab[l + i];
+    for (j = 0; j < n2; j++)
+        R[j] = tab[m + 1 + j];
+
+    // Fusionner les tableaux temporaires dans tab[l..r]
+    i = 0; j = 0; k = l;
+    while (i < n1 && j < n2) {
+        if (L[i] <= R[j]) {
+            tab[k] = L[i];
+            i++;
+        } else {
+            tab[k] = R[j];
+            j++;
+        }
+        k++;
+    }
+
+    // Copier les éléments restants de L[], s'il y en a
+    while (i < n1) {
+        tab[k] = L[i];
+        i++;
+        k++;
+    }
+
+    // Copier les éléments restants de R[], s'il y en a
+    while (j < n2) {
+        tab[k] = R[j];
+        j++;
+        k++;
+    }
+}
+
+// Fonction principale qui implémente le tri par fusion
+void mergeSort(int tab[], int l, int r) {
+    if (l < r) {
+        // Trouver le point milieu pour diviser le tableau en deux moitiés
+        int m = l + (r - l) / 2;
+
+        // Trier la première et la deuxième moitié
+        mergeSort(tab, l, m);
+        mergeSort(tab, m + 1, r);
+
+        // Fusionner les moitiés triées
+        merge(tab, l, m, r);
+    }
+}
+
+int main() {
+    int N;
+    scanf("%d", &N);
+
+    int puissances[N];
+    for (int i = 0; i < N; i++) {
+        scanf("%d", &puissances[i]);
+    }
+
+    // Trier le tableau en utilisant le tri par fusion
+    mergeSort(puissances, 0, N - 1);
+
+    // Trouver la plus petite différence
+    int minDiff = abs(puissances[1] - puissances[0]);
+    for (int i = 2; i < N; i++) {
+        int diff = abs(puissances[i] - puissances[i - 1]);
+        if (diff < minDiff) {
+            minDiff = diff;
+        }
+    }
+
+    printf("%d\n", minDiff);
+
+    return 0;
+}
+```

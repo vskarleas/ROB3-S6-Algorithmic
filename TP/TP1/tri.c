@@ -31,32 +31,35 @@ void tri_ins(int *tab, int n)
 
 /*EXERCICE 3 : TRI FUSION */
 /* Structure of the functions: The fusion function handles the merging of two sorted subarrays.
-   The tri_fusion_bis function recursively divides the array into smaller subarrays and calls
-   fusion to merge them and tri_fusion function starts the sorting process by calling tri_fusion_bis
+   The tri_fusion_bis function recursively divides the array into smaller tables and calls
+   fusion (on the left and on the right) to merge them and tri_fusion function starts the sorting process by calling tri_fusion_bis
    for the entire table. */
 void fusion(int *tab, int deb1, int fin1, int deb2, int fin2)
 {
-  int n1 = fin1 - deb1 + 1; // Number of elements in the first part
-  int n2 = fin2 - deb2 + 1; // Number of elements in the second part
+  int n1 = fin1 - deb1 + 1; //How many on the left part
+  int n2 = fin2 - deb2 + 1; //and how about the right part
 
-  int temp[n1 + n2]; // Temporary array to save the merging process
+  int temp[n1 + n2]; // Temporary array to save the process
 
-  int i = 0, j = 0, k = 0; // Indices for the subarrays and temporary array
+  int i = 0;
+  int j = 0;
+  int k = 0;
 
   // Comparison and merging on the same time
   while (i < n1 && j < n2)
   {
-    if (tab[deb1 + i] <= tab[deb2 + j])
+    if (tab[deb1 + i] <= tab[deb2 + j]) //we are before the merge "interclassement" of the two tables so we are on the left part right now
     {
       temp[k++] = tab[deb1 + i];
       i++;
     }
-    else
+    else //otherwise we are on the right part
     {
       temp[k++] = tab[deb2 + j];
       j++;
     }
   }
+
 
   // Copying any remaining elements
   while (i < n1)
@@ -185,9 +188,9 @@ void tri_enum_v2(int *tab, int n)
 
 /*EXERCICE 5 : TRI PAR BASE */
 /* How it works: We find the maximum in the table. Then, we iterate through each digit of the
-   maximum value, starting with the least significant digit. For each digit, it creates a
-   bucket for each possible value of that digit. Then, it distributes the elements of the
-   array into the appropriate buckets. Finally, it merges the buckets back together to
+   maximum value, starting with the least significant digit (on the right). For each digit, it creates a
+   bucket for each possible value of that digit in general and it saves the elements of the
+   array into the appropriate buckets. We merges the buckets back together to
    form the sorted table.*/
 void tri_base(int *tab, int n)
 {
@@ -200,7 +203,7 @@ void tri_base(int *tab, int n)
   // Iterate through each digit of the maximum value
   for (exp = 1; exp <= max_len; exp++) // Adjust loop condition based on max_len
   {
-    /* keep track of the frequency of each digit (0-9) appearing in the current digit
+    /* keep track of the frequency of each digit of the maximum number. Of course, we are on base 10 so we can have digits only between 0 and 9. appearing in the current digit
        position being sorted. Initializing all elements to 0 ensures that initially, no
        digit has appeared and their counts are kept track correctly. */
     int count[10] = {0};
@@ -208,26 +211,24 @@ void tri_base(int *tab, int n)
     {
       // Use get_length to get individual element's digit length
       /* This part checks if the number of digits in the current element tab[i]
-         is greater than or equal to the current digit position exp. For example,
-         if exp is 2 (representing the hundreds digit) and tab[i] is 123, then
+         is greater than or equal to the current digit position. For example,
+         if the number_of_digits in question is 2 and tab[i] is 123, then
          this condition is true (get_length(123) = 3 >= 2).
 
-         In that case (tab[i] / exp) % 10: If the previous condition is true, this
-         part extracts the digit at the specified exp position. It divides the
-         number by exp to shift the digits to the right, then uses modulo by 10
+         If the previous condition is true, this part extracts the digit at the specified exp position. It divides the
+         number by 'exp' to shift the digits to the right, then uses modulo by 10
          to get the remainder which is the digit at that position (e.g., (123 / 2) % 10 = 2
 
-
          To sum up, it checks if the current element has enough digits to reach
-         the current exp position, and if so, it extracts the digit at that
-         position and increments its count in the count array. */
+         the current expected position, and if so, it extracts the digit at that
+         position and increments its count (amoutn that was found) in the count table. */
       int digit = get_length(tab[i]) >= exp ? (tab[i] / exp) % 10 : 0;
       count[digit]++;
     }
 
     for (i = 1; i < 10; i++)
     {
-      // Calculating the final position for each element like we do on tri_enum function above
+      // Calculating the final position for each element like we do on tri_enum function above. It's the same logic
       count[i] += count[i - 1];
     }
 
@@ -236,45 +237,12 @@ void tri_base(int *tab, int n)
     {
       // Use get_length for one more time to handle any other elements with shorter lengths
       int digit = get_length(tab[i]) >= exp ? (tab[i] / exp) % 10 : 0;
-      sorted[--count[digit]] = tab[i];
+      sorted[--count[digit]] = tab[i]; //it's like writing count[digit] = count[digit]-1 = A which is the one that we call at sorter[A] = tab[i]
     }
 
     for (i = 0; i < n; i++)
     {
       tab[i] = sorted[i];
-    }
-  }
-}
-
-void tri_base_v2(int *tab, int n)
-{
-  int i, exp, m = tab[0];
-  for (i = 1; i < n; i++)
-  {
-    if (tab[i] > m)
-    {
-      m = tab[i];
-    }
-  }
-  for (exp = 1; m / exp > 0; exp *= 10)
-  {
-    int count[10] = {0};
-    for (i = 0; i < n; i++)
-    {
-      count[(tab[i] / exp) % 10]++;
-    }
-    for (i = 1; i < 10; i++)
-    {
-      count[i] += count[i - 1];
-    }
-    int output[n];
-    for (i = n - 1; i >= 0; i--)
-    {
-      output[--count[(tab[i] / exp) % 10]] = tab[i];
-    }
-    for (i = 0; i < n; i++)
-    {
-      tab[i] = output[i];
     }
   }
 }
