@@ -1,4 +1,4 @@
-# TP1
+# TP1 Vasileios Skarleas et Yanis Sadoun
 
 ## Exercice 2
 
