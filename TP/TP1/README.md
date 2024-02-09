@@ -2,13 +2,13 @@
 
 ## Exercice 2
 
-### Complexité
+### Complexité:
 
-La compléxité de l'agorithm tri_insertion est O(n^2)
+La compléxité de l'agorithme tri_insertion est O(n^2)
 
 ![1707481323760](image/README/1707481323760.png)
 
-### Explication
+### Explication:
 
 Selon le code en C et les notions théoriques on a:
 
@@ -33,13 +33,13 @@ void tri_ins(int *tab, int n)
 
 ## Exercice 3
 
-### Complexité
+### Complexité:
 
-La compléxité de l'algorithm tri_fusion est O(n log(n))
+La compléxité de l'algorithme tri_fusion est O(n log(n))
 
 ![1707481340827](image/README/1707481340827.png)
 
-### Explication
+### Explication:
 
 L’algorithme de tri fusion utilise une stratégie classique dite « diviser pour régner ». Elle consiste en découper un gros problème en plus petits problèmes, résoudre récursivement les problèmes, puis combiner les résultats pour obtenir une solution au problème initial.
 
@@ -49,9 +49,9 @@ Le coût d’un nœud est simplement le coût de la séparation et de la fusi
 
 Au total, la complexité de l'algorithme du tri_fusion est O(n) x le nombre de niveaux, c'est-à-dire la hauteur de l'arbre. Comme pour la recherche binaire, on trouve que cette hauteur est exactement le nombre de fois qu'il faut diviser n par 2 pour atteindre 1, soit k = log n. La complexité du tri fusion est donc en O(n log(n)).
 
-### Selon le théorème de maitre
+### Selon le théorème maitre:
 
-Considérons la relation de récurrence qui viens de théorème de maitre:
+Considérons la relation de récurrence qui viens du théorème maitre:
 
 ![1707390989745](image/README/1707390989745.png)
 
@@ -63,11 +63,11 @@ où a, b et c sont des réels positifs, avec a > 1 et b > 1. Alors :
 
 Dans notre cas:
 
-`T(n) = 2T(n/2) + O(n)` selon tri_fusion_bis. Alors, a = 2, b = 2 et *f* (n) = O(n). On remarque qu'on est dans le cas numéro 2. Ainsi n^log b(a)  <=> O(n) et n^1 <=> O(n), dès lors T(n) = O(n log(n)).
+`T(n) = 2T(n/2) + O(n)` selon tri_fusion_bis. Alors, a = 2, b = 2 et *f* (n) = O(n). On remarque ainsi que l'on est dans le cas numéro 2. Ainsi n^log b(a)  <=> O(n) et n^1 <=> O(n), dès lors T(n) = O(n log(n)).
 
 ## Exercice 4
 
-On a crée deux differents versions de la même base d'algorithm d'énumeration. L'un utilise le min et le max du tableau passé (tri_enum_v2) en argument et l'autre utilise un traitment lineaire (tri_enum) selon le numero de fois qu'on element etait trouvé sur le tableau original, tout en calculant la nouvelle position via:
+Pour cette exercice , on a écrit deux versions differentes de la même base d'algorithme d'énumeration. L'un , (tri_enum_v2), utilise le min et le max du tableau passé en argument et l'autre, (tri_enum), utilise un traitment lineaire selon le numero de fois ou on utilise  l'élement trouvé sur le tableau original, tout en calculant la nouvelle position via:
 
 ```c
 for (int i = n - 1; i >= 0; i--) // We start from the end and we go back to the beginning
@@ -84,13 +84,13 @@ for (int i = n - 1; i >= 0; i--) // We start from the end and we go back to the 
 
 #### tri_enum
 
-La compléxité de l'algorithm tri_enumeration est O(n + key) avec key avec une pire de cas très cas donc il impact le temps de traitment selon les opérations bit par bit qu'il faut faire.
+La compléxité de l'algorithme tri_enumeration est O(n + key) 
 
 ![1707481356044](image/README/1707481356044.png)
 
 #### tri_enum_v2
 
-La compléxité de l'algorithm tri_enum_v2 est O(n^2)
+La compléxité de l'algorithme tri_enum_v2 est O(n + key)
 
 ![1707481363117](image/README/1707481363117.png)
 
@@ -136,38 +136,37 @@ void tri_enum(int *tab, int n)
 }
 ```
 
-Donc au total on a `O(1) + O(n) + O(1) + O(key) + O(n) + O(key) + O(1) + O(1) + O(n) + o(n) => O(n + key)`
+Donc au total on a `O(1) + O(n) + O(1) + O(key) + O(n) + O(key) + O(1) + O(1) + O(n) + o(n) => O(n + k)`
 
 #### tri_enum_v2
 
 Si Bmax et Bmin sont des constantes, c'est-à-dire que la différence entre ces deux valeurs ne change pas et ne dépend pas de la taille du tableau n, la complexité de l'algorithme de tri par énumération change de manière significative. Dans notre algorithme:
 
 * `get_min_max` a une complexité de O(n)
-* On a deux boucles imbriques (un pour et un tant que) du coup ils ont une complexite de O(n^2)
+* On a deux boucles imbriquées (une boucle  pour de compléxité (O(n)) et une boucle tant que de compléxité (O(k))) .Ainsi, ils  ont une complexite de O(n)
 
-Donc au total on a `O(n) + O(n^2) => O(n^2)`
+Donc au total on a `O(n) + O(n + k) => O(n + k)`
 
 ## Exercice 5
 
 ### Complexité
 
-La compléxité de l'algorithm tri_base est O(n x max_length) avec max_length = longeur_du_numero_maximum_du_tableau
+La compléxité de l'algorithme tri_base est O(n x max_length) avec max_length = longeur_du_numero_maximum_du_tableau
 
 ### Explication
 
-D'un premier point de vue, la complexité du code semble d'être O(n^2) mais il faut essayer d'aller un peu plu sloin. Elle itère en fonction du nombre maximum de chiffres dans n'importe quel élément `max_len` (maximum length). Il est vraie q'il y a trois boucles imbriquées, chacune itérant n fois mais ceux boucles là ne sont pas imbriquées directement les unes dans les autres.
+De  prime abord , la complexité du code semble être O(n^2) mais il faut essayer d'aller un peu plus loin. Elle itère en fonction du nombre maximum de chiffres dans n'importe quel élément `max_len` (maximum length). Il est vraie q'il y a trois boucles imbriquées, chacune itérant n fois mais ces boucles là ne sont pas imbriquées directement les unes dans les autres.
 
-En fait la complexité semble d'être O(n x max_length), mais il faut noter que le nombre de chiffres dans le plus grand élément (`max_len`) est relativement petit par rapport au nombre total d'éléments n.
+En fait la complexité semble être O(n x max_length), mais il faut noter que le nombre de chiffres dans le plus grand élément (`max_len`) est relativement petit par rapport au nombre total d'éléments n.
+
 
 ## Exercice 6
 
 La stratégie pour reponde au cahier des charges du jeu Horse-Racing Duals est la suivante:
 
-1. Trier le tableau des nombres
-2. Examiner couple par couple pour trouver la difference le plus petite difference
    * En parcourant le tableau trié du début à la fin, calculez la différence entre chaque élément et son successeur. La plus petite différence trouvée durant ce parcours est la différence la plus faible entre les puissances de deux chevaux.
    * Une fois que le tableau est trié, les puissances des chevaux sont organisées en ordre croissant. Pour trouver les deux puissances les plus proches, il suffit de calculer la différence entre chaque paire de valeurs consécutives. La plus petite de ces différences est la réponse au défi.
-3. On retourne ce difference là
+
 
 Voici le code du jeu:
 
@@ -255,3 +254,8 @@ int main() {
     return 0;
 }
 ```
+### Choix de l'algorithme de tri : Tri par fusion (Merge Sort)
+
+•⁠  ⁠*Pourquoi le Tri par fusion ?*
+  - *Complexité :* Le tri par fusion a une complexité temporelle de O(n log n) dans le pire des cas, ce qui est efficace pour les ensembles de données de grande taille.
+  - *Efficacité sur de Grandes Données :* Contrairement au tri par insertion (O(n²)) ou au tri énumératif (efficace pour des plages de valeurs limitées), le tri par fusion gère efficacement les grands ensembles de données, ce qui est important  étant donné la contrainte 1 < N < 100000 du problème.
