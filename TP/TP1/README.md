@@ -222,9 +222,10 @@ void tri_base(int *tab, int n)
 }
 ```
 
-Ici, la fonction detecte le nombre de valeurs negatifs sur le tableau à trier, puis il sépare les nombres négatifs et positifs dans deux tableaux temporaires differents. Il faut noter que les nombres négatifs sont ici sauvegardées en valeurs absolues . 
-On appelle la fonction tri_base de base ( qui traite seulement les cas positifs) pour trier ces deux tableaux temporaires . 
-Enfin , on copie à l'envers le tableau des nombres négatifs triés ( tous en retirant la valeur absolue). On y ajoute egalement la partie positive . 
+Ici, la fonction detecte le nombre de valeurs negatifs sur le tableau à trier, puis il sépare les nombres négatifs et positifs dans deux tableaux temporaires differents. Il faut noter que les nombres négatifs sont ici sauvegardées en valeurs absolues .
+On appelle la fonction tri_base de base ( qui traite seulement les cas positifs) pour trier ces deux tableaux temporaires .
+Enfin , on copie à l'envers le tableau des nombres négatifs triés ( tous en retirant la valeur absolue). On y ajoute egalement la partie positive .
+
 ## Exercice 6
 
 La stratégie pour répondre au cahier des charges du jeu Horse-Racing Duals est la suivante:
@@ -339,3 +340,7 @@ Enfin, en ce qui concerne Tri de Base (Radix Sort), sa complexité est en O(d*n)
 ![1707496309029](image/README/1707496309029.png)
 
 Ici on n'affiche pas tri par insertion car il serait impossible de visualiser les differences avec les autres algorithmes qui sont significativement plus rapides que le tri par insertion(qui a une complexité de O(n^2)).
+
+Il est aussi interessant de noter qu'en utilisant la formule `temps_cpu / complexite_theorique_tout_en_apliquant_le_n_en_question ` on peut constater que le resultat obtenu par rapport au comportement de l'algorithme est linearisé (comme observé sur le graphe ci-dessous).
+
+![1707498798981](image/README/1707498798981.png)

@@ -20,3 +20,4 @@
 * V1.4 Finsihing the coding for TP1 and bug fixes
 * V1.5 REAME updated
 * V1.6 Fixed some bugs and added tri_base_bis
+* V1.7 Final TP1
