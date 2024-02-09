@@ -1,4 +1,4 @@
-# TP1
+# TP1 Vasileios Skarleas et Yanis Sadoun
 
 ## Exercice 2
 
@@ -94,7 +94,7 @@ La compléxité de l'algorithme tri_enum_v2 est O(n + key)
 
 ![1707481363117](image/README/1707481363117.png)
 
-**Nota bene:** Ici la version 2 s'emble être la plus efficace (elle traite les cas négatives)
+**Nota bene:** Ici la version 2 semble être la plus efficace (elle traite les cas négatives)
 
 ### Explication
 
@@ -165,13 +165,13 @@ La compléxité de l'algorithme tri_base est O(n x max_length) avec max_length =
 
 ### Explication
 
-De  prime abord , la complexité du code semble être O(n^2) mais il faut essayer d'aller un peu plus loin. Elle itère en fonction du nombre maximum de chiffres dans n'importe quel élément `max_len` (maximum length). Il est vraie q'il y a trois boucles imbriquées, chacune itérant n fois mais ces boucles là ne sont pas imbriquées directement les unes dans les autres.
+De  prime abord , la complexité du code semble être O(n^2) mais il faut essayer d'aller un peu plus loin. Elle itère en fonction du nombre maximum de chiffres dans n'importe quel élément `max_len` (maximum length). Il est vraie q'il y a trois boucles imbriquées, chacune itérant n fois, mais ces boucles là ne sont pas imbriquées directement les unes dans les autres.
 
 En fait la complexité semble être O(n x max_length), mais il faut noter que le nombre de chiffres dans le plus grand élément (`max_len`) est relativement petit par rapport au nombre total d'éléments n.
 
 ### Comparaison
 
-On constate que cet algorithme est plus rapide que le tri fusion pour les limites des données que nous avons testées. D'aprés la quéstion precedent: on sait que la complexité du tri fusion est en O(n log n), indépendamment de la nature des données. Cépendant, la complexité du tri de base est O(d*n), où d est le nombre de chiffres dans les nombres à trier. Pour des ensembles de données où d est relativement petit par rapport à n, cette complexité peut être vue comme linéaire, ce qui peut rendre le tri de base plus rapide que le tri fusion (d <log(n) dans ce cas là).
+On constate que cet algorithme est plus rapide que le tri fusion pour les limites des données que nous avons testées. D'aprés la question précedente: on sait que la complexité du tri fusion est en O(n log n), indépendamment de la nature des données. Cépendant, la complexité du tri de base est O(d*n), où d est le nombre de chiffres dans les nombres à trier. Pour des ensembles de données où d est relativement petit par rapport à n, cette complexité peut être vue comme linéaire, ce qui peut rendre le tri de base plus rapide que le tri fusion (d <log(n) dans ce cas là).
 
 ### Pour aller plus loin
 
@@ -225,7 +225,7 @@ void tri_base(int *tab, int n)
 
 ## Exercice 6
 
-La stratégie pour reponde au cahier des charges du jeu Horse-Racing Duals est la suivante:
+La stratégie pour répondre au cahier des charges du jeu Horse-Racing Duals est la suivante:
 
 * En parcourant le tableau trié du début à la fin, calculez la différence entre chaque élément et son successeur. La plus petite différence trouvée durant ce parcours est la différence la plus faible entre les puissances de deux chevaux.
 * Une fois que le tableau est trié, les puissances des chevaux sont organisées en ordre croissant. Pour trouver les deux puissances les plus proches, il suffit de calculer la différence entre chaque paire de valeurs consécutives. La plus petite de ces différences est la réponse au défi.
@@ -326,9 +326,9 @@ int main() {
 
 ## Conclusion
 
-En ce qui concerne Tri par Sélection, la complexité est O(n²) dans tous les cas. En general, il est simple à implémenter, mais inefficace pour les grands ensembles de données.
+En ce qui concerne Tri par Sélection, la compléxité est O(n²) dans tous les cas. En géneral, il est simple à implémenter, mais inefficace pour les grands ensembles de données.
 
-Puis, pour le Tri par Énumération, on a montré que la complexité est de O(n + k), où k est la plage des valeurs. En general il est efficace avec des valeurs limitées. Par contre, il utilise plus de mémoire - moins efficace pour les grandes plages de valeurs. Ici c'est le plus rapide.
+Par ailleurs, pour le Tri par Énumération, on a montré que la complexité est de O(n + k), où k est la plage des valeurs. En géneral il est efficace avec des valeurs limitées. Par contre, il utilise plus de mémoire - moins efficace pour les grandes plages de valeurs. Ici c'est le plus rapide.
 
 Maintenant, concernant le Tri par Fusion, sa complexité est O(n log n). Il est assez efficace pour les grands ensembles de données. AInsi, il est stable et bon pour les données liées à la mémoire.
 
@@ -336,4 +336,4 @@ Enfin, en ce qui concerne Tri de Base (Radix Sort), sa complexité est en O(d*n)
 
 ![1707496309029](image/README/1707496309029.png)
 
-Ici on n'affiche pas tri par insertion parce qu'il serait impossible de constater les differences pour les autres allgorithmes qui sont significativement plus rapides que le tri par insertion qui a une complexité de O(n^2).
+Ici on n'affiche pas tri par insertion car il serait impossible de visualiser les differences avec les autres algorithmes qui sont significativement plus rapides que le tri par insertion(qui a une complexité de O(n^2)).
