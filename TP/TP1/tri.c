@@ -108,7 +108,7 @@ void tri_fusion(int *tab, int n)
  From that, we can get the position of the current element in a sorted array.
  Then, we put this element in that position. We repeat this process for all
  elements in an array to get a sorted array. */
-void tri_enum(int *tab, int n)
+void tri_enum_bis(int *tab, int n)
 {
   int key = tab[0]; // we wil compare with that. We consider as our maximum
   get_max(tab, n, &key);
@@ -276,6 +276,50 @@ void tri_base(int *tab, int n)
 
   tri_base_bis(tab_negatives, nb_negatives);
   tri_base_bis(tab_positives, n-nb_negatives);
+
+  i_p = 0;
+  for (int i = nb_negatives-1; i >= 0; i--)
+  {
+    tab[i_p] = -tab_negatives[i]; 
+    i_p++;
+  }
+  for (int i =0; i < n-nb_negatives; i++)
+  {
+    tab[i_p] = tab_positives[i];
+    i_p++;
+  }
+}
+
+
+void tri_enum(int *tab, int n)
+{
+  int nb_negatives =0;
+  for (int i = 0; i<n;i++)
+  {
+    if (tab[i]<0)
+    {
+      nb_negatives ++;
+    }
+  }
+  int tab_negatives[nb_negatives];
+  int tab_positives[n-nb_negatives];
+  int i_n = 0, i_p =0;
+  for (int i = 0; i < n; i++)
+  {
+    if (tab[i]<0)
+    {
+      tab_negatives[i_n] = -tab[i]; //absolute value that will be trated
+      i_n++;
+    }
+    else 
+    {
+      tab_positives[i_p]=tab[i];
+      i_p++;
+    }
+  }
+
+  tri_enum_bis(tab_negatives, nb_negatives);
+  tri_enum_bis(tab_positives, n-nb_negatives);
 
   i_p = 0;
   for (int i = nb_negatives-1; i >= 0; i--)

@@ -337,7 +337,7 @@ Maintenant, concernant le Tri par Fusion, sa complexité est O(n log n). Il est 
 
 Enfin, en ce qui concerne Tri de Base (Radix Sort), sa complexité est en O(d*n), où d est le nombre de chiffres. On pourrait dire qu'il est efficace lorsque le nombre de chiffres (d) est faible par rapport à la taille du tableau (n). En général, il peut être plus rapide que le tri par fusion pour certaines données mais moins efficace pour les données avec un grand nombre de chiffres.
 
-![1707496309029](image/README/1707496309029.png)
+![1707668396174](image/README/1707668396174.png)
 
 Ici on n'affiche pas tri par insertion car il serait impossible de visualiser les differences avec les autres algorithmes qui sont significativement plus rapides que le tri par insertion(qui a une complexité de O(n^2)).
 

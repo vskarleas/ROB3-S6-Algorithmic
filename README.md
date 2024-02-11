@@ -21,3 +21,4 @@
 * V1.5 REAME updated
 * V1.6 Fixed some bugs and added tri_base_bis
 * V1.7 Final TP1
+* V1.8 Some bug fixes for

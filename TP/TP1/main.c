@@ -321,7 +321,6 @@ int main(int argc, char **argv)
                     temps_final = clock();
 
                     temps_cpu = (temps_final - temps_initial) * 1e-6;
-
                     yvals[index] = temps_cpu;
 
                     printf("\n\e[0;36mProcess No %d | %d items OK\e[0m\n", index + 1, length);
