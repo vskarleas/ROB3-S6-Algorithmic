@@ -422,17 +422,6 @@ int main(int argc, char **argv)
             fprintf(gnuplotPipe, "%s \n", commandsForGnuplot[i]); // Send commands to gnuplot one by one.
         }
     }
-    else if (main_choice == 3)
-    {
-        FILE *gnuplotPipe = popen("gnuplot -persistent", "w");
-
-        char *commandsForGnuplot[] = {"set title \"Sorting Algorithms Comprison\"", "set style line 1 lt 1 linecolor rgb 'yellow' lw 2 pt 1", "set style line 2 lt 1 linecolor rgb 'green' lw 2 pt 1", "set style line 3 lt 1 linecolor rgb 'blue' lw 2 pt 1", "set style line 4 lt 1 linecolor rgb 'cyan' lw 2 pt 1", "set style line 5 lt 1 linecolor rgb 'magenta' lw 2 pt 1", "plot 'data_fusion-sort.temp' using 1:2 ls 2 title 'Fusion' with lines, \'data_enumeration-sort.temp' using 1:2 ls 3 title 'Enumeration' with lines, \'data_base-sort.temp' using 1:2 ls 4 title 'Base (Randix)' with lines, \'data_enumerationV2-sort.temp' using 1:2 ls 5 title 'EnumerationV2 (min,max)' with lines"};
-        // We are not printing 'data_insertion-sort_all.temp' using 1:2 ls 1 title 'one' with lines, \ because we can't see the differences of others on scale
-        for (int i = 0; i < NUM_COMMANDS_ALL; i++)
-        {
-            fprintf(gnuplotPipe, "%s \n", commandsForGnuplot[i]); // Send commands to gnuplot one by one.
-        }
-    }
     else
     {
         clearScreen();

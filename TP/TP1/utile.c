@@ -197,7 +197,7 @@ int menu_mode()
 int main_menu()
 {
     char userInput[20];
-    char *msg[1] = {"Choose what operation you need to excecute. You can choose between Single or All. Single gives you the option to choose a specific algorithm to test and see its trace, or all gives an overall graph for the same analysis of all the algorithms. Choose the option Create in order to combine files generated from the Single option.  Your choice: "};
+    char *msg[1] = {"Choose what operation you need to excecute. You can choose between Single or All. Single gives you the option to choose a specific algorithm to test and see its trace, or all gives an overall graph for the same analysis of all the algorithms. Your choice: "};
     char *msg_attention[1] = {"You can only choose from Single or All."};
 
     while (true)
@@ -218,10 +218,6 @@ int main_menu()
         else if (strcmp(userInput, "all") == 0)
         {
             return 2;
-        }
-        else if (strcmp(userInput, "creat") == 0)
-        {
-            return 3;
         }
         else
         {

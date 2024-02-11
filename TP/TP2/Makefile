@@ -1,21 +1,110 @@
-EXEC=main
+#############################################################################
+# Fichier Makefile 
+# UE Infomatics for Robotics - Polytech Sorbonne - 2023/2024 - S6
+# Author: Vasileios Filippos Skarleas - All rights reserved.
+#############################################################################
+# utilisation des variables internes $@ $< $^ $*
+# $@ : correspond au nom de la cible
+# $< : correspond au nom de la premiere dependance
+# $^ : correspond � toutes les d�pendances
+# $* : correspond au nom du fichier sans extension 
+#       (dans les regles generiques uniquement)
+#############################################################################
+# information sur la regle executee avec la commande @echo
+# (une commande commancant par @ n'est pas affichee a l'ecran)
+#############################################################################
 
-all: $(EXEC)
+# Chaque exercise ies identifie par un programme principale nomé comme exercise_xxx.c 
+# Les programmes peuvent etre base sur d'autres fonctionctions definies aux different fichiers
 
-main: maxsubarray.o minmax.o main.o utile.o
-	gcc -o main -g maxsubarray.o minmax.o main.o utile.o
+#############################################################################
+# definition des variables locales
+#############################################################################
 
-utile.o: utile.c
-	gcc -o utile.o -g -c utile.c -Wall
+# compilateur C
+CC = clang
 
-maxsubarray.o: maxsubarray.c
-	gcc -o maxsubarray.o -g -c maxsubarray.c -Wall
+# chemin d'acces aux librairies (interfaces)
+INCDIR = .
 
-minmax.o: minmax.c
-	gcc -o minmax.o -g -c minmax.c -Wall
+# chemin d'acces aux librairies (binaires)
+LIBDIR = .
 
-main.o: main.c minmax.h utile.h maxsubarray.h
-	gcc -o main.o -g -c main.c -Wall
+# options pour l'�dition des liens
+LDOPTS = -L$(LIBDIR) -lm
 
-clean :
-	rm *.o $(EXEC)	
+# options pour la recherche des fichiers .o et .h
+INCLUDEOPTS = -I$(INCDIR)
+
+# options de compilation
+COMPILOPTS = -g -Wall $(INCLUDEOPTS)
+
+# liste des executables
+EXECUTABLES = tri triv2
+
+#############################################################################
+# definition des regles
+#############################################################################
+
+########################################################
+# la r�gle par d�faut
+all : $(EXECUTABLES)
+
+########################################################
+# regle generique : 
+#  remplace les regles de compilation separee de la forme
+#	module.o : module.c module.h
+#		$(CC) -c $(COMPILOPTS) module.c
+%.o : %.c %.h
+	@echo ""
+	@echo "---------------------------------------------"
+	@echo "Compilation du module "$*
+	@echo "---------------------------------------------"
+	$(CC) -c $(COMPILOPTS) $<
+
+########################################################
+# regles explicites de compilation separee de modules
+# n'ayant pas de fichier .h ET/OU dependant d'autres modules
+	
+tri.o : tri.c tri.h
+	@echo ""
+	@echo "---------------------------------------------"
+	$(CC) -c $(COMPILOPTS) $<
+
+utile.o : utile.c utile.h
+	@echo ""
+	@echo "---------------------------------------------"
+	$(CC) -c $(COMPILOPTS) $<
+
+main.o : main.c utile.h tri.h
+	@echo ""
+	@echo "---------------------------------------------"
+	$(CC) -c $(COMPILOPTS) $<
+
+mainv2.o : mainv2.c utile.h tri.h
+	@echo ""
+	@echo "---------------------------------------------"
+	$(CC) -c $(COMPILOPTS) $<
+		
+########################################################
+# regles explicites de creation des executables
+
+tri : main.o tri.o utile.o
+	@echo ""
+	@echo "---------------------------------------------"
+	@echo "Creation de l'executable "$@
+	@echo "---------------------------------------------"
+	$(CC) $^ $(LDOPTS) -o $@
+
+triv2 : mainv2.o tri.o utile.o
+	@echo ""
+	@echo "---------------------------------------------"
+	@echo "Creation de l'executable "$@
+	@echo "---------------------------------------------"
+	$(CC) $^ $(LDOPTS) -o $@
+
+
+
+# regle pour "nettoyer" le r�pertoire
+clean:
+	rm -fR $(EXECUTABLES) *.o 
