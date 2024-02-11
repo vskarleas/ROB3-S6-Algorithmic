@@ -20,20 +20,23 @@ for (int i = 1; i<n; i++)
 }
 
 //EXO1.2
-void get_min_max_rec(int* tab, int from, int to, int* min, int * max){
-
-if(from < to)
-{
-if(to - from == 1)
-{if(tab[from]<tab[to]){*min = tab[from]; *max = tab[to];}else {  *min = tab[to]; *max = tab[from];}}
-else if(to-from != 2)
-{
-    int mid = (from + to) / 2;
-    get_min_max_rec(tab, from, mid, min, max);
-    get_min_max_rec(tab, mid+1, to, min, max);
-}
-}
-
+void get_min_max_rec(int* tab, int from, int to, int* min, int* max) {
+    if (from == to) {
+        // Base case: single element
+        *min = *max = tab[from];
+    } else if (from < to - 1) { // Corrected condition: to - from > 1
+        int mid = (from + to) / 2;
+        get_min_max_rec(tab, from, mid, min, max);
+        get_min_max_rec(tab, mid + 1, to, min, max);
+    } else { // Handle two elements
+        if (tab[from] < tab[to]) {
+            *min = tab[from];
+            *max = tab[to];
+        } else {
+            *min = tab[to];
+            *max = tab[from];
+        }
+    }
 }
 
 void get_min_max_2(int* tab, int n, int* min, int* max){
