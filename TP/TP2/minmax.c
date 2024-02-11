@@ -24,8 +24,8 @@ void get_min_max_rec(int* tab, int from, int to, int* min, int * max){
 
 if(from < to)
 {
-if(to - from == 2)
-{if(tab[from]<tab[to]){*min = tab[from]; *max = tab[to];}}
+if(to - from == 1)
+{if(tab[from]<tab[to]){*min = tab[from]; *max = tab[to];}else {  *min = tab[to]; *max = tab[from];}}
 else if(to-from != 2)
 {
     int mid = (from + to) / 2;
