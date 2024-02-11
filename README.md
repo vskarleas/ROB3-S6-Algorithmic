@@ -1,6 +1,7 @@
 # Calendar
 
-1. 7/2/2023 TP1 started
+1. 7/2/2024 TP1 started
+2. 11/2/2024 TP1 corrigé sent to tuteur and TP2 started
 
 # Goals
 
@@ -22,3 +23,4 @@
 * V1.6 Fixed some bugs and added tri_base_bis
 * V1.7 Final TP1
 * V1.8 Some bug fixes for TP1
+* V2.1 Exo1 of TP2 completed and Exo2 until Q2-2 completed

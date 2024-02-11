@@ -1,48 +1,66 @@
 /* structure is used to return two values from minMax() */
-#include<stdio.h>
+#include <stdio.h>
+#include <stdlib.h>
+#include <limits.h>
+#include "minmax.h"
 
-//EXO1.1
-void get_min_max_1(int* tab, int n, int* min, int* max){
-int max_local=tab[0];
-int min_local = tab[0];
-
-for (int i = 1; i<n; i++)
+// EXO1.1
+void get_min_max_1(int *tab, int n, int *min, int *max)
 {
-    if (tab[i] < min_local)
-    { min_local = tab[i];}
-    else if (tab[i] > max_local)
-    { max_local = tab[i];
+    int max_local = tab[0];
+    int min_local = tab[0];
+
+    for (int i = 1; i < n; i++)
+    {
+        if (tab[i] < min_local)
+        {
+            min_local = tab[i];
         }
+        else if (tab[i] > max_local)
+        {
+            max_local = tab[i];
+        }
+    }
+    *min = min_local;
+    *max = max_local;
 }
-*min = min_local;
-*max = max_local;
 
-}
-
-//EXO1.2
-void get_min_max_rec(int* tab, int from, int to, int* min, int* max) {
-    if (from == to) {
-        // Base case: single element
+// EXO1.2
+void get_min_max_rec(int *tab, int from, int to, int *min, int *max)
+{
+    if (from == to) // Base case: single element (at least one element)
+    {
         *min = *max = tab[from];
-    } else if (from < to - 1) { // Corrected condition: to - from > 1
+    }
+    else if (from < to - 1) //Divide and conquer principle here (diviser par regner)
+    {
         int mid = (from + to) / 2;
         get_min_max_rec(tab, from, mid, min, max);
         get_min_max_rec(tab, mid + 1, to, min, max);
-    } else { // Handle two elements
-        if (tab[from] < tab[to]) {
+    }
+    else //otherwise we reach our most possible general case which is to have to compare only two elements
+    {
+        if (tab[from] < tab[to])
+        {
             *min = tab[from];
             *max = tab[to];
-        } else {
+        }
+        else
+        {
             *min = tab[to];
             *max = tab[from];
         }
     }
 }
 
-void get_min_max_2(int* tab, int n, int* min, int* max){
+void get_min_max_2(int *tab, int n, int *min, int *max)
+{
+    /*To ensure that we do not run on a segmentation fault in case that a 
+      comparison is occured without having set min and max before, we initialize 
+      them to the system's default min and max*/
     *min = INT_MIN;
     *max = INT_MAX;
-get_min_max_rec(tab, 0, n-1, min, max);
+    get_min_max_rec(tab, 0, n - 1, min, max);
 }
 
 /* Yes, the complexity of your corrected algorithm for finding the minimum and maximum using divide and conquer is indeed **(3/2)n - 2**. Here's why:

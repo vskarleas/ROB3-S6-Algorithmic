@@ -40,7 +40,7 @@ INCLUDEOPTS = -I$(INCDIR)
 COMPILOPTS = -g -Wall $(INCLUDEOPTS)
 
 # liste des executables
-EXECUTABLES = tri triv2
+EXECUTABLES = main
 
 #############################################################################
 # definition des regles
@@ -66,7 +66,12 @@ all : $(EXECUTABLES)
 # regles explicites de compilation separee de modules
 # n'ayant pas de fichier .h ET/OU dependant d'autres modules
 	
-tri.o : tri.c tri.h
+minmax.o : minmax.c minmax.h
+	@echo ""
+	@echo "---------------------------------------------"
+	$(CC) -c $(COMPILOPTS) $<
+
+maxsubarray.o:  maxsubarray.c maxsubarray.h
 	@echo ""
 	@echo "---------------------------------------------"
 	$(CC) -c $(COMPILOPTS) $<
@@ -76,12 +81,7 @@ utile.o : utile.c utile.h
 	@echo "---------------------------------------------"
 	$(CC) -c $(COMPILOPTS) $<
 
-main.o : main.c utile.h tri.h
-	@echo ""
-	@echo "---------------------------------------------"
-	$(CC) -c $(COMPILOPTS) $<
-
-mainv2.o : mainv2.c utile.h tri.h
+main.o : main.c minmax.h utile.h maxsubarray.h
 	@echo ""
 	@echo "---------------------------------------------"
 	$(CC) -c $(COMPILOPTS) $<
@@ -89,21 +89,12 @@ mainv2.o : mainv2.c utile.h tri.h
 ########################################################
 # regles explicites de creation des executables
 
-tri : main.o tri.o utile.o
+main : main.o utile.o maxsubarray.o minmax.o
 	@echo ""
 	@echo "---------------------------------------------"
 	@echo "Creation de l'executable "$@
 	@echo "---------------------------------------------"
 	$(CC) $^ $(LDOPTS) -o $@
-
-triv2 : mainv2.o tri.o utile.o
-	@echo ""
-	@echo "---------------------------------------------"
-	@echo "Creation de l'executable "$@
-	@echo "---------------------------------------------"
-	$(CC) $^ $(LDOPTS) -o $@
-
-
 
 # regle pour "nettoyer" le r�pertoire
 clean:
