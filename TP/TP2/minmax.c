@@ -29,8 +29,8 @@ if(to - from == 2)
 else if(to-from != 2)
 {
     int mid = (from + to) / 2;
-    get_min_max_rec(tab, 0, mid, min, max);
-    get_min_max_rec(tab, mid+1, n-1, min, max);
+    get_min_max_rec(tab, from, mid, min, max);
+    get_min_max_rec(tab, mid+1, to, min, max);
 }
 }
 
