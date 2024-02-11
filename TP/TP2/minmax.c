@@ -21,11 +21,17 @@ for (int i = 1; i<n; i++)
 
 //EXO1.2
 void get_min_max_rec(int* tab, int from, int to, int* min, int * max){
+
+if(from < to)
+{
 if(to - from == 2)
 {if(tab[from]<tab[to]){*min = tab[from]; *max = tab[to];}}
 else if(to-from != 2)
-{get_min_max_rec(tab, 0, n/2, min, max);
-    get_min_max_rec(tab, (n/2)+1, n-1, min, max);
+{
+    int mid = (from + to) / 2;
+    get_min_max_rec(tab, 0, mid, min, max);
+    get_min_max_rec(tab, mid+1, n-1, min, max);
+}
 }
 
 }
