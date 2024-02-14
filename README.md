@@ -24,3 +24,4 @@
 * V1.7 Final TP1
 * V1.8 Some bug fixes for TP1
 * V2.1 Exo1 of TP2 completed and Exo2 until Q2-2 completed
+* V2.2 Exo3 started. G3-1 has been completed. We need to move on the part G2-3 as well.

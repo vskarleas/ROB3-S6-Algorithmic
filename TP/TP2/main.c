@@ -5,6 +5,7 @@
 #include "utile.h"
 #include "minmax.h"
 #include "maxsubarray.h"
+#include "median.h"
 
 void test_exo_1(int N, int step, int Bmin, int Bmax)
 {
@@ -119,6 +120,43 @@ void test_exo_2(int N, int step, int Bmin, int Bmax)
   fclose(fichier);
 }
 
+void test_exo_3(int N, int step, int Bmin, int Bmax)
+{
+  printf("\n In progess...\n");
+  int i, n;
+  float mean;
+  clock_t temps_initial;
+  clock_t temps_final;
+  FILE *fichier = NULL;
+  srand(time(NULL));
+  fichier = fopen("exo3.txt", "w");
+  if (fichier != NULL)
+  {
+    for (n = step; n < N; n += step)
+    {
+      fprintf(fichier, "%d\t", n);
+      int *tab;
+      tab = malloc(n * sizeof(int));
+
+      mean = 0;
+      for (i = 0; i < 20; i++)
+      {
+        init_tab(tab, n, Bmin, Bmax);
+        affiche_tab(tab, n, 1, "");
+        temps_initial = clock();
+        median(tab, n);
+        temps_final = clock();
+        affiche_tab(tab, n, 2, "Fusion");
+        mean = mean + 1. / (i + 1) * (temps_final - temps_initial);
+      }
+      fprintf(fichier, "%f\n", mean);
+
+      free(tab);
+    }
+  }
+  fclose(fichier);
+}
+
 int main()
 {
   init_nb_aleatoire();
@@ -130,6 +168,7 @@ int main()
   int Bmin = 10;
   int Bmax = 100;
   FILE *gnuplotPipe = popen("gnuplot -persistent", "w");
+  FILE *gnuplotPipe2 = popen("gnuplot -persistent", "w");
 
   switch (main_choice)
   {
@@ -147,7 +186,7 @@ int main()
     break;
 
   case 2:
-    N = 2100;
+    N = 1000;
     test_exo_2(N, step, Bmin, Bmax);
     clearScreen();
     printf("\nWe have removed the MaxSubArray1 algo result from the graph because it was impossible to see what was going on with the other algorithms. However you can always use gnuplot command and plot the 1st and 2nd column of the exo2.txt file\n\n");
@@ -157,11 +196,25 @@ int main()
     {
       fprintf(gnuplotPipe, "%s \n", commandsForGnuplot2[i]); // Send commands to gnuplot one by one.
     }
+
+    char *commandsForGnuplot22[] = {"set title \"MaxSubArray Algo 1 Comprison\"", "set style line 1 lt 1 linecolor rgb 'magenta' lw 2 pt 1", "set style line 2 lt 1 linecolor rgb 'blue' lw 2 pt 1", "plot 'exo2.txt' using 1:2 ls 2 title 'Algo 1' w lp"};
+    for (int i = 0; i < 4; i++)
+    {
+      fprintf(gnuplotPipe2, "%s \n", commandsForGnuplot22[i]); // Send commands to gnuplot one by one.
+    }
     printf("\n================================================\nProcess completed\n================================\n");
     break;
     break;
 
   case 3:
+    N = 10000;
+    test_exo_3(N, step, Bmin, Bmax);
+    clearScreen();
+    char *commandsForGnuplot3[] = {"set title \"Median Algo 1\"", "set style line 1 lt 1 linecolor rgb 'magenta' lw 2 pt 1", "set style line 2 lt 1 linecolor rgb 'blue' lw 2 pt 1", "plot 'exo3.txt' using 1:2 ls 2 title 'Algo 1' w lp"};
+    for (int i = 0; i < 4; i++)
+    {
+      fprintf(gnuplotPipe, "%s \n", commandsForGnuplot3[i]); // Send commands to gnuplot one by one.
+    }
     break;
 
   default:

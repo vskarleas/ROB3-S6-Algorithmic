@@ -136,7 +136,7 @@ int maxSubArraySum1(int *tab, int n)
 }
 ```
 
-Il s'agit d'un algorithme de complexéte O(n^3) car au pire des cas, on aura trois boucles imbriques de n elements. Ainsi on parle de n * n * n = n^3. La courbe du temps par rapport la taille du tableau est bien une courbe de n^3. On test pour un minimum des elements car on arrive déja à très grands nombres pour de taille assez petits. 
+Il s'agit d'un algorithme de complexéte O(n^3) car au pire des cas, on aura trois boucles imbriques de n elements. Ainsi on parle de n * n * n = n^3. La courbe du temps par rapport la taille du tableau est bien une courbe de n^3. On test pour un minimum des elements car on arrive déja à très grands nombres pour de taille assez petits.
 
 ![1707674499236](image/README/1707674499236.png)
 
@@ -164,3 +164,41 @@ D'un premier point de vue, l'algorithme s'emble d'avoit une comlexité O(n). Mai
 | ![1707677111355](image/README/1707677111355.png) | ![1707677106397](image/README/1707677106397.png) |
 
 On constate comme même que les valeurs du temps ne sont pas très précis.
+
+## Exercice 3
+
+### Q3-1 Médian en utilisant tri fusion
+
+L'agorithme est assez simple:
+
+```c
+void median(int *tab, int n)
+{
+    tri_fusion(tab, n); //O(n log(n))
+    if (n % 2 == 0) //O(1)
+    {
+        printf("Median number are: %d and %d\n", tab[(n/2)-1], tab[n/2]); //O(1)
+    }
+    else
+    {
+        printf("Median number is: %d\n", tab[n/2]); //O(1)
+    }
+}
+```
+
+Alors sa complexéte est O(n log(n)) et a courbe de l'exécution est la suivante:
+
+![1707940905588](image/README/1707940905588.png)
+
+### Q3-2
+
+Il faut trouver l'agorithme selon les specifications suivantes:
+
+> Développer une méthode de type diviser pour régner pour ce problème.
+> Soit selection(S,k) la fonction qui sélectionne le keme plus petit élément de S. Pour ce faire, on
+> utilise un élément pivot v du tableau en fonction duquel on partitionne S en trois sous-ensembles :
+> le sous-ensemble SG des éléments plus petits que v, le sous-ensemble Sv des éléments égaux à v et le
+> sous-ensemble SD des éléments plus grands que v. Si |SG| < k ≤ |SG| + |Sv| alors v est le keme plus
+> petit élément de S. Identifier l’appel récursif à réaliser après partition de S en SG, Sv et SD.
+
+Du coup, on propose l'agorithme suivante:

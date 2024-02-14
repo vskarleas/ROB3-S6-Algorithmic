@@ -81,6 +81,11 @@ utile.o : utile.c utile.h
 	@echo "---------------------------------------------"
 	$(CC) -c $(COMPILOPTS) $<
 
+median.o : median.c median.h
+	@echo ""
+	@echo "---------------------------------------------"
+	$(CC) -c $(COMPILOPTS) $<
+
 main.o : main.c minmax.h utile.h maxsubarray.h
 	@echo ""
 	@echo "---------------------------------------------"
@@ -89,7 +94,7 @@ main.o : main.c minmax.h utile.h maxsubarray.h
 ########################################################
 # regles explicites de creation des executables
 
-main : main.o utile.o maxsubarray.o minmax.o
+main : main.o utile.o maxsubarray.o minmax.o median.o
 	@echo ""
 	@echo "---------------------------------------------"
 	@echo "Creation de l'executable "$@
