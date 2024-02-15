@@ -15,4 +15,6 @@ int menu_mode();
 
 void get_max(int *tab, int n, int *max);
 
+void swap(int *a, int *b);
+
 #endif

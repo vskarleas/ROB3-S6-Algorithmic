@@ -9,4 +9,10 @@ void tri_fusion(int *tab, int n);
 
 void median(int *tab, int n);
 
+int pivot_division(int *tab, int start, int finish);
+
+int smallest_k(int *tab, int start, int finish, int k);
+
+void median_2(int *tab, int n);
+
 #endif

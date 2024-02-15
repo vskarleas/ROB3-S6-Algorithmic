@@ -103,3 +103,10 @@ void get_max(int *tab, int n, int *max)
         }
     }
 }
+
+void swap(int *a, int *b)
+{
+  int temp = *a;
+  *b = *a;
+  *a = temp;
+}

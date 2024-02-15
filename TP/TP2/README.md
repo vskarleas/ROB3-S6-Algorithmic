@@ -202,3 +202,49 @@ Il faut trouver l'agorithme selon les specifications suivantes:
 > petit élément de S. Identifier l’appel récursif à réaliser après partition de S en SG, Sv et SD.
 
 Du coup, on propose l'agorithme suivante:
+
+```
+fonction median_2 
+	Entree: un tablau des entier et sa longueur
+	Sortie: le median du tableau
+
+si longeur = 0 alors
+	median N'EXISTE PAS (NILL)
+sinon
+	si n est impair alors
+		retourner smallest_k(tableau, 0, n-1, n/2)
+	sinon
+		retourner (smallest_k(tableau, 0, n-1, n/2) + smallest_k(tableau, 0, n-1, n/2+1))
+	finsi
+finsi
+
+## Basé sur l'idée clasique qui si l'echantilon (trié) est un nombre impair, alors le median est l'element en centre et dans le cas d'une logueur pair c'est lamoyenne de deux nombres centrés.
+
+fonction smallest_k
+	Entree: un tableau des entiers, debut et fin de traitment de sous-tableau de tableau original, ainsi qu'un nombre k. 
+	Sortie: Retourner le kieme plus petit element de sous-tableau [debut, ... , fin].
+
+si debut = fin
+alors
+	retourner tableau[debut] ## Il y a un seul element sur le tableau donce effectivement il va etre le kieme element le plus petit. 
+finsi
+
+position_de_pivot <- pivot_division(tableau, debut, fin)
+
+si k = position_pivot - debut alors
+	retourner tableau[position_de_pivot] #kieme element le plus petit trouvé
+sinon si k < position_pivot - debut alors
+	retourner smallest_k(tableau, debut,position_de_pivot - 1, k) #le kieme element le plus petit n'est pas encire trouvé mais il va être à gauce
+sinon
+	retourner smallest_k(tableau,position_de_pivot- 1, fin, k - position_pivot +debut) #le kieme element va être à gauce
+finsi
+
+```
+
+pivot_division ici choisi un pivot aleartoirement tout en partionant le sous-tableau du tableau orginal selon les instructions du sujet.
+
+Cet algorithme est inspiré par le cours CS125 Fall 2016 - Unite 4 - Prof.  Jelani Nelson at Harvard University (source: https://people.seas.harvard.edu/~cs125/fall16/lec4.pdf).
+
+La complexité de l'agorithm est entre O(n) et O(n^2). Bein verifié par les resultats de la graphe:
+
+![1708028566198](image/README/1708028566198.png)

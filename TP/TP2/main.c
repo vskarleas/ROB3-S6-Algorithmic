@@ -80,7 +80,7 @@ void test_exo_2(int N, int step, int Bmin, int Bmax)
         mean = mean + 1. / (i + 1) * (temps_final - temps_initial);
       }
       fprintf(fichier, "%f\t", mean);
-      
+
       mean = 0;
       for (i = 0; i < 20; i++)
       {
@@ -92,29 +92,29 @@ void test_exo_2(int N, int step, int Bmin, int Bmax)
       }
       fprintf(fichier, "%f\n", mean); // TO BE REPLACED FROM \n to \t
 
-    /*
-      mean = 0;
-      for (i = 0; i < 20; i++)
-      {
-        init_tab(tab, n, Bmin, Bmax);
-        temps_initial = clock();
-        maxSubArraySum3(tab, n);
-        temps_final = clock();
-        mean = mean + 1. / (i + 1) * (temps_final - temps_initial);
-      }
-      fprintf(fichier, "%f\t", mean);
+      /*
+        mean = 0;
+        for (i = 0; i < 20; i++)
+        {
+          init_tab(tab, n, Bmin, Bmax);
+          temps_initial = clock();
+          maxSubArraySum3(tab, n);
+          temps_final = clock();
+          mean = mean + 1. / (i + 1) * (temps_final - temps_initial);
+        }
+        fprintf(fichier, "%f\t", mean);
 
-      mean = 0;
-      for (i = 0; i < 20; i++)
-      {
-        init_tab(tab, n, Bmin, Bmax);
-        temps_initial = clock();
-        maxSubArraySum4(tab, n);
-        temps_final = clock();
-        mean = mean + 1. / (i + 1) * (temps_final - temps_initial);
-      }
-      fprintf(fichier, "%f\n", mean);
-      */
+        mean = 0;
+        for (i = 0; i < 20; i++)
+        {
+          init_tab(tab, n, Bmin, Bmax);
+          temps_initial = clock();
+          maxSubArraySum4(tab, n);
+          temps_final = clock();
+          mean = mean + 1. / (i + 1) * (temps_final - temps_initial);
+        }
+        fprintf(fichier, "%f\n", mean);
+        */
     }
   }
   fclose(fichier);
@@ -149,7 +149,18 @@ void test_exo_3(int N, int step, int Bmin, int Bmax)
         affiche_tab(tab, n, 2, "Fusion");
         mean = mean + 1. / (i + 1) * (temps_final - temps_initial);
       }
-      fprintf(fichier, "%f\n", mean);
+      fprintf(fichier, "%f\t", mean);
+
+      mean = 0;
+      for (i = 0; i < 20; i++)
+      {
+        init_tab(tab, n, Bmin, Bmax);
+        temps_initial = clock();
+        median_2(tab, n);
+        temps_final = clock();
+        mean = mean + 1. / (i + 1) * (temps_final - temps_initial);
+      }
+      fprintf(fichier, "%f\n", mean); // TO BE REPLACED FROM \n to \t
 
       free(tab);
     }
@@ -210,8 +221,8 @@ int main()
     N = 10000;
     test_exo_3(N, step, Bmin, Bmax);
     clearScreen();
-    char *commandsForGnuplot3[] = {"set title \"Median Algo 1\"", "set style line 1 lt 1 linecolor rgb 'magenta' lw 2 pt 1", "set style line 2 lt 1 linecolor rgb 'blue' lw 2 pt 1", "plot 'exo3.txt' using 1:2 ls 2 title 'Algo 1' w lp"};
-    for (int i = 0; i < 4; i++)
+    char *commandsForGnuplot3[] = {"set title \"Median Algo 1\"", "set style line 1 lt 1 linecolor rgb 'magenta' lw 2 pt 1", "set style line 2 lt 1 linecolor rgb 'blue' lw 2 pt 1", "plot 'exo3.txt' using 1:2 ls 2 title 'Algo 1' w lp", "replot 'exo3.txt' using 1:3 ls 1 title 'Algo 2' w lp"};
+    for (int i = 0; i < 5; i++)
     {
       fprintf(gnuplotPipe, "%s \n", commandsForGnuplot3[i]); // Send commands to gnuplot one by one.
     }

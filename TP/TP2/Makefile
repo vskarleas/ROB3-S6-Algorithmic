@@ -81,7 +81,7 @@ utile.o : utile.c utile.h
 	@echo "---------------------------------------------"
 	$(CC) -c $(COMPILOPTS) $<
 
-median.o : median.c median.h
+median.o : median.c median.h utile.h
 	@echo ""
 	@echo "---------------------------------------------"
 	$(CC) -c $(COMPILOPTS) $<
