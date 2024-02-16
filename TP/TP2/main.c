@@ -90,31 +90,31 @@ void test_exo_2(int N, int step, int Bmin, int Bmax)
         temps_final = clock();
         mean = mean + 1. / (i + 1) * (temps_final - temps_initial);
       }
-      fprintf(fichier, "%f\n", mean); // TO BE REPLACED FROM \n to \t
+      fprintf(fichier, "%f\t", mean);
 
-      /*
-        mean = 0;
-        for (i = 0; i < 20; i++)
-        {
-          init_tab(tab, n, Bmin, Bmax);
-          temps_initial = clock();
-          maxSubArraySum3(tab, n);
-          temps_final = clock();
-          mean = mean + 1. / (i + 1) * (temps_final - temps_initial);
-        }
-        fprintf(fichier, "%f\t", mean);
+      mean = 0;
+      for (i = 0; i < 20; i++)
+      {
+        init_tab(tab, n, Bmin, Bmax);
+        temps_initial = clock();
+        maxSubArraySum3(tab, n);
+        temps_final = clock();
+        mean = mean + 1. / (i + 1) * (temps_final - temps_initial);
+      }
+      fprintf(fichier, "%f\t", mean);
 
-        mean = 0;
-        for (i = 0; i < 20; i++)
-        {
-          init_tab(tab, n, Bmin, Bmax);
-          temps_initial = clock();
-          maxSubArraySum4(tab, n);
-          temps_final = clock();
-          mean = mean + 1. / (i + 1) * (temps_final - temps_initial);
-        }
-        fprintf(fichier, "%f\n", mean);
-        */
+      
+      mean = 0;
+      for (i = 0; i < 20; i++)
+      {
+        init_tab(tab, n, Bmin, Bmax);
+        temps_initial = clock();
+        maxSubArraySum4(tab, n);
+        temps_final = clock();
+        mean = mean + 1. / (i + 1) * (temps_final - temps_initial);
+      }
+      fprintf(fichier, "%f\n", mean);
+      
     }
   }
   fclose(fichier);
@@ -180,6 +180,8 @@ int main()
   int Bmax = 100;
   FILE *gnuplotPipe = popen("gnuplot -persistent", "w");
   FILE *gnuplotPipe2 = popen("gnuplot -persistent", "w");
+  FILE *gnuplotPipe3 = popen("gnuplot -persistent", "w");
+  FILE *gnuplotPipe4 = popen("gnuplot -persistent", "w");
 
   switch (main_choice)
   {
@@ -201,17 +203,29 @@ int main()
     test_exo_2(N, step, Bmin, Bmax);
     clearScreen();
     printf("\nWe have removed the MaxSubArray1 algo result from the graph because it was impossible to see what was going on with the other algorithms. However you can always use gnuplot command and plot the 1st and 2nd column of the exo2.txt file\n\n");
-    char *commandsForGnuplot2[] = {"set title \"MaxSubArray Algorithms Comprison\"", "set style line 1 lt 1 linecolor rgb 'magenta' lw 2 pt 1", "set style line 2 lt 1 linecolor rgb 'blue' lw 2 pt 1", "plot 'exo2.txt' using 1:3 ls 1 title 'Algo 2' w lp"};
+    char *commandsForGnuplot2[] = {"set title \"MaxSubArray Algo 2\"", "set style line 1 lt 1 linecolor rgb 'magenta' lw 2 pt 1", "set style line 2 lt 1 linecolor rgb 'blue' lw 2 pt 1", "plot 'exo2.txt' using 1:3 ls 1 title 'Algo 2' w lp"};
     // We are not printing 'data_insertion-sort_all.temp' using 1:2 ls 1 title 'one' with lines, \ because we can't see the differences of others on scale
     for (int i = 0; i < 4; i++)
     {
       fprintf(gnuplotPipe, "%s \n", commandsForGnuplot2[i]); // Send commands to gnuplot one by one.
     }
 
-    char *commandsForGnuplot22[] = {"set title \"MaxSubArray Algo 1 Comprison\"", "set style line 1 lt 1 linecolor rgb 'magenta' lw 2 pt 1", "set style line 2 lt 1 linecolor rgb 'blue' lw 2 pt 1", "plot 'exo2.txt' using 1:2 ls 2 title 'Algo 1' w lp"};
+    char *commandsForGnuplot22[] = {"set title \"MaxSubArray Algo 1\"", "set style line 1 lt 1 linecolor rgb 'green' lw 2 pt 1", "set style line 2 lt 1 linecolor rgb 'green' lw 2 pt 1", "plot 'exo2.txt' using 1:2 ls 2 title 'Algo 1' w lp"};
     for (int i = 0; i < 4; i++)
     {
       fprintf(gnuplotPipe2, "%s \n", commandsForGnuplot22[i]); // Send commands to gnuplot one by one.
+    }
+
+    char *commandsForGnuplot23[] = {"set title \"MaxSubArray Algo 2 and Comprison\"", "set style line 1 lt 1 linecolor rgb 'magenta' lw 2 pt 1", "set style line 2 lt 1 linecolor rgb 'blue' lw 2 pt 1", "plot 'exo2.txt' using 1:3 ls 1 title 'Algo 2' w lp", "replot 'exo2.txt' using 1:4 ls 2 title 'Algo 3' w lp"};
+    for (int i = 0; i < 5; i++)
+    {
+      fprintf(gnuplotPipe3, "%s \n", commandsForGnuplot23[i]); // Send commands to gnuplot one by one.
+    }
+
+    char *commandsForGnuplot24[] = {"set title \"MaxSubArray Algo 3 and 4\"", "set style line 1 lt 1 linecolor rgb 'blue' lw 2 pt 1", "set style line 2 lt 1 linecolor rgb 'green' lw 2 pt 1", "plot 'exo2.txt' using 1:5 ls 2 title 'Algo 4' w lp", "replot 'exo2.txt' using 1:4 ls 1 title 'Algo 3' w lp"};
+    for (int i = 0; i < 5; i++)
+    {
+      fprintf(gnuplotPipe4, "%s \n", commandsForGnuplot24[i]); // Send commands to gnuplot one by one.
     }
     printf("\n================================================\nProcess completed\n================================\n");
     break;

@@ -90,7 +90,7 @@ void get_min_max_2(int *tab, int n, int *min, int *max)
 
 ![1707672267023](image/README/1707672267023.png)
 
-On constate que l'agorithm get_min_max_1 est plus efficace que get_min_max_2. L'explication est assez simple.
+On constate que l'agorithm get_min_max_1 est plus efficace que get_min_max_2 - qui n'est pas très d'accord avec les complexités théoriques car ` 2n-1` > `(3/2)n - 2`. Mais c'est quoi l'explication ?
 
 `get_min_max_1` parcourt le tableau une fois, effectuant des comparaisons et des affectations à temps constant. Sa complexité est O(n), ce qui le rend efficace pour des ensembles de données plus petits grâce à son approche simple et directe.
 
@@ -138,11 +138,11 @@ int maxSubArraySum1(int *tab, int n)
 
 Il s'agit d'un algorithme de complexéte O(n^3) car au pire des cas, on aura trois boucles imbriques de n elements. Ainsi on parle de n * n * n = n^3. La courbe du temps par rapport la taille du tableau est bien une courbe de n^3. On test pour un minimum des elements car on arrive déja à très grands nombres pour de taille assez petits.
 
-![1707674499236](image/README/1707674499236.png)
+![1708097962837](image/README/1708097962837.png)
 
 ### Q2-2 Invariant Θ(n^2)
 
-Selon la théorie mathematique, la meileur solution est celui de Kadane. L'algorithm proposé par le matécien est (notre invariant):
+Selon la théorie mathematique, la meileur solution est celui de Kadane. L'algorithm proposé par le mathematicien est (notre invariant):
 
 ```
 def max_subarray(numbers):
@@ -157,13 +157,71 @@ def max_subarray(numbers):
 
 En effet, si l'élément actuel en question est supérieur à la somme actuelle du sous-tableau (max_current sur le code), alors il est préférable de démarrer un "nouveau" sous-tableau avec tab[i] comme seul élément (il est déja le plus grand dasn ce cas là).
 
-D'un premier point de vue, l'algorithme s'emble d'avoit une comlexité O(n). Mais il y a une propabilité qu'il ne serait pas lineair pour chaque table possible. Par contre on sait que son majorant est Θ(n^2).
+D'un premier point de vue, l'algorithme semble d'avoir une comlexité O(n). Mais il y a une propabilité qu'il ne serait pas lineair pour chaque table possible. Par contre on sait que son majorant est Θ(n^2).
 
 | MaxSumArray1 vs MaxSumArray2                   | MaxSumArray2                                   |
 | ---------------------------------------------- | ---------------------------------------------- |
-| ![1707677111355](image/README/1707677111355.png) | ![1707677106397](image/README/1707677106397.png) |
+| ![1708097948171](image/README/1708097948171.png) | ![1708097956104](image/README/1708097956104.png) |
 
 On constate comme même que les valeurs du temps ne sont pas très précis.
+
+### Q2-3 Calculant stm3 en Θ(n)
+
+Pour ce problème on veut faire une divison du tableau, alors mathematiquement stm3 est egal:
+
+![1708089438705](image/README/1708089438705.png)
+
+En general il faut prendre un tableau et  le diviser en deux parties, A1 et A2, au milieu. stm1 est le partie à gauche, stm2 est le partie droit et stm3 va inclure les elements centrés. On va resoudre le probleme recursivement pour stm1 et stm2 (les deux sous-tableaux), ce qui nous donne max1 et max2 respectivement. Derniere etape est la "fusion" des resultats: on cherche le max entre max1, max2, et stm3. Le resultat sera la somme maximale du sous-tableau pour le tableau combiné.
+
+#### Complexité
+
+On calcule ![1708089465431](image/README/1708089465431.png) avec une boucle en Θ(n). De plus, on calcule ![1708089490912](image/README/1708089490912.png) avec une boucle en Θ(n).  On somme les deux resultats. stm(A) = max{max1, max2, stm3}. La compelxite de fusion est donc lie au calcul de stm3 qui ce fait en Θ(n).
+
+### Q2-4
+
+Selon la question precedent, on propose l'agorithm suivante:
+
+1. On divise le tableau dans 2 sous-tableaux (left and right). Il s'agit d'une appel recursive ayant comme cas de base: tableau d'un seule element retourne cet element comme son maximum.
+2. On calcule le stm3 qui calcule le maximum de sous-tableau gauche et droit
+3. On fait une comparaison de maximume ntre stm1, stm2, stm3
+
+#### Complexité
+
+En combinant ces deux parties, la complexité totale de l'algorithme est déterminée par le produit du nombre de niveaux de récursion et du coût de chaque opération de fusion. Puisque l'algorithme réalise une opération de fusion linéaire O(n) à chaque niveau de récursion et qu'il y a O(log n) niveaux, la complexité totale de l'algorithme est O(n log n).
+
+Le theoreme maitre nous donne:
+
+`T(n) = 2T(n/2) + O(n)` avec a = 2, b = 2 et d = 1 => O(n log(n))
+
+![1708097973064](image/README/1708097973064.png)
+
+En comparant les deux algorithms, on constate que algo2 est plus efficace que algo3 pour ce nombre d'itterations. En effet, algo2 a une complexite de O(n) et algo3 une compelxité O(n log(n)) tels que n < n log(n).
+
+### Q2-5
+
+Ca serait faux, car on peut avoir:
+
+pref(A1) =/= pref(A) et suff(A2) =/= suff(A). Un tel exemple est pour un tableau `1 -2 3 -1 ` avec A1 = {1,-2} et A2 = {3, -1}. AInsi pref(A1) = 1 et pref(A2) = 3 et pref(A) = 3. Donc on est biens dans le cas de pref(A1) =/= pref(A).
+
+### Q2-6
+
+#### Formule
+
+La formule de trouver le quadruplet est le suivant:
+
+(**max{stm1, stm2, suff1 + pref2}** , *max{pref1, tota1 + pref2}*, max{suff2, suff1 + tota2}, tota1 + tota2). De plus on remarque que la compelxité de cette operation est Θ(1).
+
+#### Complexité
+
+D'apres le theorem de maitre on a:
+
+`T(n) = 2T(n/2) + Θ(1) `car tous les operations de comparison qui sont effectués sur maxSubArraySumRec2 sont de complexité O(1). Ainsi a = 2, b = 2 and n = 0;
+
+Ainsi la complexité est Θ(n) selon le theoreme toujours.
+
+![1708102781170](image/README/1708102781170.png)
+
+Selon les resultats obtenu par la comparaiosn, l'agorithm4 (complexité Θ(n)) est plus efficace que l'gorithme3 (complexite O(n log(n))). Les resulatst theoriques sont verifiés experimantelment. 
 
 ## Exercice 3
 
@@ -248,3 +306,83 @@ Cet algorithme est inspiré par le cours CS125 Fall 2016 - Unite 4 - Prof.  Jela
 La complexité de l'agorithm est entre O(n) et O(n^2). Bein verifié par les resultats de la graphe:
 
 ![1708028566198](image/README/1708028566198.png)
+
+## Exercice 4
+
+Le code pour resoudre le puzzle "Shadows of the Knight" is:
+
+```c
+#include <stdbool.h>
+#include <stdio.h>
+#include <stdlib.h>
+#include <string.h>
+
+/**
+ * Auto-generated code below aims at helping you parse
+ * the standard input according to the problem statement.
+ **/
+
+int main() {
+  // width of the building.
+  int W;
+  // height of the building.
+  int H;
+  scanf("%d%d", &W, &H);
+  // maximum number of turns before game over.
+  int N;
+  scanf("%d", &N);
+  int X0;
+  int Y0;
+  scanf("%d%d", &X0, &Y0);
+
+  int x1 = 0;
+  int y1 = 0;
+  int x2 = W - 1;
+  int y2 = H - 1;
+
+  // game loop
+  while (1) {
+    // the direction of the bombs from batman's current location (U, UR, R, DR,
+    // D, DL, L or UL)
+    char bomb_dir[4];
+    scanf("%s", bomb_dir);
+
+    bomb_dir[strcspn(bomb_dir, "\n")] = '\0';
+
+    if (strcspn(bomb_dir, "U") != strlen(bomb_dir))
+    {
+        y2 = Y0 - 1;
+    }
+    else if (strcspn(bomb_dir, "D") != strlen(bomb_dir))
+    {
+        y1 = Y0 + 1;
+    }
+
+    if (strcspn(bomb_dir, "L") != strlen(bomb_dir))
+    {
+        x2 = X0 - 1;
+    }
+    else if (strcspn(bomb_dir, "R") != strlen(bomb_dir))
+    {
+        x1 = X0 + 1;
+    }
+
+    X0 = x1 + (x2 - x1) / 2;
+    Y0 = y1 + (y2 - y1) / 2;
+
+    // the location of the next window Batman should jump to.
+    printf("%d %d\n", X0, Y0);
+  }
+
+  return 0;
+}
+```
+
+On a cree deux couples (x1, y1) et (x2, y2) qui nous donne le diagonal de sous-2Dtableau sur laquel on chercher chaque fois. On cherche si sur la phrase lu existe "U", "D", "L", "R" et on fait les deplacemnets des coordonnes necesaires. Derniere etape est de mettre à jour les coordonnes du caracter qui sont controllés par les variables (x0, y0).
+
+| Phrase | x   | y   |
+| ------ | --- | --- |
+| U      |     | y-- |
+| D      |     | y++ |
+| L      | x-- |     |
+| R      | x++ |     |
