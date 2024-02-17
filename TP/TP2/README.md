@@ -2,7 +2,7 @@
 
 ## Exercice 1
 
-### Q1-1 Algorithmé et complexité
+### Q1-1 Algorithme et complexité
 
 On initialise `min` et `max` en leur assignant la valeur du premier élément du tableau. Ensuite, on parcourt le reste du tableau, ce qui représente n-1  éléments, en comparant chaque élément aux valeurs de base  de `min` et `max`. Si un élément est inférieur à `min` ou supérieur à `max`, on met à jour `min` ou `max` en conséquence.
 
@@ -264,13 +264,13 @@ void median(int *tab, int n)
 }
 ```
 
-Dès lors,  sa complexité est O(n log(n)) et sa courbe sa courbe de temps d’exécution est la suivante:
+Dès lors, sa complexité est O(n log(n)) et sa courbe de temps d’exécution est la suivante:
 
 ![1707940905588](image/README/1707940905588.png)
 
 ### Q3-2
 
-Il faut trouver un algorithme selon les specifications suivantes:
+Il faut trouver un algorithme selon les spécifications suivantes:
 
 > Développer une méthode de type diviser pour régner pour ce problème.
 > Soit selection(S,k) la fonction qui sélectionne le keme plus petit élément de S. Pour ce faire, on
@@ -323,7 +323,7 @@ La fonction pivot_division choisit un pivot aléatoirement et partitionne le sou
 
 Cet algorithme est inspiré par le cours CS125 de l'automne 2016, Unité 4, donné par le Professeur Jelani Nelson à l'Université Harvard (source: https://people.seas.harvard.edu/~cs125/fall16/lec4.pdf)
 
-La complexité de cet algorithme varie entre O(n) et O(n^2), en fonction de la distribution des données et de l'efficacité du pivot choisi. Cette fourchette de complexité a été vérifiée expérimentalement, comme le montrent les résultats graphiques :
+La complexité de cet algorithme varie entre O(n log n) et O(n^2), en fonction de la distribution des données et de l'efficacité du pivot choisi. Cette fourchette de complexité a été vérifiée expérimentalement, comme le montrent les résultats graphiques :
 
 ![1708028566198](image/README/1708028566198.png)
 
