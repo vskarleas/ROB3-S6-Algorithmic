@@ -47,9 +47,7 @@ max_local = tab[i]; //O(1)
 
 Chaque appel récursif divise le problème en deux sous-problèmes, ce qui implique une complexité de O(log(n)) pour le processus de division. En ce qui concerne la partie de comparaison, nous avons soit un cas de base avec un seul élément, soit une comparaison entre deux éléments suivie d'un retour à l'étape de division précédente.
 
-
 Par conséquent, nous avons une compléxité en O(3 * log(n)) pour l'ensemble des appels récursifs et O(n - 2) pour les comparaisons entre deux éléments, à condition que n soit une puissance de 2. En somme, la complexité totale est de  O(3 * log(n)) + O((n - 2)), qui peut être simplifiée en O((3/2)n - 2) car log(n) < n.
-
 
 ```c
 void get_min_max_rec(int *tab, int from, int to, int *min, int *max)
@@ -92,10 +90,9 @@ void get_min_max_2(int *tab, int n, int *min, int *max)
 
 ![1707672267023](image/README/1707672267023.png)
 
-
 Il est observé que l'algorithme `get_min_max_1` est plus performant que `get_min_max_2`, ce qui peut sembler contre-intuitif au regard des complexités théoriques, car 2n-1 est supérieur à (3/2)n - 2. L'explication pourrait résider dans les détails d'implémentation et le coût des opérations individuelles.
 
-En effet, 
+En effet,
 
 `get_min_max_1` parcourt le tableau une fois, effectuant des comparaisons et des affectations à temps constant. Sa complexité est O(n), ce qui le rend efficace pour des ensembles de données plus petits grâce à son approche simple et directe.
 
@@ -103,7 +100,7 @@ D'autre part , `get_min_max_2` divise récursivement le problème en sous-probl�
 
 Voici donc , le recapitulatif de nos resultats:
 
-| Algorithme         | Complexité | Avantages                                                          | Inconvenients                                           |
+| Algorithme        | Complexité | Avantages                                                          | Inconvenients                                           |
 | ----------------- | ----------- | ------------------------------------------------------------------ | ------------------------------------------------------- |
 | `get_min_max_1` | O(n)        | Simple, efficace pour les petits ensembles de données             | Peut être lent pour les grands ensembles de données   |
 | `get_min_max_2` | O(log n)    | Asymptotiquement plus rapide pour les grands ensembles de données | Plus de surcharge pour les petits ensembles de données |
@@ -140,9 +137,9 @@ int maxSubArraySum1(int *tab, int n)
    return max;
 }
 ```
-L'algorithme considéré a une complexité de O(n^3) car, dans le pire des cas, il comporte trois boucles imbriquées, chacune traitant n éléments. Par conséquent, le nombre total d'opérations est proportionnel à n * n * n = n^3. 
-La courbe représentant le temps d'exécution en fonction de la taille du tableau est bien une courbe cubique. Toutefois On limite ici les tests à un nombre minimum d'éléments, car les temps d'exécution deviennent très importants même pour des tailles relativement petites.
 
+L'algorithme considéré a une complexité de O(n^3) car, dans le pire des cas, il comporte trois boucles imbriquées, chacune traitant n éléments. Par conséquent, le nombre total d'opérations est proportionnel à n * n * n = n^3.
+La courbe représentant le temps d'exécution en fonction de la taille du tableau est bien une courbe cubique. Toutefois On limite ici les tests à un nombre minimum d'éléments, car les temps d'exécution deviennent très importants même pour des tailles relativement petites.
 
 ![1708097962837](image/README/1708097962837.png)
 
@@ -163,9 +160,7 @@ def max_subarray(numbers):
 
 En effet, si l'élément actuel en question est supérieur à la somme actuelle du sous-tableau (max_current sur le code), alors il est préférable de démarrer un "nouveau" sous-tableau avec tab[i] comme seul élément (il est déja le plus grand dans ce cas là).
 
-
 À première vue, l'algorithme semble avoir une complexité de O(n). Cependant, il existe une probabilité, bien que faible, qu'il ne soit pas linéaire pour toutes les configurations possibles de données. Néanmoins, on sait que la limite supérieure ( le majorant) de sa complexité, dans le pire des cas, est de Θ(n^2).
-
 
 | MaxSumArray1 vs MaxSumArray2                   | MaxSumArray2                                   |
 | ---------------------------------------------- | ---------------------------------------------- |
@@ -182,7 +177,6 @@ Pour ce problème on veut faire une divison du tableau, alors mathématiquement 
 Considérons un tableau A que nous divisons en deux parties, A1 à gauche et A2 à droite, séparées au milieu. stm1 représente la somme maximale du sous-tableau dans la partie gauche A1, et stm2 est celle de la partie droite A2. stm3 est calculé pour inclure les éléments qui chevauchent le milieu, englobant les derniers éléments de A1 et les premiers éléments de A2.
 Ensuite, nous résolvons le problème récursivement pour stm1 et stm2, ce qui nous donne max1 et max2 respectivement. La dernière étape est la fusion des résultats : nous cherchons le maximum entre max1, max2 et stm3. Le résultat final sera la somme maximale du sous-tableau pour le tableau combiné A.
 
-
 #### Complexité
 
 On calcule ![1708089465431](image/README/1708089465431.png) avec une boucle en Θ(n). De plus, on calcule ![1708089490912](image/README/1708089490912.png) avec une boucle en Θ(n).  On somme les deux resultats. stm(A) = max{max1, max2, stm3}. La complexité de fusion est donc lie au calcul de stm3 qui ce fait en Θ(n).
@@ -194,10 +188,9 @@ D'après la question précedente, on propose l'agorithme suivante:
 1.On divise le tableau en deux sous-tableaux, gauche (left) et droite (right). Il s'agit d'une appel recursive ayant comme cas de base:
 un tableau d'un seul élément qui renvoie cet élément comme la somme maximale de ce sous-tableau.
 
-2.On calcule  stm3, qui représente la somme maximale du sous-tableau chevauchant le milieu, en trouvant la somme maximale suffixe dans le sous-tableau de gauche et la somme maximale préfixe dans le sous-tableau de droite, puis en les additionnant.
+2.On calcule  stm3, qui représente la somme maximale du sous-tableau chevauchant le milieu, en trouvant la somme maximale dans le sous-tableau de gauche (tout en sauvegardant le resultat au derniere element du tableau de gauche) et la somme maximale dans le sous-tableau de droite (tout en sauvegardant le resultat au premier element du tableau de droit), puis en les additionnant = c'est le stm3.
 
 3.On effectue une comparaison pour déterminer le maximum entre stm1, stm2, et stm3.
-
 
 #### Complexité
 
@@ -209,7 +202,6 @@ De même, d'après le theoreme-maitre on a :
 
 ![1708097973064](image/README/1708097973064.png)
 
-
 En comparant les deux algorithmes, on observe que algo2 est plus efficace que algo3 pour un nombre donné d'itérations. En effet, algo2 présente une complexité de O(n) tandis que algo3 a une complexité de O(n log n) .En effet,pour tout
 n positif,  n est toujours inférieur à nlogn. Cela implique que, pour des tailles de tableau identiques, algo2 sera plus rapide que algo3 en raison de sa complexité temporelle inférieure.
 
@@ -217,7 +209,7 @@ n positif,  n est toujours inférieur à nlogn. Cela implique que, pour des tail
 
 Ca serait faux, car on peut avoir:
 
-pref(A1) =/= pref(A) et suff(A2) =/= suff(A). 
+pref(A1) =/= pref(A) et suff(A2) =/= suff(A).
 
 Par exemple,pour un tableau `1 -2 3 -1 ` avec A1 = {1,-2} et A2 = {3, -1} , on a  pref(A1) = 1 et pref(A2) = 3 et pref(A) = 3. Donc on est biens dans le cas de pref(A1) =/= pref(A).
 
@@ -239,9 +231,7 @@ Ainsi la complexité est Θ(n) .
 
 ![1708102781170](image/README/1708102781170.png)
 
-
-D'après les résultats obtenus par la comparaison graphique, l'algorithme 4, qui présente une complexité de Θ(n), est plus efficace que l'algorithme 3, dont la complexité est de O(nlogn). Les résultats théoriques sont donc corroborés par les expérimentations. 
-
+D'après les résultats obtenus par la comparaison graphique, l'algorithme 4, qui présente une complexité de Θ(n), est plus efficace que l'algorithme 3, dont la complexité est de O(nlogn). Les résultats théoriques sont donc corroborés par les expérimentations.
 
 ## Exercice 3
 
@@ -319,7 +309,7 @@ finsi
 
 ```
 
-La fonction pivot_division choisit un pivot aléatoirement et partitionne le sous-tableau du tableau original conformément aux instructions énoncées. 
+La fonction pivot_division choisit un pivot aléatoirement et partitionne le sous-tableau du tableau original conformément aux instructions énoncées.
 
 Cet algorithme est inspiré par le cours CS125 de l'automne 2016, Unité 4, donné par le Professeur Jelani Nelson à l'Université Harvard (source: https://people.seas.harvard.edu/~cs125/fall16/lec4.pdf)
 
