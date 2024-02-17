@@ -317,7 +317,7 @@ La complexité de cet algorithme varie entre O(n log n) et O(n^2), en fonction d
 
 ![1708028566198](image/README/1708028566198.png)
 
-Pour conclure, on observe que algo2 est plus rapide que algo1
+Pour conclure, on observe que l'allure de algo2 semble plus rapide que celle d'algo1.
 
 ## Exercice 4
 
