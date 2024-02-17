@@ -188,7 +188,7 @@ D'après la question précedente, on propose l'agorithme suivante:
 1.On divise le tableau en deux sous-tableaux, gauche (left) et droite (right). Il s'agit d'une appel recursive ayant comme cas de base:
 un tableau d'un seul élément qui renvoie cet élément comme la somme maximale de ce sous-tableau.
 
-2.On calcule  stm3, qui représente la somme maximale du sous-tableau chevauchant le milieu, en trouvant la somme maximale dans le sous-tableau de gauche (tout en sauvegardant le resultat au derniere element du tableau de gauche) et la somme maximale dans le sous-tableau de droite (tout en sauvegardant le resultat au premier element du tableau de droit), puis en les additionnant = c'est le stm3.
+2.On calcule  stm3, qui représente la somme maximale du sous-tableau chevauchant le milieu, en trouvant la somme maximale dans le sous-tableau de gauche (tout en sauvegardant le resultat au dernier element du tableau de gauche) et la somme maximale dans le sous-tableau de droite (tout en sauvegardant le resultat au premier element du tableau de droite), puis en les additionnant = c'est le stm3.
 
 3.On effectue une comparaison pour déterminer le maximum entre stm1, stm2, et stm3.
 
@@ -316,6 +316,8 @@ Cet algorithme est inspiré par le cours CS125 de l'automne 2016, Unité 4, donn
 La complexité de cet algorithme varie entre O(n log n) et O(n^2), en fonction de la distribution des données et de l'efficacité du pivot choisi. Cette fourchette de complexité a été vérifiée expérimentalement, comme le montrent les résultats graphiques :
 
 ![1708028566198](image/README/1708028566198.png)
+
+Pour conclure, on observe que algo2 est plus rapide que algo1
 
 ## Exercice 4
 
