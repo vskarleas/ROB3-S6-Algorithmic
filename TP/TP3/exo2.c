@@ -1,5 +1,6 @@
 #include <stdio.h>
-#include "stdbool.h"
+#include <stdbool.h>
+#include "utile.h"
 
 // EXO2.1
 void tri_taches_exo2(int *deb, int *fin, int nbTaches)
@@ -89,7 +90,7 @@ void calcule_OPT_glouton2(int *deb, int *fin, int nbTaches, bool *tacheSelected)
     int dispo = 0;
     int k = 0;
 
-    //same idea with the previous but here we use a staic table to save the date called tacheSelected
+    //same idea with the previous but here we use a static table to save the date called tacheSelected
     //This approch is close to the dynamc programming (programmation dynamique) of TD4
     for (int j = 0; j < nbTaches; j++)
     {

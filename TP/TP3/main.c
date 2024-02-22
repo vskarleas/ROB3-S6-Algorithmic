@@ -13,7 +13,7 @@ void test_exo_2(int N,int step, int Fmax){
 	clock_t temps_final; 
 	FILE* fichier = NULL;
 
-	srand(time(NULL));  //WHY TWO TIMES ?
+	//srand(time(NULL));  //WHY TWO TIMES ?
 	fichier = fopen("exo2.txt", "w");
 	int nbIterations = 20;
 	if (fichier != NULL)
@@ -25,7 +25,9 @@ void test_exo_2(int N,int step, int Fmax){
 			mean2 = 0;
 
 			for(i = 0;i <nbIterations; i++){
+				
 				generate_instances(debut, fin, n, Fmax);	
+				printf("%d\n", i);
 				temps_initial = clock();
 				calcule_OPT(debut, fin, n);
 				temps_final = clock();
@@ -51,6 +53,6 @@ int main(){
   int N = 200; int step = 20; int Fmax=100;
   init_nb_aleatoire();
   test_exo_2(N,step,Fmax);
-  test_exo_3(N,step,Fmax);
+  //test_exo_3(N,step,Fmax);
 return 0;
 }
