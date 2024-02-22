@@ -26,3 +26,4 @@
 * V2.1 Exo1 of TP2 completed and Exo2 until Q2-2 completed
 * V2.2 Exo3 started. G3-1 has been completed. We need to move on the part G2-3 as well.
 * V2.3 Finished TP2
+* V3.1 Exercise 1 TP 3 completed
