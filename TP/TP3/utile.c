@@ -31,5 +31,17 @@ void generate_instances(int *debut, int *fin, int n, int Fmax){
   }
 }
 
+int max(int x, int y)
+{
+  if (x > y)
+  {
+    return x;
+  }
+  else
+  {
+    return y;
+  }
+}
+
 
 
