@@ -1,9 +1,12 @@
-EXEC=main
+EXEC=main test
 
 all: $(EXEC)
 
 main: exo2.o exo3.o main.o utile.o
 	gcc -o main -g exo2.o exo3.o main.o utile.o
+
+test: test.o
+	gcc -o test -g test.o
 
 utile.o: utile.c
 	gcc -o utile.o -g -c utile.c -Wall
@@ -16,6 +19,10 @@ exo3.o: exo3.c
 
 main.o: main.c exo2.h utile.h exo3.h
 	gcc -o main.o -g -c main.c -Wall
+
+test.o: test.c
+	gcc -o test.o -g -c test.c -Wall
+
 
 clean :
 	rm *.o $(EXEC)	
