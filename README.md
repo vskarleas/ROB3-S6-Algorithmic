@@ -27,4 +27,5 @@
 * V2.2 Exo3 started. G3-1 has been completed. We need to move on the part G2-3 as well.
 * V2.3 Finished TP2
 * V3.1 Exercise 1 TP 3 completed
-* V3.2 Exercise 2 TP3
+* V3.2 Exercise 2 TP3 completed
+* V3.3 corrections on TP3 and mainly completed
