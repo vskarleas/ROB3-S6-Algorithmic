@@ -217,6 +217,10 @@ int main() {
 }
 ```
 
+
+IL Y AUSSI UNE AUTRE VERSIONQUE J'AI FAIT. C'EST LE SUIVANT: https://share.icloud.com/photos/0ae5x__yUIGFreGZCe49VEmKA
+J'AI PRIS DES PHOTOS PARCE QUE JE N'ETAIS PAS SUR MON ORDI. JE VA LE METTRE COMME VERSION 2 DEMAIN.
+
 Ce code suit les étapes suivantes :
 
 Lire le nombre de Pilipius et le coût du cadeau.
