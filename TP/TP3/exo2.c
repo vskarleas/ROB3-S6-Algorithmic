@@ -12,14 +12,15 @@ void tri_taches_exo2(int *deb, int *fin, int nbTaches)
         {
             if (fin[j] < fin[i])
             {
-                temp_start = deb[i];
-                temp_end = fin[i];
-
+                temp_end = fin[j];
+                fin[j] = fin[i];
+                fin[i] = temp_end;
+                
                 // exchanging fin needs to change the debut
-                deb[i] = deb[j];
-                fin[i] = fin[j];
-                deb[j] = temp_start;
-                fin[j] = temp_end;
+                temp_start = deb[j];
+                deb[j] = deb[i];
+                deb[i] = temp_start;
+        
             }
         }
     }
@@ -27,24 +28,18 @@ void tri_taches_exo2(int *deb, int *fin, int nbTaches)
 
 bool is_compatible(int i, int j, int *debut, int *fin)
 {
-    if (i >= j)
-    {
-        return false;
-    }
-    else // case that fin is inside of debut
-    {
-        if (fin[i] <= debut[j] || fin[j] <= debut[i])
+    if (fin[i] <= debut[j] || fin[j] <= debut[i])
         {
             return true;
         }
         return false;
-    }
 }
 
 int calcule_OPT(int *deb, int *fin, int nbTaches)
 {
     int der_j;
     bool continue_running = true;
+    //base case here
     if (nbTaches == 0)
     {
         return 0;
@@ -61,6 +56,7 @@ int calcule_OPT(int *deb, int *fin, int nbTaches)
                     continue_running = false;
                 }
             }
+            continue_running = true;
         }
 
         return max(1 + calcule_OPT(deb, fin, der_j), calcule_OPT(deb, fin, nbTaches - 1)); // as explained on the TP paper
