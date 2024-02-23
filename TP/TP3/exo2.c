@@ -38,7 +38,8 @@ bool is_compatible(int i, int j, int *debut, int *fin)
 int calcule_OPT(int *deb, int *fin, int nbTaches)
 {
     int der_j;
-    bool continue_running = true;
+    bool found_compatible_pair = false;
+    int i = 0;
     //base case here
     if (nbTaches == 0)
     {
@@ -46,18 +47,16 @@ int calcule_OPT(int *deb, int *fin, int nbTaches)
     }
     else
     {
-        for (int i = 0; i < nbTaches; i++)
+        while(i < nbTaches && !found_compatible_pair)
         {
-            while (continue_running)
-            {
-                if (is_compatible(i, nbTaches - 1, deb, fin))
+            if (is_compatible(i, nbTaches - 1, deb, fin))
                 {
                     der_j = i; // we have the max of i cases
-                    continue_running = false;
+                    found_compatible_pair = true;
                 }
-            }
-            continue_running = true;
+                i++;
         }
+        
 
         return max(1 + calcule_OPT(deb, fin, der_j), calcule_OPT(deb, fin, nbTaches - 1)); // as explained on the TP paper
     }
