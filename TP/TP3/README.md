@@ -191,26 +191,37 @@ retourner depth
 
 #### Compléxité
 
-La complexité de cet algorithme est O(n), car dans le pire des cas, il parcourt jusqu'à nbTaches, équivalent à n. La condition qui contrôle la boucle while utilise un opérateur logique 'et', ce qui assure qu'on ne dépasse pas n itérations.
+La compléité de cet algorithme peut être analysé comme suit : 
+
+*  `tri_selon_la_fin(deb, nbTaches)` et `tri_selon_la_fin(fin, nbTaches)` qui utilise le tri fusion. La complexité de chaque tri est O(n log n), où n est `nbTaches`.
+  Puisque le tri est effectué deux fois, la complexité totale pour cette étape est 2*O(n log n) = O(n log n).
+
+* La boucle s'exécute tant que `i` et `j` sont inférieurs à `nbTaches`. En pratique, cela signifie qu'elle s'exécutera pour chaque extrémité d'intervalle (début et fin), soit un total de 2n fois dans le pire des cas (chaque `i` et `j` va de 0 à `nbTaches - 1`).
+Les opérations à l'intérieur de la boucle sont toutes des opérations en temps constant, O(1).
+
+En combinant ces éléments, la complexité totale de l'algorithme est :
+
+- Pour les tris : O(n log n).
+- Pour la boucle : O(2n) = O(n).
+
+Par conséquent, la complexité globale de l'algorithme est dominée par l'étape de tri, soit O(n log n). Cette compléxité est visible 
 
 ![1708707430450](image/README/1708707430450.png)
 
 ### Q3
 
-On a testé deux exemples fait à la main qui etaient les suivantes:
+Nous avons réalisé des tests expérimentaux sur deux ensembles d'intervalles pour vérifier l'hypothèse selon laquelle le nombre de machines requis dans un ordonnancement optimal correspond à la profondeur de l'ensemble des intervalles. Voici les ensembles testés :
 
-* Exemple 1
+- Pour le premier ensemble :
+  - Les dates de début sont `[1, 2, 4, 6, 8]`.
+  - Les dates de fin sont `[3, 5, 7, 9, 10]`.
+- Pour le second ensemble :
+  - Les dates de début sont `[1, 3, 0, 5, 8, 5]`.
+  - Les dates de fin sont `[2, 4, 6, 7, 9, 9]`.
 
-  * int deb1[]= {1, 2, 4, 6, 8};
-  * int fin1[]= {3, 5, 7, 9, 10};
-* Exemple 2
+Les résultats des tests sont cohérents avec l'hypothèse : le premier ensemble nécessite 2 machines, tandis que le second en nécessite 3. Ces résultats correspondent à la profondeur maximale des intervalles dans chaque ensemble, confirmant ainsi que le nombre de machines dans un ordonnancement optimal est bien égal à la profondeur de l'ensemble d'intervalles des tâches.
 
-  * int deb2[]= {1, 3, 0, 5, 8, 5};
-  * int fin2[]= {2, 4, 6, 7, 9, 9};
-
-Dans le deux cas on obtiens les memes resultats (2 pour le premier et 3 pour le deuxieme)
-
-## Exercise 4
+## Exercice 4
 
 ```c
 #include <stdio.h>
@@ -266,17 +277,16 @@ J'AI PRIS DES PHOTOS PARCE QUE JE N'ETAIS PAS SUR MON ORDI. JE VA LE METTRE COMM
 
 Ce code suit les étapes suivantes :
 
-Lire le nombre de Pilipius et le coût du cadeau.
-Lire les budgets de chaque Pilipiu, les additionner et les trier.
-Si la somme des budgets est inférieure au coût du cadeau, afficher "IMPOSSIBLE".
-Sinon, répartir le coût du cadeau parmi les Pilipius en commençant par le budget le plus bas, tout en s'assurant que chaque contribution est le plus petit entre le budget du Pilipiu et sa part équitable du coût restant.
-Afficher les contributions de chaque Pilipiu.
+* Lire le nombre de Pilipius et le coût du cadeau.
+* Lire les budgets de chaque Pilipiu, les additionner et les trier.
+* Si la somme des budgets est inférieure au coût du cadeau, afficher "IMPOSSIBLE".
+* Sinon, répartir le coût du cadeau parmi les Pilipius en commençant par le budget le plus bas, tout en s'assurant que chaque contribution est le plus petit entre le budget du Pilipiu et sa part équitable du coût restant.
+* Afficher les contributions de chaque Pilipiu.
+  
 Cette approche gloutonne vise à minimiser la contribution la plus élevée en attribuant d'abord le montant que chaque Pilipiu peut raisonnablement contribuer, compte tenu du budget restant et du nombre de Pilipius restants.
 
-L'algorithme glouton que j'ai proposé pour le problème des Pilipius n'est pas nécessairement correct pour toutes les instances possibles.
- Le problème réside dans la manière dont l'algorithme répartit le coût du cadeau parmi les Pilipius.
- L'algorithme tente de minimiser la contribution la plus élevée en attribuant d'abord la contribution que chaque Pilipiu peut raisonnablement payer, compte tenu de son budget et du coût total restant.
-  Cependant, cette approche ne garantit pas toujours que la solution trouvée soit optimale selon les critères énoncés, notamment :
-
+L'algorithme glouton que nous proposons pour le problème des Pilipius n'est pas nécessairement correct pour toutes les instances possibles. En effet, le problème réside dans la manière dont l'algorithme répartit le coût du cadeau parmi les Pilipius.
+Il tente de minimiser la contribution la plus élevée en attribuant d'abord la contribution que chaque Pilipiu peut raisonnablement payer, compte tenu de son budget et du coût total restant.
+Cependant, cette approche ne garantit pas toujours que la solution trouvée soit optimale selon les critères énoncés, notamment :
 La plus grande contribution est minimale.
 Si plusieurs solutions optimales sont possibles, choisir celle où la deuxième plus grande contribution est minimale, et ainsi de suite.
