@@ -77,7 +77,7 @@ int calcule_OPT(int *deb, int *fin, int j)
 
 ### Q2
 
-La complexité de l'algorithme `calcule_OPT_glouton` est \(O(n)\). En effet, l'algorithme contient principalement une boucle `for` qui itère sur l'ensemble des tâches, allant de 0 à `nbTaches - 1`. À l'intérieur de cette boucle, toutes les opérations effectuées, sont en temps constant, c'est-à-dire O(1). Puisque ces opérations en temps constant sont répétées pour chaque tâche, la complexité globale de l'algorithme est dominée par le nombre d'itérations de la boucle, qui est proportionnel au nombre de tâches `n`.
+La complexité de l'algorithme `calcule_OPT_glouton` est O(n). En effet, l'algorithme contient principalement une boucle `for` qui itère sur l'ensemble des tâches, allant de 0 à `nbTaches - 1`. À l'intérieur de cette boucle, toutes les opérations effectuées, sont en temps constant, c'est-à-dire O(1). Puisque ces opérations en temps constant sont répétées pour chaque tâche, la complexité globale de l'algorithme est dominée par le nombre d'itérations de la boucle, qui est proportionnel au nombre de tâches `n`.
 
 Dès lors , la complexité totale est en O(n) (linéaire par rapport à `n`).
 
@@ -116,6 +116,8 @@ On obtient les graphiques suivants:
 ![1708706694935](image/README/1708706694935.png)
 
 ![1708707944362](image/README/1708707944362.png)
+
+Ici, algo2 correspond à calcule_OPT_glouton et algo3 correspond à calcule_OPT_glouton2. 
 
 A travers ces graphes , on constate que bien que les deux algorithmes présentent la même complexité théorique, leurs performances pratiques diffèrent. Cela illustre comment une opération individuelle de complexité O(1) peut influencer, même subtilement, le comportement global d'un algorithme.
 
@@ -194,7 +196,7 @@ int glouton(int *deb, int *fin, int nbTaches)
 
 #### Complexité
 
-Sa compléxité peut être analysé comme suit :
+Sa compléxité peut être analysée comme suit :
 
 * La boucle dans cette fonction parcourt le tableau `servers` de taille `n` une seule fois pour initialiser chaque élément à -1. La complexité est donc (O(n).
 * Il y a une boucle `for` qui parcourt toutes les tâches, donc elle s'exécute `n` fois.
@@ -402,6 +404,6 @@ players--;
 
 Ce code suit les étapes suivantes :
 
-1. Trier le tableay des budgets
-2. Decider locallement selon le montant restant si l'utilisateur va payer une partie ou le maximum de son budget
-3. Il utilise dans la logique combien des personnes ont déjà payés
+1. Trier le tableau des budgets
+2. Décider localement selon le montant restant si l'utilisateur va payer une partie ou le maximum de son budget.
+3. L'algorithme prend en compte le nombre de participants ayant déjà contribué pour ajuster les contributions ultérieures.
