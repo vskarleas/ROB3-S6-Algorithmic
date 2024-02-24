@@ -29,3 +29,4 @@
 * V3.1 Exercise 1 TP 3 completed
 * V3.2 Exercise 2 TP3 completed
 * V3.3 corrections on TP3 and mainly completed
+* V3.4 last fixes for TP3
