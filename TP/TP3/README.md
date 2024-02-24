@@ -146,16 +146,35 @@ Cette méthode peut conduire à un intervalle de temps inutilisé si une tâche 
 
 ![1708707666121](image/README/1708707666121.png)
 
+
+#### Algorithme
+Dès lors, voici le code de notre algorithme qui trie les tâches par ordre croissant des d[j]:
+
+
+
+#### Compelxité
+Sa compléxité peut être analysé comme suit : 
+
+* La boucle dans cette fonction parcourt le tableau `servers` de taille `n` une seule fois pour initialiser chaque élément à -1. La complexité est donc (O(n).
+
+* Il y a une boucle `for` qui parcourt toutes les tâches, donc elle s'exécute `n` fois.
+* À l'intérieur de la boucle `for`, il y a une boucle `while` qui parcourt les serveurs existants. Dans le pire des cas, si chaque tâche nécessite une nouvelle machine, cette boucle s'exécute `p` fois, où `p` est le nombre de machines déjà utilisées. Dans le pire des cas, `p` peut être aussi grand que `n`.
+* La vérification de la disponibilité du serveur (`if (servers[i] <= deb[j])`) est une opération en temps constant, en O(1) mais comme elle se trouve à l'intérieur de la boucle imbriquée, cette opération pourrait être exécutée jusqu'à n fois dans le pire des cas.
+
+Dès lors, la complexité totale de l'algorithme est en O(n^2) dans le pire des cas(c'est quadratique).
+
+
+
 ### Q2
 
 #### Algorithme
 
-On definit profondeur d'un ensemble d'intervalles ouverts le nombre maximum contenant une instance de temps. Alors, ici on a comme condition necesaire que: `nb_machines_besoin >= profondeur`. Pour calculer le profondeur, on tri les tableaux selon le triage en ordre croissante de f[j]. Après on applique l'algorithme suivante:
+Pour calculer cette profondeur, une première étape consiste à trier les tableaux de début et de fin d'intervalles en ordre croissant. Cela permet d'établir une condition nécessaire :nb_machines_besoin >= profondeur`. Une fois les intervalles triés, l'algorithme de calcul de la profondeur est appliqué pour déterminer ce nombre maximal de chevauchements, comme suit : 
 
 ```c
-tri_selon_le_fin(deb, nbTaches)
-tri_selon_le_fin(fin, nbTaches)
-depth <- 0 //Initialisation du profondeur à zero selon la du profondeur
+tri_selon_la_fin(deb, nbTaches)
+tri_selon_la_fin(fin, nbTaches)
+depth <- 0 //Initialisation de la  profondeur à zéro 
 
 tant que i < nbTaches & j < nbTaches
     si deb[i] < fin[j] alors
@@ -170,9 +189,9 @@ fin tant que
 retourner depth
 ```
 
-#### Compelxité
+#### Compléxité
 
-La complexité d'algorithme est de O(n) parce que le pire de cas possible est de parcourir jusque nbTcahes = n. Il y a un 'et logique' sur la condition qui control la boucle while [sur le code] et on fait on ne peut pas avoir plus que n itterations.
+La complexité de cet algorithme est O(n), car dans le pire des cas, il parcourt jusqu'à nbTaches, équivalent à n. La condition qui contrôle la boucle while utilise un opérateur logique 'et', ce qui assure qu'on ne dépasse pas n itérations.
 
 ![1708707430450](image/README/1708707430450.png)
 
