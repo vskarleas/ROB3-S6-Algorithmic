@@ -125,7 +125,7 @@ void test_exo_3(int N, int step, int Fmax)
 
 void test_exo_3_2()
 {
-	//============ Example 1 ==============
+	//============ example 1 ==============
 	int deb1[] = {1, 2, 4, 6, 8};
 	int fin1[] = {3, 5, 7, 9, 10};
 
@@ -139,7 +139,7 @@ void test_exo_3_2()
 	printf("Servers needed : %d\n", nb_servers);
 
 
-	//============ Example 2 ==============
+	//============ example 2 ==============
 	int deb2[] = {1, 3, 0, 5, 8, 5};
 	int fin2[] = {2, 4, 6, 7, 9, 9};
 
@@ -156,7 +156,7 @@ int main()
 	int N = 110;
 	int step = 10;
 
-	/* Used only on Case 1 */
+	/* Used only on Case 1 (testing exo1) */
 	int n = 10;
 	int d[n], f[n];
 
@@ -173,11 +173,11 @@ int main()
 
 		generate_instances(d, f, n, Fmax);
 
-		// Affichage des tâches
-		printf("Taches générées :\n");
+		//Printing the tasks generation results
+		printf("Instances generated :\n");
 		for (int i = 0; i < n; i++)
 		{
-			printf("Tache %d : Debut = %d, Fin = %d\n", i, d[i], f[i]);
+			printf("Task No %d : Start = %d, End = %d\n", i, d[i], f[i]);
 		}
 
 		break;
@@ -211,6 +211,7 @@ int main()
 		break;
 
 	default:
+		//Treating the case where menu_mode() functions runs into an error
 		printf("An error occured\n");
 		exit(1);
 		break;

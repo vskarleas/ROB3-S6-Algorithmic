@@ -8,6 +8,8 @@
 #include <ncurses.h>
 #include "utile.h"
 
+
+/* Printing the table (for visualisation and test porpuses) */
 void affiche_tab(int *tab, int n, int mode, char *methode)
 {
     if (mode == 1)
@@ -32,12 +34,13 @@ void init_nb_aleatoire()
   srand(time(0));
 }
 
-/*Generates random numbers min and max given as arguments*/
+/* Generates random numbers min and max given as arguments */
 int nb_random(int min, int max)
 {
   return min + rand() % (max + 1 - min);
 }
 
+/* Rand tasks (instances) generation */
 void generate_instances(int *debut, int *fin, int n, int Fmax)
 {
   for (int i = 0; i < n; ++i)
@@ -47,6 +50,7 @@ void generate_instances(int *debut, int *fin, int n, int Fmax)
   }
 }
 
+/* Choose exercise testing for main program */
 int menu_mode()
 {
   char userInput[20];
@@ -88,6 +92,7 @@ int menu_mode()
   return 0;
 }
 
+/* Simply returns the maximum between two numbers (inputs) */
 int max(int x, int y)
 {
   if (x > y)

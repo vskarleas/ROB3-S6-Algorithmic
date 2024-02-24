@@ -55,6 +55,7 @@ void fusion(int *deb, int *fin, int debut, int milieu, int finTab)
     }
 }
 
+//Recursive calls for sort merging algorithm defined below at 'tri_taches_exo2'
 void tri_fusion(int *deb, int *fin, int debut, int finTab)
 {
     if (debut < finTab)
@@ -67,6 +68,7 @@ void tri_fusion(int *deb, int *fin, int debut, int finTab)
 }
 
 // EXO2.1
+//A sort merging approach from TP1
 void tri_taches_exo2(int *deb, int *fin, int nbTaches)
 {
     tri_fusion(deb, fin, 0, nbTaches - 1);
@@ -96,7 +98,7 @@ int calcule_OPT(int *deb, int *fin, int j)
     else
     {
         int der_j = -1;
-        // Trouver la dernière tâche compatible avec la tâche j
+        //Findig the last task that is compatible with j
         for (int i = 0; i < j; i++)
         {
             if (is_compatible(i, j, deb, fin))
@@ -105,7 +107,7 @@ int calcule_OPT(int *deb, int *fin, int j)
             }
         }
 
-        // Calculer récursivement l'OPT en incluant ou excluant la tâche j
+        //Using the recursive logic explained on the TP paper
         return max(1 + calcule_OPT(deb, fin, der_j), calcule_OPT(deb, fin, j - 1));
     }
 }

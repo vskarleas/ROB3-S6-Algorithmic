@@ -57,19 +57,18 @@ int glouton(int *deb, int *fin, int nbTaches)
 // EXO3.2
 void fusion_extrem(int *tab, int debut, int milieu, int fin)
 {
-	int n1 = milieu - debut + 1; // Longueur du premier sous-tableau
-	int n2 = fin - milieu;		 // Longueur du second sous-tableau
+	int n1 = milieu - debut + 1; 
+	int n2 = fin - milieu;
 
-	// Création de tableaux temporaires
+	// Temporary tables initialisation
 	int L[n1], R[n2];
 
-	// Copie des données dans les tableaux temporaires
 	for (int i = 0; i < n1; i++)
 		L[i] = tab[debut + i];
 	for (int j = 0; j < n2; j++)
 		R[j] = tab[milieu + 1 + j];
 
-	// Fusion des tableaux temporaires
+	// Merging the temp tables
 	int i = 0, j = 0, k = debut;
 	while (i < n1 && j < n2)
 	{
@@ -86,7 +85,7 @@ void fusion_extrem(int *tab, int debut, int milieu, int fin)
 		k++;
 	}
 
-	// Copie des éléments restants
+	// Re-writing the result to the original table received on arguments
 	while (i < n1)
 	{
 		tab[k] = L[i];
@@ -101,7 +100,7 @@ void fusion_extrem(int *tab, int debut, int milieu, int fin)
 	}
 }
 
-// Fonction de tri fusion pour trier un tableau.
+//Recursive calls for sort merging algorithm
 void tri_fusion_extrem(int *tab, int debut, int fin)
 {
 	if (debut < fin)
@@ -113,6 +112,7 @@ void tri_fusion_extrem(int *tab, int debut, int fin)
 	}
 }
 
+//Sort merging
 void tri(int *tab, int n)
 {
 	tri_fusion_extrem(tab, 0, n - 1);
@@ -124,8 +124,9 @@ int get_profondeur(int *deb, int *fin, int nbTaches)
 	tri(deb, nbTaches);
 	tri(fin, nbTaches);
 
-	int depth = 0;
-	int p = 0;
+	int depth = 0; //Depth is the 'profondeur'
+	int p = 0; //Servers in use
+	/* Indexes for start-finish analysis */
 	int i = 0;
 	int j = 0;
 
@@ -145,5 +146,5 @@ int get_profondeur(int *deb, int *fin, int nbTaches)
 		depth = max(p, depth);
 	}
 
-	return depth; // Retourner la profondeur maximale trouvée
+	return depth; //
 }
