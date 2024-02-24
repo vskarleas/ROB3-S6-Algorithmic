@@ -108,33 +108,41 @@ L'algorithme récursif de la question 1, montre une complexité qui croît rapid
 
 ### Q4
 
-Basé sur l'algorithme de la question 2, maintenant on cree un tablau statique qui s'appelle tacheSelected surlequel on sauvegarde  pour chaque position si la machine peut accepter un tache quand il n'y a pas un chevauchment. C'est juste le sauvegrade d'une information de plus qui n'est pas utilisé sur la logique de décision de l'agorithme glouton. La complexité est toujours O(n).
+L'algorithme calcule_OPT_glouton2 enrichit la version gloutonne précédente en enregistrant explicitement les tâches sélectionnées pour l'ordonnancement. Il utilise pour cela un tableau statique tacheSelected de booléens où chaque élément correspond à une tâche : si tacheSelected[j] vaut true, cela signifie que la tâche j a été retenue dans l'ordonnancement ; si c'est false, la tâche j n'a pas été retenue car elle entre en conflit avec une tâche précédemment choisie.  
+ Bien que cette information supplémentaire soit sauvegardée, elle n'influe pas sur le processus décisionnel de l'algorithme glouton lui-même. La complexité de cet algorithme demeure linéaire, 
+O(n), car il parcourt une seule fois l'ensemble des tâches, indépendamment de l'ajout de cette trace.
 
-On obtiens le graphe suivant:
+Nota bene: Cette stratégie semble être analogue à une approche de programmation dynamique (vu au td4 du cours d'algorithmie), car elle stocke des informations supplémentaires qui pourraient être utiles pour des décisions ultérieures.
+
+
+ 
+On obtient les graphiques suivants:
 
 ![1708706694935](image/README/1708706694935.png)
 
 ![1708707944362](image/README/1708707944362.png)
 
-On constate que même si les deux algorithmes ont la meme complexité, on n'obtiens pas les mêmes resultats. C'est un très bon exemple d'observer comment une ligne du code de complexité O(1) peut impacter (pas beaucoup) le comportment du code globalment.
+A travers ces graphes , on constate que bien que les deux algorithmes présentent la même complexité théorique, leurs performances pratiques diffèrent. Cela illustre comment une opération individuelle de complexité O(1) peut influencer, même subtilement, le comportement global d'un algorithme.
 
 #### Nota bene
 
-On remarque qu'on ne distingue pas très clairment la complexite de O(n) sur la graphe car on n'a pas pris un grand nombre des nmbre des sequences pour faire les tests parce que l'appelle de fonction est la meme avec celle qui appele la question 1 qui a une compelxite de O(2^n) - il prend beaucoup de temps pour executer.
+La différence de performance entre les deux algorithmes n'est pas nettement visible sur le graphique, en raison du choix de l'échelle des tailles de séquence pour les tests. Les temps d'exécution pour la fonction de complexité O(n) ne sont pas clairement distingués car les tests n'ont pas été effectués avec une gamme suffisamment large de valeurs de n. Cela est d'autant plus notable que la même fonction d'appel est utilisée pour la question 1, qui a une complexité de O(2^n) et qui requiert un temps d'exécution considérablement plus long.
 
-## Exercise 3
+## Exercice 3
 
 ### Q1
+Pour optimiser l'ordonnancement et minimiser le nombre de machines nécessaires, il est important  de déterminer la séquence de tri des tâches la plus efficace. Parmi les trois stratégies de tri proposées, trier les tâches par ordre croissant de leurs dates de début 
+d[j] s'avère être l'approche optimale. Cette méthode priorise les tâches selon leur moment de commencement, facilitant une utilisation des machines plus stratégique et plus efficace.
 
-Il est tres important d'essayer diminuer le nombre des machines qui sont utilisé à chaque moment. Pour decider entre les trois propositions de triage, on considere que les taches en question sont trié en ordre corissant. La methode le plus efficace est celle de triage en ordre coissante de d[j]. Ca veut dire d'ordre croissante selon le debut de chaque tache. 
+En examinant les contre-exemples pour les deux autres méthodes de tri, on peut démontrer leur inefficacité :
 
-On propose le deux contre exemples ci-dessous qui nous permet à conclure.
-
-#### Trier les taches en ordre croissant de f[j] - d[j]
+#### Trier les tâches en ordre croissant de f[j] - d[j]: 
+Cette methode (la durée de la tâche) ne prend pas en compte les chevauchements potentiels qui peuvent survenir avec des tâches plus longues commençant plus tôt.
 
 ![1708707660029](image/README/1708707660029.png)
 
-#### Trier les taches en ordre croissant de f[j]
+#### Trier les tâches en ordre croissant de f[j]
+Cette méthode peut conduire à un intervalle de temps inutilisé si une tâche ayant une date de début tardive se termine avant d'autres tâches ayant commencé plus tôt.
 
 ![1708707666121](image/README/1708707666121.png)
 
