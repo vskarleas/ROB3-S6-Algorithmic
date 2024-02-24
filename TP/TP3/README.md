@@ -24,17 +24,16 @@ tant que i de 1 à n
 
 La condition de nouveau max est d'être inferieure ou egale à max.
 
-La compléxité de ce code peut être analysé comme suit : 
+La compléxité de ce code peut être analysé comme suit :
 
 La fonction génère des instances pour un problème d'ordonnancement en assignant aléatoirement des dates de début et de fin à n tâches, avec certaines contraintes.
 
 * La boucle for itère n fois, où n est le nombre de tâches.
-*  debut[i] = nb_random(0, Fmax) génére un nombre aléatoire pour la date de début de la tâche. Cette opération est considérée comme 
-O(1), une opération en temps constant.
+* debut[i] = nb_random(0, Fmax) génére un nombre aléatoire pour la date de début de la tâche. Cette opération est considérée comme
+  O(1), une opération en temps constant.
 * fin[i] = debut[i] + nb_random(1, Fmax - debut[i]); : Génére un autre nombre aléatoire pour la durée de la tâche et l'ajouter à la date de début pour obtenir la date de fin. Cette opération est également O(1).
 
-Par conséquent, la complexité de generate_instances est O(n), où n est le nombre de tâches à générer. 
-
+Par conséquent, la complexité de generate_instances est O(n), où n est le nombre de tâches à générer.
 
 ## Exercice 2
 
@@ -74,13 +73,11 @@ int calcule_OPT(int *deb, int *fin, int j)
 }
 ```
 
-
-
 ![1708707927926](image/README/1708707927926.png)
 
 ### Q2
 
-La complexité de l'algorithme `calcule_OPT_glouton` est \(O(n)\). En effet, l'algorithme contient principalement une boucle `for` qui itère sur l'ensemble des tâches, allant de 0 à `nbTaches - 1`. À l'intérieur de cette boucle, toutes les opérations effectuées, sont en temps constant, c'est-à-dire O(1). Puisque ces opérations en temps constant sont répétées pour chaque tâche, la complexité globale de l'algorithme est dominée par le nombre d'itérations de la boucle, qui est proportionnel au nombre de tâches `n`. 
+La complexité de l'algorithme `calcule_OPT_glouton` est \(O(n)\). En effet, l'algorithme contient principalement une boucle `for` qui itère sur l'ensemble des tâches, allant de 0 à `nbTaches - 1`. À l'intérieur de cette boucle, toutes les opérations effectuées, sont en temps constant, c'est-à-dire O(1). Puisque ces opérations en temps constant sont répétées pour chaque tâche, la complexité globale de l'algorithme est dominée par le nombre d'itérations de la boucle, qui est proportionnel au nombre de tâches `n`.
 
 Dès lors , la complexité totale est en O(n) (linéaire par rapport à `n`).
 
@@ -108,14 +105,12 @@ L'algorithme récursif de la question 1, montre une complexité qui croît rapid
 
 ### Q4
 
-L'algorithme calcule_OPT_glouton2 enrichit la version gloutonne précédente en enregistrant explicitement les tâches sélectionnées pour l'ordonnancement. Il utilise pour cela un tableau statique tacheSelected de booléens où chaque élément correspond à une tâche : si tacheSelected[j] vaut true, cela signifie que la tâche j a été retenue dans l'ordonnancement ; si c'est false, la tâche j n'a pas été retenue car elle entre en conflit avec une tâche précédemment choisie.  
- Bien que cette information supplémentaire soit sauvegardée, elle n'influe pas sur le processus décisionnel de l'algorithme glouton lui-même. La complexité de cet algorithme demeure linéaire, 
+L'algorithme calcule_OPT_glouton2 enrichit la version gloutonne précédente en enregistrant explicitement les tâches sélectionnées pour l'ordonnancement. Il utilise pour cela un tableau statique tacheSelected de booléens où chaque élément correspond à une tâche : si tacheSelected[j] vaut true, cela signifie que la tâche j a été retenue dans l'ordonnancement ; si c'est false, la tâche j n'a pas été retenue car elle entre en conflit avec une tâche précédemment choisie.
+ Bien que cette information supplémentaire soit sauvegardée, elle n'influe pas sur le processus décisionnel de l'algorithme glouton lui-même. La complexité de cet algorithme demeure linéaire,
 O(n), car il parcourt une seule fois l'ensemble des tâches, indépendamment de l'ajout de cette trace.
 
 Nota bene: Cette stratégie semble être analogue à une approche de programmation dynamique (vu au td4 du cours d'algorithmie), car elle stocke des informations supplémentaires qui pourraient être utiles pour des décisions ultérieures.
 
-
- 
 On obtient les graphiques suivants:
 
 ![1708706694935](image/README/1708706694935.png)
@@ -131,45 +126,88 @@ La différence de performance entre les deux algorithmes n'est pas nettement vis
 ## Exercice 3
 
 ### Q1
-Pour optimiser l'ordonnancement et minimiser le nombre de machines nécessaires, il est important  de déterminer la séquence de tri des tâches la plus efficace. Parmi les trois stratégies de tri proposées, trier les tâches par ordre croissant de leurs dates de début 
+
+Pour optimiser l'ordonnancement et minimiser le nombre de machines nécessaires, il est important  de déterminer la séquence de tri des tâches la plus efficace. Parmi les trois stratégies de tri proposées, trier les tâches par ordre croissant de leurs dates de début
 d[j] s'avère être l'approche optimale. Cette méthode priorise les tâches selon leur moment de commencement, facilitant une utilisation des machines plus stratégique et plus efficace.
 
 En examinant les contre-exemples pour les deux autres méthodes de tri, on peut démontrer leur inefficacité :
 
-#### Trier les tâches en ordre croissant de f[j] - d[j]: 
+#### Trier les tâches en ordre croissant de f[j] - d[j]:
+
 Cette methode (la durée de la tâche) ne prend pas en compte les chevauchements potentiels qui peuvent survenir avec des tâches plus longues commençant plus tôt.
 
 ![1708707660029](image/README/1708707660029.png)
 
 #### Trier les tâches en ordre croissant de f[j]
+
 Cette méthode peut conduire à un intervalle de temps inutilisé si une tâche ayant une date de début tardive se termine avant d'autres tâches ayant commencé plus tôt.
 
 ![1708707666121](image/README/1708707666121.png)
 
-
 #### Algorithme
+
 Dès lors, voici le code de notre algorithme qui trie les tâches par ordre croissant des d[j]:
 
+```c
+void init_servers(int n, int *tab)
+{
+	for (int i = 0; i < n; i++)
+	{
+		tab[i] = -1;
+	}
+	return;
+}
 
+int glouton(int *deb, int *fin, int nbTaches)
+{
+	int p = 0;			   // servers working currently
+	int servers[nbTaches]; // maximum number of machines is the number of requests
 
-#### Compelxité
-Sa compléxité peut être analysé comme suit : 
+	init_servers(nbTaches, servers);
+
+	for (int j = 0; j < nbTaches; j++)
+	{
+		int i = 0;
+		bool need_new_server = true;
+		while (i < p && need_new_server) // we test every server that is working if it has finished the task or not
+		{
+			{
+				if (servers[i] <= deb[j])
+				{
+					servers[i] = fin[j];
+					need_new_server = false;
+				}
+				i++;
+			}
+		}
+
+		if (need_new_server) // every server is working. We add a new one on the network
+		{
+			servers[p] = fin[j];
+			p++;
+		}
+	}
+
+	return p;
+}
+```
+
+#### Complexité
+
+Sa compléxité peut être analysé comme suit :
 
 * La boucle dans cette fonction parcourt le tableau `servers` de taille `n` une seule fois pour initialiser chaque élément à -1. La complexité est donc (O(n).
-
 * Il y a une boucle `for` qui parcourt toutes les tâches, donc elle s'exécute `n` fois.
 * À l'intérieur de la boucle `for`, il y a une boucle `while` qui parcourt les serveurs existants. Dans le pire des cas, si chaque tâche nécessite une nouvelle machine, cette boucle s'exécute `p` fois, où `p` est le nombre de machines déjà utilisées. Dans le pire des cas, `p` peut être aussi grand que `n`.
 * La vérification de la disponibilité du serveur (`if (servers[i] <= deb[j])`) est une opération en temps constant, en O(1) mais comme elle se trouve à l'intérieur de la boucle imbriquée, cette opération pourrait être exécutée jusqu'à n fois dans le pire des cas.
 
 Dès lors, la complexité totale de l'algorithme est en O(n^2) dans le pire des cas(c'est quadratique).
 
-
-
 ### Q2
 
 #### Algorithme
 
-Pour calculer cette profondeur, une première étape consiste à trier les tableaux de début et de fin d'intervalles en ordre croissant. Cela permet d'établir une condition nécessaire :nb_machines_besoin >= profondeur`. Une fois les intervalles triés, l'algorithme de calcul de la profondeur est appliqué pour déterminer ce nombre maximal de chevauchements, comme suit : 
+Pour calculer cette profondeur, une première étape consiste à trier les tableaux de début et de fin d'intervalles en ordre croissant. Cela permet d'établir une condition nécessaire :nb_machines_besoin >= profondeur`. Une fois les intervalles triés, l'algorithme de calcul de la profondeur est appliqué pour déterminer ce nombre maximal de chevauchements, comme suit :
 
 ```c
 tri_selon_la_fin(deb, nbTaches)
@@ -191,20 +229,19 @@ retourner depth
 
 #### Compléxité
 
-La compléité de cet algorithme peut être analysé comme suit : 
+La complexité de cet algorithme peut être analysée comme suit :
 
-*  `tri_selon_la_fin(deb, nbTaches)` et `tri_selon_la_fin(fin, nbTaches)` qui utilise le tri fusion. La complexité de chaque tri est O(n log n), où n est `nbTaches`.
+* `tri_selon_la_fin(deb, nbTaches)` et `tri_selon_la_fin(fin, nbTaches)` qui utilise le tri fusion. La complexité de chaque tri est O(n log n), où n est `nbTaches`.
   Puisque le tri est effectué deux fois, la complexité totale pour cette étape est 2*O(n log n) = O(n log n).
-
 * La boucle s'exécute tant que `i` et `j` sont inférieurs à `nbTaches`. En pratique, cela signifie qu'elle s'exécutera pour chaque extrémité d'intervalle (début et fin), soit un total de 2n fois dans le pire des cas (chaque `i` et `j` va de 0 à `nbTaches - 1`).
-Les opérations à l'intérieur de la boucle sont toutes des opérations en temps constant, O(1).
+  Les opérations à l'intérieur de la boucle sont toutes des opérations en temps constant, O(1).
 
 En combinant ces éléments, la complexité totale de l'algorithme est :
 
 - Pour les tris : O(n log n).
 - Pour la boucle : O(2n) = O(n).
 
-Par conséquent, la complexité globale de l'algorithme est dominée par l'étape de tri, soit O(n log n). Cette compléxité est visible 
+Par conséquent, la complexité globale de l'algorithme est dominée par l'étape de tri, soit O(n log n). Cette compléxité est visible sur la graphique suivant:
 
 ![1708707430450](image/README/1708707430450.png)
 
@@ -222,6 +259,8 @@ Nous avons réalisé des tests expérimentaux sur deux ensembles d'intervalles p
 Les résultats des tests sont cohérents avec l'hypothèse : le premier ensemble nécessite 2 machines, tandis que le second en nécessite 3. Ces résultats correspondent à la profondeur maximale des intervalles dans chaque ensemble, confirmant ainsi que le nombre de machines dans un ordonnancement optimal est bien égal à la profondeur de l'ensemble d'intervalles des tâches.
 
 ## Exercice 4
+
+### V1
 
 ```c
 #include <stdio.h>
@@ -271,10 +310,6 @@ int main() {
 }
 ```
 
-
-IL Y AUSSI UNE AUTRE VERSIONQUE J'AI FAIT. C'EST LE SUIVANT: https://share.icloud.com/photos/0ae5x__yUIGFreGZCe49VEmKA
-J'AI PRIS DES PHOTOS PARCE QUE JE N'ETAIS PAS SUR MON ORDI. JE VA LE METTRE COMME VERSION 2 DEMAIN.
-
 Ce code suit les étapes suivantes :
 
 * Lire le nombre de Pilipius et le coût du cadeau.
@@ -282,7 +317,7 @@ Ce code suit les étapes suivantes :
 * Si la somme des budgets est inférieure au coût du cadeau, afficher "IMPOSSIBLE".
 * Sinon, répartir le coût du cadeau parmi les Pilipius en commençant par le budget le plus bas, tout en s'assurant que chaque contribution est le plus petit entre le budget du Pilipiu et sa part équitable du coût restant.
 * Afficher les contributions de chaque Pilipiu.
-  
+
 Cette approche gloutonne vise à minimiser la contribution la plus élevée en attribuant d'abord le montant que chaque Pilipiu peut raisonnablement contribuer, compte tenu du budget restant et du nombre de Pilipius restants.
 
 L'algorithme glouton que nous proposons pour le problème des Pilipius n'est pas nécessairement correct pour toutes les instances possibles. En effet, le problème réside dans la manière dont l'algorithme répartit le coût du cadeau parmi les Pilipius.
@@ -290,3 +325,83 @@ Il tente de minimiser la contribution la plus élevée en attribuant d'abord la 
 Cependant, cette approche ne garantit pas toujours que la solution trouvée soit optimale selon les critères énoncés, notamment :
 La plus grande contribution est minimale.
 Si plusieurs solutions optimales sont possibles, choisir celle où la deuxième plus grande contribution est minimale, et ainsi de suite.
+
+### V2
+
+```c
+#include <stdlib.h>
+#include <stdio.h>
+#include <string.h>
+#include <stdbool.h>
+
+/**
+ * Auto-generated code below aims at helping you parse
+ * the standard input according to the problem statement.
+ **/
+
+ int sum_of(int n, int *tab)
+ {
+    int sumall = 0;
+    for (int i=0; i < n; i++){
+       sumall =  tab[i] + sumall;
+    }
+    return sumall;
+}
+
+int compare(const void *a, const void *b) { //difference to decide which is greater
+    return *(int *)a - *(int *)b;
+}
+
+int main()
+{
+    int N;
+    scanf("%d", &N);
+    int C;
+    scanf("%d", &C);
+    int amounts[N];
+    for (int i = 0; i < N; i++) {
+        int B;
+        scanf("%d", &B);
+        amounts[i] = B;
+    }
+
+    // Write an answer using printf(). DON'T FORGET THE TRAILING \n
+    // To debug: fprintf(stderr, "Debug messages...\n");
+
+if (sum_of(N, amounts)< C)
+{
+    printf("IMPOSSIBLE\n");
+}
+else
+{
+
+    qsort(amounts, N, sizeof(int), compare); // Trier les budgets
+    int remains = C;
+    int players = N;
+    for (int i = 0; i < N; i++)
+    {
+        if (remains/players > amounts[i])
+        {
+            printf("%d\n", amounts[i]);
+remains = remains - amounts[i];
+players--;
+        }
+        else
+        {
+            printf("%d\n", remains/players);
+            remains = remains - remains/players;
+            players--;
+        }
+    
+    }
+}
+
+    return 0;
+}
+```
+
+Ce code suit les étapes suivantes :
+
+1. Trier le tableay des budgets
+2. Decider locallement selon le montant restant si l'utilisateur va payer une partie ou le maximum de son budget
+3. Il utilise dans la logique combien des personnes ont déjà payés
