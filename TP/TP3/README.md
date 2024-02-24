@@ -2,7 +2,7 @@
 
 ## Exercice 1
 
-Le code de l'exercise est:
+Voici le code pour cet exercice :
 
 ```c
 void generate_instances(int *debut, int *fin, int n, int Fmax){
@@ -18,20 +18,36 @@ L'agorithme est le suivant:
 
 ```
 tant que i de 1 à n
-	debut[i] <- nombre_aleatoire(0 à max)
-	fin[i] <- debut[i] + nombre_aleatoire(1, nouveau_max)
+	début[i] <- nombre_aléatoire(0 à max)
+	fin[i] <- debut[i] + nombre_aléatoire(1, nouveau_max)
 ```
 
-La condition de nouveau max est d'etre inferieur ou egal à max. La compelxite est O(n).
+La condition de nouveau max est d'être inferieure ou egale à max.
 
-## Exercise 2
+La compléxité de ce code peut être analysé comme suit : 
+
+La fonction génère des instances pour un problème d'ordonnancement en assignant aléatoirement des dates de début et de fin à n tâches, avec certaines contraintes.
+
+* La boucle for itère n fois, où n est le nombre de tâches.
+*  debut[i] = nb_random(0, Fmax) génére un nombre aléatoire pour la date de début de la tâche. Cette opération est considérée comme 
+O(1), une opération en temps constant.
+* fin[i] = debut[i] + nb_random(1, Fmax - debut[i]); : Génére un autre nombre aléatoire pour la durée de la tâche et l'ajouter à la date de début pour obtenir la date de fin. Cette opération est également O(1).
+
+Par conséquent, la complexité de generate_instances est O(n), où n est le nombre de tâches à générer. 
+
+
+## Exercice 2
 
 ### Q1
 
-Pour le code de calcule_optimale mentioné sur le sujet du TP, la complexité est O(2^n) car:
+La compléxité du code de calcule_optimale mentioné sur le sujet du TP peut être analysée comme suit:
 
 * On constate que pour chaque tâche j, l'algorithme parcourt toutes les tâches précédentes (de 0 à `j-1`) pour trouver la dernière tâche compatible. Le pire des cas est O(j).
 * L'algorithme fait deux appels récursifs : un pour le cas der_j et un autre pour le cas où la tâche j n'est pas incluse.
+
+Par conséquent , la compléxité  de cet algorithme esst exponentielle, plus précisement en O(2^n) où n est le nombre total de tâches.
+
+Nota bene:En pratique, cet algorithme peut devenir très lent pour un nombre relativement faibles de tâches, etant donné que le nombre total d'opérations augmente très rapidement à mesure que le nombre de tâches augmente . C'est d'ailleurs ce qui est visible sur le graphe ci-dessous.
 
 ```c
 int calcule_OPT(int *deb, int *fin, int j)
@@ -58,13 +74,15 @@ int calcule_OPT(int *deb, int *fin, int j)
 }
 ```
 
-Ainsi la compelxité semble être exponentielle. Plus precisemment en O(2^n). Par alleurs, cela est visible sur le graphe ci-dessous.
+
 
 ![1708707927926](image/README/1708707927926.png)
 
 ### Q2
 
-Pour l'algorithme suivant on peut observer qu'il y a seulement une boucle qui commence de 0 à n-1. Donc la complexité est O(n)
+La complexité de l'algorithme `calcule_OPT_glouton` est \(O(n)\). En effet, l'algorithme contient principalement une boucle `for` qui itère sur l'ensemble des tâches, allant de 0 à `nbTaches - 1`. À l'intérieur de cette boucle, toutes les opérations effectuées, sont en temps constant, c'est-à-dire O(1). Puisque ces opérations en temps constant sont répétées pour chaque tâche, la complexité globale de l'algorithme est dominée par le nombre d'itérations de la boucle, qui est proportionnel au nombre de tâches `n`. 
+
+Dès lors , la complexité totale est en O(n) (linéaire par rapport à `n`).
 
 ```c
 int calcule_OPT_glouton(int *deb, int *fin, int nbTaches)
@@ -84,11 +102,9 @@ int calcule_OPT_glouton(int *deb, int *fin, int nbTaches)
 } => O(total) = 3 * O(1) + O(n) = O(n)
 ```
 
-De plus, on peut aussi comparer ce resultat avec la complexéte d'algorithme précédent. Sur la même graphe le trace d'ago 2 est representé en bleu et presque pas visbile (car il est fortement plus efficace). On va l'analyser en détail sur la question 4.
-
 ### Q3
 
-On constate que l'agorithme 2 est plus efficace que l'algorithme 1. Alors, les predictiosn theoriques sont validés experimentalments. 
+L'algorithme récursif de la question 1, montre une complexité qui croît rapidement avec la taille de l'entrée, comme en témoigne le tracé rose sur le graphe, qui indique une augmentation exponentielle du temps d'exécution. En revanche, l'Algorithme 2, qui est une approche gloutonne, présente une complexité linéaire O(n), ce qui se traduit par un temps d'exécution beaucoup plus court, à peine visible sur le graphe et représenté en bleu. Ce contraste marque l'efficacité supérieure de l'algorithme glouton par rapport à l'approche récursive pour ce problème spécifique.
 
 ### Q4
 
