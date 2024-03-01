@@ -31,3 +31,4 @@
 * V3.3 corrections on TP3 and mainly completed
 * V3.4 Last fixes for TP3
 * V3.5 TP3 completed
+* V4.1 Project started. The 1.1 has been completed partially. The base cases work but when we check for a more complex one, the answers are not the best.

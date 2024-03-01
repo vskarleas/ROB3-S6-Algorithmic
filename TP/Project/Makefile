@@ -66,22 +66,17 @@ all : $(EXECUTABLES)
 # regles explicites de compilation separee de modules
 # n'ayant pas de fichier .h ET/OU dependant d'autres modules
 
-utile.o:  utile.c
+utile.o:  utile.c utile.h
 	@echo ""
 	@echo "---------------------------------------------"
 	$(CC) -c $(COMPILOPTS) $<
 
-exo2.o : exo2.c utile.h
+algos.o : algos.c algos.h utile.h
 	@echo ""
 	@echo "---------------------------------------------"
 	$(CC) -c $(COMPILOPTS) $<
 
-exo3.o : exo3.c exo2.h utile.h
-	@echo ""
-	@echo "---------------------------------------------"
-	$(CC) -c $(COMPILOPTS) $<
-
-main.o : main.c utile.h exo2.h exo3.h
+main.o : main.c utile.h algos.h
 	@echo ""
 	@echo "---------------------------------------------"
 	$(CC) -c $(COMPILOPTS) $<
@@ -89,7 +84,7 @@ main.o : main.c utile.h exo2.h exo3.h
 ########################################################
 # regles explicites de creation des executables
 
-main : exo2.o exo3.o main.o utile.o
+main : algos.o main.o utile.o
 	@echo ""
 	@echo "---------------------------------------------"
 	@echo "Creation de l'executable "$@
