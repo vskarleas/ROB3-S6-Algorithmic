@@ -54,7 +54,7 @@ bool verify(int tab[], int seq[], int j, int l)
 void colorize(int l, int j, int *tab, int *seq)
 {
     // verification -> meaning that we can not colourize that cell
-    if (!verify(tab, seq, j, l))
+    if (tab[j] != DEFAULT && !verify(tab, seq, j, l))
     {
         if (l > 0 && j < tab[0] - seq[l - 1] - 1)
         {
