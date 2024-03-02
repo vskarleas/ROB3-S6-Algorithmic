@@ -29,6 +29,7 @@ On applique tous ceux notions sur le pseudocode proposé ci-dessous pour la ques
 
 ## Question 4
 
+```
 bool verifier(l, j, tab, seq)
 switch (l)
 	cas (0):
@@ -53,11 +54,13 @@ switch (l)
 		fin_switch
 		break
 fin_switch
+```
 
 ## Question 5
 
 On propose les modifications suivantes:
 
+```
 bool verifier(l, j, tab, seq, decision_code)
 NOTA: pour decision_code = 1 c'est qu'on a bien une conclusion positive (TRUE), si decision_code = 2 on a deux conclusion negative (FALSE), et enfin si decision_code = 3 on ne peut mas decider.
 switch (l)
@@ -101,5 +104,6 @@ switch (l)
 		fin_switch
 		break
 fin_switch
+```
 
 Comme j'utilise decision_code ????
