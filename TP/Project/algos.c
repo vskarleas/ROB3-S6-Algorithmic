@@ -16,6 +16,46 @@
 #define UNKNOWN -1
 #define DEFAULT -2
 
+bool T(int j, int l, int *tab, int *seq)
+{
+    if (l==0)
+    {
+        return true;
+    }
+    if (l >= 1)
+    {
+        if (j < seq[l] - 1) //please consider that is seauence seq the place at seq[0] is never used on our program. It's just initialises on a nunber that we never take into consideration
+        {
+            return false;
+        }
+        if (j == seq[l] - 1)
+        {
+            if(l==1)
+            {
+                for (int i=0; i<=j;i++)
+            {
+                if (tab[i] == WHITE)
+                {
+                    return false;
+                }
+            }
+            return true;
+            }
+            
+            return false;
+        }
+        if(j > seq[l] -1)
+        {
+            if (tab[j] == WHITE) //we check the previous combination
+            {
+                return (T(j - 1, l, tab, seq);
+            }
+            return(T(j-1,l, tab, seq) || T(j - seq[l] - 1, l-1, tab, seq));
+        }
+        
+    }
+}
+
 /* It verifies the decisions regarding a line according to its sequence and the rules of the puzzle */
 bool verify(int tab[], int seq[], int j, int l)
 {
