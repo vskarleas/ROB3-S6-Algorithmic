@@ -1,8 +1,16 @@
+// #############################################################################
+// # File utile.h
+// # UE Infomatics for Robotics - Polytech Sorbonne - 2023/2024 - S6
+// # Authors: Yannis Sadoun, Vasileios Filippos Skarleas - All rights reserved.
+// #############################################################################
+
 #ifndef H_UTIL
 #define H_UTIL
 
 /* Printing the different arrays for testing purposes */
 void print_table(int *tab, int n, int mode);
+
+void table_content(int *tab, int n);
 
 /* Initialiazing everything to DEFAULT (nothing) */
 void initialize1D(int *tab, int n);

@@ -66,17 +66,17 @@ all : $(EXECUTABLES)
 # regles explicites de compilation separee de modules
 # n'ayant pas de fichier .h ET/OU dependant d'autres modules
 
-utile.o:  utile.c utile.h
+utile.o:  utile.c utile.h constants.h
 	@echo ""
 	@echo "---------------------------------------------"
 	$(CC) -c $(COMPILOPTS) $<
 
-algos.o : algos.c algos.h utile.h
+algos.o : algos.c algos.h utile.h constants.h
 	@echo ""
 	@echo "---------------------------------------------"
 	$(CC) -c $(COMPILOPTS) $<
 
-main.o : main.c utile.h algos.h
+main.o : main.c utile.h algos.h constants.h
 	@echo ""
 	@echo "---------------------------------------------"
 	$(CC) -c $(COMPILOPTS) $<

@@ -13,11 +13,7 @@
 #include <ncurses.h>
 
 #include "utile.h"
-
-#define WHITE 1
-#define BLACK 0
-#define UNKNOWN -1
-#define DEFAULT -2
+#include "constants.h"
 
 /* Printing the different arrays for testing purposes */
 void print_table(int *tab, int n, int mode)
@@ -27,11 +23,11 @@ void print_table(int *tab, int n, int mode)
     {
         if (tab[i] == BLACK)
         {
-            printf(" \e[1;35m#\e[0m |"); //magenta
+            printf(" \e[1;30m#\e[0m |");
         }
         else if (tab[i] == WHITE)
         {
-            printf(" \e[1;33m#\e[0m |"); //yellow
+            printf(" \e[1;37m#\e[0m |");
         }
         else if (tab[i] == DEFAULT) // default case
         {
@@ -40,11 +36,11 @@ void print_table(int *tab, int n, int mode)
     }
     if (tab[n - 1] == BLACK)
     {
-        printf(" \e[1;35m#\e[0m ");
+        printf(" \e[1;30m#\e[0m ");
     }
     else if (tab[n - 1] == WHITE)
     {
-        printf(" \e[1;33m#\e[0m ");
+        printf(" \e[1;37m#\e[0m ");
     }
     else if (tab[i] == DEFAULT) // default case
     {
@@ -64,6 +60,16 @@ void print_table(int *tab, int n, int mode)
     }
 }
 
+void table_content(int *tab, int n)
+{
+    int i;
+    for (i = 0; i < n - 1; i++)
+    {
+        printf(" %d |", tab[i]);
+    }
+    printf(" %d ", tab[n - 1]);
+}
+
 /* Initialiazing everything to DEFAULT (nothing) */
 void initialize1D(int *tab, int n)
 {
@@ -77,8 +83,8 @@ void initialize1D(int *tab, int n)
 int menu_mode()
 {
     char userInput[20];
-    char *msg[1] = {"Choose an option (1.1, 1.2, 1.3). Your choice: "};
-    char *msg_attention[1] = {"You can only choose from 1.1, 1.2 or 1.3."};
+    char *msg[1] = {"Choose an option (1.2, 1.3). Your choice: "};
+    char *msg_attention[1] = {"You can only choose from 1.2 or 1.3."};
 
     while (true)
     {
@@ -91,7 +97,7 @@ int menu_mode()
             userInput[i] = tolower(userInput[i]);
         }
 
-        if (strcmp(userInput, "1.1") == 0)
+        if (strcmp(userInput, "lalala") == 0)
         {
             return 1;
         }

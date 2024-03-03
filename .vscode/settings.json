@@ -9,5 +9,6 @@
         "string.h": "c",
         "ctype.h": "c",
         "time.h": "c",
+        "constants.h": "c"
     }
 }

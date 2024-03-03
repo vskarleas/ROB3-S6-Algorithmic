@@ -10,132 +10,43 @@
 #include <stdbool.h>
 
 #include "utile.h"
+#include "constants.h"
 
-#define WHITE 1
-#define BLACK 0
-#define UNKNOWN -1
-#define DEFAULT -2
-
+/* It verifies the decisions regarding a line according to its sequence and the rules of the puzzle */
 bool T(int j, int l, int *tab, int *seq)
 {
-    if (l==0)
+    if (l == 0)
     {
         return true;
     }
     if (l >= 1)
     {
-        if (j < seq[l] - 1) //please consider that is seauence seq the place at seq[0] is never used on our program. It's just initialises on a nunber that we never take into consideration
+        if (j < seq[l-1] - 1) // please consider that is seauence seq the place at seq[0] is never used on our program. It's just initialises on a nunber that we never take into consideration
         {
             return false;
         }
-        if (j == seq[l] - 1)
+        if (j == seq[l-1] - 1)
         {
-            if(l==1)
-            {
-                for (int i=0; i<=j;i++)
+            //checking for any whites on this space
+            for (int i = 0; i <= j; i++)
             {
                 if (tab[i] == WHITE)
                 {
                     return false;
                 }
             }
-            return true;
-            }
-            
-            return false;
+            return (l == 1); //the condition that needs to be true in order for that sub case (2b) to be verfied
         }
-        if(j > seq[l] -1)
+        if (j > seq[l-1] - 1)
         {
-            if (tab[j] == WHITE) //we check the previous combination
+            //Checking if it white as mentioned on Project's subject
+            if (tab[j] == WHITE && T(j - seq[l-1] - 1, l - 1, tab, seq)) // we check the previous combination [I AM NOT SURE FOR THE SECOND CONDITION]
             {
-                return (T(j - 1, l, tab, seq);
+                return (T(j - 1, l, tab, seq));
             }
-            return(T(j-1,l, tab, seq) || T(j - seq[l] - 1, l-1, tab, seq));
-        }
-        
-    }
-}
-
-/* It verifies the decisions regarding a line according to its sequence and the rules of the puzzle */
-bool verify(int tab[], int seq[], int j, int l)
-{
-
-    if (l == 0)
-    {
-        return true;
-    }
-    else if (l >= 1)
-    {
-        if (j < seq[l - 1] - 1)
-        { // Return false directly when j is out of bounds
-            return false;
-        }
-        else if (j == seq[l - 1] - 1)
-        {
-            if (l == 1)
-            {
-                return true;
-            }
-            else
-            {
-                return false;
-            }
-        }
-        else // for j > seq[l] - 1
-        {
-            return (verify(tab, seq, j - 1, l) || verify(tab, seq, j - seq[l - 1] - 1, l - 1));
+            return (T(j - 1, l, tab, seq) || T(j - seq[l-1] - 1, l - 1, tab, seq));
         }
     }
-
     return false;
 }
 
-/* updates the states of the cells in a specific line to white, black, or default (could mean undefinied or not treated yet) */
-void colorize(int l, int j, int *tab, int *seq)
-{
-    // verification -> meaning that we can not colourize that cell
-    if (tab[j] != DEFAULT && !verify(tab, seq, j, l))
-    {
-        if (l > 0 && j < tab[0] - seq[l - 1] - 1)
-        {
-            // Explicit check for gap between blocks, set cell to white
-            tab[j] = WHITE;
-        }
-        return;
-    }
-
-    // treating the rest of the cases
-    switch (l)
-    {
-    case 0:
-        break; // No block, nothing to color
-    case 1:
-        for (int i = j; i >= j - seq[0] + 1; i--)
-        {
-            tab[i] = BLACK; // Color the block
-        }
-        break;
-    default:
-        if (j < 0)
-        {
-            return; // Base case for j negative
-        }
-        if (j == seq[l - 1] - 1)
-        {
-            tab[j] = BLACK; // Coloring the last cell of the block
-        }
-        else
-        {
-            colorize(l, j - 1, tab, seq);
-            if (verify(tab, seq, j - seq[l - 1] - 1, l - 1))
-            {
-                colorize(l - 1, j - seq[l - 1] - 1, tab, seq); // Cell black and block placed
-            }
-            else
-            {
-                tab[j] = WHITE; // Explicitly set to white if the black option fails
-            }
-        }
-    }
-    return;
-}
