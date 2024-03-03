@@ -154,4 +154,4 @@ On propose les tests ci-dessous:
 
 ## Question 8
 
-Let's see
+Let's see.
