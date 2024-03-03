@@ -140,3 +140,93 @@ void initialize2D(int **table, int rows, int cols)
         }
     }
 }
+
+/* Decoding an instance's file content */
+void read_file(char *filename, int **lines, int **columns, int *n_rows, int *n_cols)
+{
+    FILE *file = fopen(filename, "r");
+    char ch;
+
+    if (file == NULL)
+    {
+        printf("Erreur lors de l'ouverture du fichier\n");
+        return;
+    }
+
+    *n_rows = 0; // how many lines exists for the puzzle ?
+
+    ch = fgetc(file);
+    while (ch != EOF)
+    {
+        // Check for new line and increment count
+        if (ch == '\n')
+        {
+            (*n_rows)++;
+        }
+
+        // Check for '#' at the beginning of a line
+        if (ch == '#' && fgetc(file) == '\n')
+        {
+            break;
+        }
+
+        // Read the next character
+        ch = fgetc(file);
+    }
+
+    *lines = malloc(*n_rows * sizeof(int));
+
+    rewind(file);
+    for (int i = 0; i < *n_rows; i++)
+    {
+        fscanf(file, "%d ", &(*lines)[i]); // Read sequence for each row
+    }
+
+    fscanf(file, "#\n"); // Read the delimiter
+
+    *n_cols = 0;
+    ch = fgetc(file);
+    while (ch != EOF)
+    {
+        // Check for new line and increment count
+        if (ch == '\n')
+        {
+            (*n_cols)++;
+        }
+
+        // Read the next character
+        ch = fgetc(file);
+    }
+
+    (*n_cols) = (*n_cols) - 1;
+
+    *columns = malloc(*n_cols * sizeof(int));
+    rewind(file);
+
+    int temp=0;
+    ch = fgetc(file);
+    while (ch != EOF)
+    {
+        // Check for new line and increment count
+        if (ch == '\n')
+        {
+            temp++;
+        }
+
+        if (temp == *n_rows + 1)
+        {
+            break;
+        }
+
+        // Read the next character
+        ch = fgetc(file);
+    }
+    
+
+    for (int i = 0; i < *n_cols; i++)
+    {
+        fscanf(file, "%d ", &(*columns)[i]);
+    }
+
+    fclose(file);
+}

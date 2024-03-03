@@ -154,4 +154,10 @@ On propose les tests ci-dessous:
 
 ## Question 8
 
-Let's see.
+La boucle tant que s'exécute quand LignesAVoir ou ColonnesAVoir n'est pas vide. Alors, à chaque itération, au moins une case est coloriée, parce que ColoreLig et ColoreCol colorent au moins une case si possible. Ainsi le nombre total des itterations et N * M.
+
+Maintenant, on se focalise sur la complexité de ColoreLig et ColoreCol, qui sont des fonctionnes reccursives. La profondeur de la récursivité est bornée par le nombre de cases dans une ligne/colonne, soit N ou M respectivement. Donc, la complexité de chaque fonction est O(N * M).
+
+On peut conclure que la complexité totale est O(N * M) * O(N * M) = O((N * M)^2) qui est bien une complexité polynomiale comme attendu.
+
+## Question 9

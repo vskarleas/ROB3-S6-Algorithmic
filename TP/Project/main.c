@@ -13,6 +13,8 @@
 #include "algos.h"
 #include "constants.h"
 
+#define DIRECTORY_PATH "TP/Project/instances"
+
 int main(int argc, char **argv)
 {
     int choice = menu_mode();
@@ -320,6 +322,39 @@ int main(int argc, char **argv)
             printf("=>  FALSE\n---------------------\n");
         }
         printf("The test 1.2 has been successfully completed\n");
+    }
+    else if (choice == 3)
+    {
+        char filename[100];
+
+        printf("What's the instance's file name: ");
+        scanf("%s", filename);
+
+        filename[strcspn(filename, "\n")] = '\0'; // make sure that the file is in correct format so that we can start counting nb_lines and nb_columns immediatly
+
+        int n_rows, n_cols;
+        int *lines;
+        int *columns;
+
+        read_file(filename, &lines, &columns, &n_rows, &n_cols);
+        printf("NB Lines: %d\n", n_rows);
+        printf("NB Columns: %d\n", n_cols);
+
+        printf("Sequence lines: ");
+        for (int i = 0; i < n_rows; i++)
+        {
+            printf("%d ", lines[i]);
+        }
+        printf("\n");
+        printf("Sequence columns: ");
+        for (int i = 0; i < n_cols; i++)
+        {
+            printf("%d ", columns[i]);
+        }
+
+        // free(grid);
+        free(lines);
+        free(columns);
     }
     else
     {

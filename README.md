@@ -32,4 +32,10 @@
 * V3.4 Last fixes for TP3
 * V3.5 TP3 completed
 * V4.1 Project started. The 1.1 has been completed partially. The base cases work but when we check for a more complex one, the answers are not the best.
-* V4.2 Corrections, bug fixes and compte rendu completed until Question 7.
+* V4.2 Corrections, bug fixes and compte rendu completed until Question 7
+* V4.3 Question 8 answered and we started the read_file function for the propagation program asked on question 9. Many things need to be done in order for 1st stage of the project to be completed:
+  * Finish the read_file function (and its organisation)
+  * Write the colorization's algorithm logic in C
+    * Use the T function maybe to analyse line by line
+  * Create an initialization function for the gred according to the M and N read from the file (setting every case to DEFAULT because in the beginning it's not colorised)
+  * See how to treat the colorisation in general
