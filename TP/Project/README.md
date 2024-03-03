@@ -142,40 +142,6 @@ bool T(int j, int l, int *tab, int *seq)
     }
     return false;
 }
-
-/* It verifies the decisions regarding a line according to its sequence and the rules of the puzzle */
-bool verify(int tab[], int seq[], int j, int l)
-{
-
-    if (l == 0)
-    {
-        return true;
-    }
-    else if (l >= 1)
-    {
-        if (j < seq[l - 1] - 1)
-        { // Return false directly when j is out of bounds
-            return false;
-        }
-        else if (j == seq[l - 1] - 1)
-        {
-            if (l == 1)
-            {
-                return true;
-            }
-            else
-            {
-                return false;
-            }
-        }
-        else // for j > seq[l] - 1
-        {
-            return (verify(tab, seq, j - 1, l) || verify(tab, seq, j - seq[l - 1] - 1, l - 1));
-        }
-    }
-
-    return false;
-}
 ```
 
 ### Tests
@@ -188,4 +154,4 @@ On propose les tests ci-dessous:
 
 ## Question 8
 
-Let's
+Let's see
