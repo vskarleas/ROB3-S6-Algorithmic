@@ -39,3 +39,4 @@
     * Use the T function maybe to analyse line by line
   * Create an initialization function for the gred according to the M and N read from the file (setting every case to DEFAULT because in the beginning it's not colorised)
   * See how to treat the colorisation in general
+* V4.4 Tests for file's decodation have been passed. AN initialisation function of grid and main program for part 1.3 have been completed. Only the treating algorithm remains

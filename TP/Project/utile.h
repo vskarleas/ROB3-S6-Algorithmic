@@ -8,7 +8,7 @@
 #define H_UTIL
 
 /* Printing the different arrays for testing purposes */
-void print_table(int *tab, int n, int mode);
+void print_table(int *tab, int n);
 
 void table_content(int *tab, int n);
 
@@ -21,7 +21,28 @@ int menu_mode();
 /* Initialiazing everything on a 2D table to DEFAULT (nothing) */
 void initialize2D(int **table, int rows, int cols);
 
+/* Returns the max of two numbers */
+int max(int x, int y);
+
+/* Saving the nb of lines, columsn as well as the maximum length of a sequence of a line and a sequence of a collumn */
+void decode_file(char *filename, int *n_rows, int *n_cols, int *max_rows, int *max_cols);
+
+/* Caracter to int */
+int ctoi(int c);
+
+/* Reverses an array of numbers */
+void reverse(int l, int h, int *arr);
+
 /* Decoding an instance's file content */
-void read_file(char *filename, int **lines, int **columns, int *n_rows, int *n_cols);
+void read_file(char *filename, int **lines, int **columns, int n_rows, int n_cols, int max_lines, int max_columns);
+
+/* Printing error message for allocating memory with corresponding general */
+void allocation_error_print_general(char reference[512]);
+
+/* Printing error message for allocating memory with corresponding ID */
+void allocation_error_print_with_id(char reference[512], int i);
+
+/* Simple printing function for visualisations puproses */
+void printing_grid(int **grid, int lines, int columns, int mode);
 
 #endif

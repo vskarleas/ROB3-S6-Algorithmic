@@ -16,47 +16,35 @@
 #include "constants.h"
 
 /* Printing the different arrays for testing purposes */
-void print_table(int *tab, int n, int mode)
+void print_table(int *tab, int n)
 {
     int i;
     for (i = 0; i < n - 1; i++)
     {
         if (tab[i] == BLACK)
         {
-            printf(" \e[1;30m#\e[0m |");
+            printf("\e[1;30m#\e[0m | ");
         }
         else if (tab[i] == WHITE)
         {
-            printf(" \e[1;37m#\e[0m |");
+            printf("\e[1;37m#\e[0m | ");
         }
         else if (tab[i] == DEFAULT) // default case
         {
-            printf(" ? |");
+            printf("? | ");
         }
     }
     if (tab[n - 1] == BLACK)
     {
-        printf(" \e[1;30m#\e[0m ");
+        printf("\e[1;30m#\e[0m ");
     }
     else if (tab[n - 1] == WHITE)
     {
-        printf(" \e[1;37m#\e[0m ");
+        printf("\e[1;37m#\e[0m ");
     }
     else if (tab[i] == DEFAULT) // default case
     {
-        printf(" ? ");
-    }
-    if (mode == 1)
-    {
-        printf("\nI am SURE for that\n");
-    }
-    else if (mode == 2)
-    {
-        printf("\n");
-    }
-    else
-    {
-        printf("\nI am NOT SURE for that\n");
+        printf("? ");
     }
 }
 
@@ -141,8 +129,119 @@ void initialize2D(int **table, int rows, int cols)
     }
 }
 
+/* Returns the max of two numbers */
+int max(int x, int y)
+{
+    if (x > y)
+    {
+        return x;
+    }
+    else
+    {
+        return y;
+    }
+}
+
+/* Saving the nb of lines, columsn as well as the maximum length of a sequence of a line and a sequence of a collumn */
+void decode_file(char *filename, int *n_rows, int *n_cols, int *max_rows, int *max_cols)
+{
+    FILE *file = fopen(filename, "r");
+    char ch;
+    int temp = 0;
+
+    // Verification
+    if (file == NULL)
+    {
+        printf("There was an error opening the file!\n");
+        return;
+    }
+
+    // Initialisations
+    *n_rows = 0;
+    *max_cols = 0;
+    *max_rows = 0;
+    *n_cols = 0;
+
+    // Analyzing
+    ch = fgetc(file);
+    if (ch != '\n' && ch != '\r' && ch != ' ')
+    {
+        temp++;
+    }
+    while (ch != EOF)
+    {
+        // Check for new line and increment count
+        if (ch == '\n')
+        {
+            *max_rows = max(*max_rows, temp);
+            temp = 0;
+            (*n_rows)++;
+        }
+
+        // Check for '#' at the beginning of a line
+        if (ch == '#' && fgetc(file) == '\n')
+        {
+            break;
+        }
+
+        // Read the next character
+        ch = fgetc(file);
+        if (ch != '\n' && ch != '\r' && ch != ' ')
+        {
+            temp++;
+        }
+    }
+
+    temp = 0;
+
+    ch = fgetc(file);
+    if (ch != '\n' && ch != '\r' && ch != ' ')
+    {
+        temp++;
+    }
+    while (ch != EOF)
+    {
+        // Check for new line and increment count
+        if (ch == '\n')
+        {
+            *max_cols = max(*max_cols, temp);
+            temp = 0;
+            (*n_cols)++;
+        }
+
+        // Read the next character
+        ch = fgetc(file);
+        if (ch != '\n' && ch != '\r' && ch != ' ')
+        {
+            temp++;
+        }
+    }
+
+    fclose(file);
+}
+
+/* Caracter to int */
+int ctoi(int c)
+{
+    return c - '0';
+}
+
+/* Reverses an array of numbers */
+void reverse(int l, int h, int *arr)
+{
+    if (l >= h)
+    {
+        return;
+    }
+    int temp;
+    temp = arr[l];
+    arr[l] = arr[h];
+    arr[h] = temp;
+    reverse(l + 1, h - 1, arr); // recursive call
+}
+
 /* Decoding an instance's file content */
-void read_file(char *filename, int **lines, int **columns, int *n_rows, int *n_cols)
+void read_file(char *filename, int **lines, int **columns, int n_rows, int n_cols, int max_lines, int max_columns)
 {
     FILE *file = fopen(filename, "r");
     char ch;
@@ -153,15 +252,31 @@ void read_file(char *filename, int **lines, int **columns, int *n_rows, int *n_c
         return;
     }
 
-    *n_rows = 0; // how many lines exists for the puzzle ?
+    int id = 0;
+    int local = 0;
 
     ch = fgetc(file);
     while (ch != EOF)
     {
+        if (ch != '\n' && ch != '\r' && ch != ' ' && ch != '#')
+        {
+            lines[id][local] = ctoi(ch);
+            local++;
+        }
+
         // Check for new line and increment count
         if (ch == '\n')
         {
-            (*n_rows)++;
+            if (local < max_lines)
+            {
+                for (int i = local; i < max_lines; i++)
+                {
+                    lines[id][i] = 0;
+                }
+            }
+            local = 0;
+            // reverse(0, max_lines-1, lines[id]);
+            id++;
         }
 
         // Check for '#' at the beginning of a line
@@ -174,46 +289,35 @@ void read_file(char *filename, int **lines, int **columns, int *n_rows, int *n_c
         ch = fgetc(file);
     }
 
-    *lines = malloc(*n_rows * sizeof(int));
+    id = 0;
+    local = 0;
 
-    rewind(file);
-    for (int i = 0; i < *n_rows; i++)
-    {
-        fscanf(file, "%d ", &(*lines)[i]); // Read sequence for each row
-    }
-
-    fscanf(file, "#\n"); // Read the delimiter
-
-    *n_cols = 0;
     ch = fgetc(file);
     while (ch != EOF)
     {
+        if (ch != '\n' && ch != '\r' && ch != ' ' && ch != '#')
+        {
+            columns[id][local] = ctoi(ch);
+            local++;
+        }
+
         // Check for new line and increment count
         if (ch == '\n')
         {
-            (*n_cols)++;
+            if (local < max_columns)
+            {
+                for (int i = local; i < max_columns; i++)
+                {
+                    columns[id][i] = 0;
+                }
+            }
+            local = 0;
+            // reverse(0, max_lines-1, lines[id]);
+            id++;
         }
 
-        // Read the next character
-        ch = fgetc(file);
-    }
-
-    (*n_cols) = (*n_cols) - 1;
-
-    *columns = malloc(*n_cols * sizeof(int));
-    rewind(file);
-
-    int temp=0;
-    ch = fgetc(file);
-    while (ch != EOF)
-    {
-        // Check for new line and increment count
-        if (ch == '\n')
-        {
-            temp++;
-        }
-
-        if (temp == *n_rows + 1)
+        // Check for '#' at the beginning of a line
+        if (ch == '#' && fgetc(file) == '\n')
         {
             break;
         }
@@ -221,12 +325,46 @@ void read_file(char *filename, int **lines, int **columns, int *n_rows, int *n_c
         // Read the next character
         ch = fgetc(file);
     }
-    
+}
 
-    for (int i = 0; i < *n_cols; i++)
+/* Printing error message for allocating memory with corresponding general */
+void allocation_error_print_general(char reference[512])
+{
+    fprintf(stderr, "Failed to allocate memory for %s.\n", reference);
+    exit(-1);
+}
+
+/* Printing error message for allocating memory with corresponding ID */
+void allocation_error_print_with_id(char reference[512], int i)
+{
+    fprintf(stderr, "Failed to allocate memory for %s %d.\n", reference, i);
+    exit(-1);
+}
+
+/* Simple printing function for visualisations puproses */
+void printing_grid(int **grid, int lines, int columns, int mode)
+{
+    if (mode == 1)
     {
-        fscanf(file, "%d ", &(*columns)[i]);
+        for (int i = 0; i < lines; i++)
+        {
+            for (int j = 0; j < columns - 1; j++)
+            {
+                printf("%d | ", grid[i][j]);
+            }
+            printf("%d \n", grid[i][columns - 1]);
+        }
     }
-
-    fclose(file);
+    else if (mode == 2)
+    {
+        for (int i = 0; i < lines; i++)
+        {
+            print_table(grid[i], columns);
+            printf("\n");
+        }
+    }
+    else
+    {
+        printf("\nAn error occured!\n");
+    }
 }
