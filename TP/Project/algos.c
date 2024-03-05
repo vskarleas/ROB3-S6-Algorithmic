@@ -63,6 +63,7 @@ bool to_see_is_not_empty(bool *table, int n)
     return false;
 }
 
+//TO BE CORRECTED IN ORDER TO BE CAPABLE TO TREAT THE CORRECT COLORISATION PROCESS FOR 0.txt
 /* Colorizes the line once it knows that it can be colourised correctly */
 void color_lineORcolumn(int *line, int *seq, int length)
 {
@@ -216,9 +217,9 @@ enum State color_grid(int **main_grid, int n_rows, int n_columns, int **rows, in
             columns_to_see[i] = false;
         }
     }
+    copy_grid(grid, main_grid, n_rows, n_columns); // Copying the final result back to the main grid
     if (grid_in_color(grid, n_rows, n_columns) == true)
     {
-        copy_grid(grid, main_grid, n_rows, n_columns); // Copying the final result back to the main grid
         return SUCCESS;
     }
     else

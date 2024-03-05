@@ -407,7 +407,7 @@ int main(int argc, char **argv)
         {
         case SUCCESS:
             printf("\n\e[0;32mSUCCESS\e[0m");
-            printf("\nThe colourised grid\n");
+            printf("\nThe colourised grid is\n");
             printing_grid(grid, n_rows, n_cols, 2);
             break;
         case FAIL:
@@ -415,6 +415,8 @@ int main(int argc, char **argv)
             break;
         case NO_DECISION:
             printf("\n\e[0;36mThere is NO DECISION for the provided puzzle\e[0m\n");
+            printf("\nThe grid is\n");
+            printing_grid(grid, n_rows, n_cols, 2);
             break;
         default:
             printf("An error occured on enum State response\n");

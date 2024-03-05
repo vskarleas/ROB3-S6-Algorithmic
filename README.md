@@ -41,4 +41,5 @@
   * See how to treat the colorisation in general
 * V4.4 Tests for file's decodation have been passed. AN initialisation function of grid and main program for part 1.3 have been completed. Only the treating algorithm remains
 * V4.5 Algorithm for Q9 has been completed but it's not working properly. Probably there is an index issue or something. Needs to be tested with the debuging tools. Moreover needs to be checked the case where we input a file name that is not at all acppeted (it doesn't exist) but the program instead of doing what it is supposed to do (say that opening the file is imposisble), instead it prints the rest of the UI.
-* V4.6 The program has been completed
+* V4.6 The program has been completed in a great percentage
+* V4.7 The color_llineORcolumn needs some corrections for 0.txt and the rest on the logic
