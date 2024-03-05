@@ -165,6 +165,7 @@ enum State color_grid(int **main_grid, int n_rows, int n_columns, int **rows, in
 
     while (to_see_is_not_empty(lines_to_see, n_rows) || to_see_is_not_empty(columns_to_see, n_columns))
     {
+        //TO BE VERFIED WITH EXACT ANNEXE'S ALGORITHM
         for (int i = 0; i < n_rows; i++)
         {
 
