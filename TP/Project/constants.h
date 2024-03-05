@@ -11,4 +11,6 @@
 #define BLACK 0
 #define DEFAULT -2
 
+enum State {SUCCESS, FAIL, NO_DECISION};
+
 #endif

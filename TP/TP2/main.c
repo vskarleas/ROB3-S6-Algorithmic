@@ -160,7 +160,7 @@ void test_exo_3(int N, int step, int Bmin, int Bmax)
         temps_final = clock();
         mean = mean + 1. / (i + 1) * (temps_final - temps_initial);
       }
-      fprintf(fichier, "%f\n", mean); // TO BE REPLACED FROM \n to \t
+      fprintf(fichier, "%f\n", mean);
 
       free(tab);
     }

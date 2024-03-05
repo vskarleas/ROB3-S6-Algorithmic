@@ -13,8 +13,6 @@
 #include "algos.h"
 #include "constants.h"
 
-#define DIRECTORY_PATH "TP/Project/instances"
-
 int main(int argc, char **argv)
 {
     int choice = menu_mode();
@@ -334,7 +332,7 @@ int main(int argc, char **argv)
 
         int n_rows, n_cols, max_rows, max_columns;
 
-        //FIrst analysis of the instance
+        // FIrst analysis of the instance
         decode_file(filename, &n_rows, &n_cols, &max_rows, &max_columns);
 
         printf("\nNB Lines: %d\n", n_rows);
@@ -375,15 +373,16 @@ int main(int argc, char **argv)
             }
         }
 
-        //Instance decoding
+        // Instance decoding
         read_file(filename, rows, columns, n_rows, n_cols, max_rows, max_columns);
+        
         printf("\nLines sequences\n");
         printing_grid(rows, n_rows, max_rows, 1);
 
         printf("\nColumns sequences\n");
         printing_grid(columns, n_cols, max_columns, 1);
 
-        //Grid creation and initialization
+        // Grid creation and initialization
         int **grid;
         grid = malloc(n_rows * sizeof(int *));
         if (columns == NULL)
@@ -391,9 +390,9 @@ int main(int argc, char **argv)
             allocation_error_print_general("grid");
         }
 
-        for (int i = 0; i < n_cols; i++)
+        for (int i = 0; i < n_rows; i++)
         {
-            grid[i] = malloc(max_columns * sizeof(int));
+            grid[i] = malloc(n_cols * sizeof(int));
             if (grid[i] == NULL)
             {
                 allocation_error_print_with_id("grid row", i);
@@ -401,8 +400,26 @@ int main(int argc, char **argv)
         }
 
         initialize2D(grid, n_rows, n_cols);
-        printf("\nThe initialized grid\n");
-        printing_grid(grid, n_rows, n_cols, 2);
+        enum State result;
+        result = color_grid(grid, n_rows, n_cols, rows, columns);
+
+        switch (result)
+        {
+        case SUCCESS:
+            printf("\n\e[0;32mSUCCESS\e[0m");
+            printf("\nThe colourised grid\n");
+            printing_grid(grid, n_rows, n_cols, 2);
+            break;
+        case FAIL:
+            printf("\n\e[0;31mThe provided puzzle can NOT BE SOLVED\e[0m\n");
+            break;
+        case NO_DECISION:
+            printf("\n\e[0;36mThere is NO DECISION for the provided puzzle\e[0m\n");
+            break;
+        default:
+            printf("An error occured on enum State response\n");
+            break;
+        }
     }
     else
     {

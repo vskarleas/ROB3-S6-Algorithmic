@@ -45,4 +45,24 @@ void allocation_error_print_with_id(char reference[512], int i);
 /* Simple printing function for visualisations puproses */
 void printing_grid(int **grid, int lines, int columns, int mode);
 
+/* Copying date from gridA to gridB */
+void copy_grid(int **grid, int **final, int rows, int columns);
+
+/* Initializing the LignesAVoir abd the ColonnesAVoir tables */
+void init_to_see(bool *tab, int n);
+
+/* Isolating a specific line from the grid */
+void line_isolation(int **grid, int line_id, int length, int *returned);
+
+/* Values from a seperate table (represents a line) are copied to the 2D grid */
+void line_to_grid(int **grid, int line_id, int *line, int length);
+
+/* Values from a seperate table (represents a column here) are copied to the 2D grid */
+void column_to_grid(int **grid, int column_id, int *column, int length);
+
+/* Isolating a specific column from the grid */
+void column_isolation(int **grid, int column_id, int length, int *returned);
+
+void print_line(int *tab, int n);
+
 #endif
