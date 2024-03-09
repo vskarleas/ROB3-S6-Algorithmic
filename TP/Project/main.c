@@ -215,8 +215,8 @@ int main(int argc, char **argv)
 
         /* TEST No 11 (has to return true) */
         printf("\n\e[0;32mTest No %d\e[0m\n", test_id);
-        int tab11[6] = {DEFAULT, DEFAULT, DEFAULT, DEFAULT, DEFAULT, DEFAULT};
-        int seq11[2] = {3, 2};
+        int tab11[5] = {DEFAULT, DEFAULT, DEFAULT, DEFAULT, DEFAULT};
+        int seq11[1] = {3};
 
         print_table(tab11, sizeof(tab11) / sizeof(tab11[0]));
         printf("The sequence is: ");
@@ -229,6 +229,7 @@ int main(int argc, char **argv)
         {
             printf("=>  FALSE\n---------------------\n");
         }
+        print_table(tab11, sizeof(tab11) / sizeof(tab11[0]));
         test_id++;
 
         /* TEST No 12 (has to return true) */
@@ -375,7 +376,7 @@ int main(int argc, char **argv)
 
         // Instance decoding
         read_file(filename, rows, columns, n_rows, n_cols, max_rows, max_columns);
-        
+
         printf("\nLines sequences\n");
         printing_grid(rows, n_rows, max_rows, 1);
 
@@ -400,28 +401,94 @@ int main(int argc, char **argv)
         }
 
         initialize2D(grid, n_rows, n_cols);
-        enum State result;
-        result = color_grid(grid, n_rows, n_cols, rows, columns);
+        // enum State result;
+        // result = color_grid(grid, n_rows, n_cols, rows, columns, max_rows, max_columns);
 
-        switch (result)
+        // switch (result)
+        // {
+        // case SUCCESS:
+        //     printf("\n\e[0;32mSUCCESS\e[0m");
+        //     printf("\nThe colourised grid is\n");
+        //     printing_grid(grid, n_rows, n_cols, 2);
+        //     break;
+        // case FAIL:
+        //     printf("\n\e[0;31mThe provided puzzle can NOT BE SOLVED\e[0m\n");
+        //     break;
+        // case NO_DECISION:
+        //     printf("\n\e[0;36mThere is NO DECISION for the provided puzzle\e[0m\n");
+        //     printf("\nThe grid is\n");
+        //     printing_grid(grid, n_rows, n_cols, 2);
+        //     break;
+        // default:
+        //     printf("An error occured on enum State response\n");
+        //     break;
+        // }
+
+        if (color_grid(grid, n_rows, n_cols, rows, columns))
         {
-        case SUCCESS:
-            printf("\n\e[0;32mSUCCESS\e[0m");
-            printf("\nThe colourised grid is\n");
+            printf("Solved puzzle:\n");
             printing_grid(grid, n_rows, n_cols, 2);
-            break;
-        case FAIL:
-            printf("\n\e[0;31mThe provided puzzle can NOT BE SOLVED\e[0m\n");
-            break;
-        case NO_DECISION:
-            printf("\n\e[0;36mThere is NO DECISION for the provided puzzle\e[0m\n");
-            printf("\nThe grid is\n");
-            printing_grid(grid, n_rows, n_cols, 2);
-            break;
-        default:
-            printf("An error occured on enum State response\n");
-            break;
         }
+        else
+        {
+            printf("Failed to solve puzzle.\n");
+        }
+    }
+    else if (choice == 4)
+    {
+        printf("\n\e[0;32mTest No %d\e[0m\n", 1);
+        int tab16[5] = {DEFAULT, DEFAULT, DEFAULT, DEFAULT, DEFAULT};
+        int seq16[1] = {3};
+
+        print_table(tab16, sizeof(tab16) / sizeof(tab16[0]));
+        printf("The sequence is: ");
+        table_content(seq16, sizeof(seq16) / sizeof(seq16[0]));
+        if (color_decision(tab16, seq16, 5, 1) == true)
+        {
+            printf("=>  TRUE\n---------------------\n");
+        }
+        else
+        {
+            printf("=>  FALSE\n---------------------\n");
+        }
+        print_table(tab16, sizeof(tab16) / sizeof(tab16[0]));
+        printf("\nThe test 1.2.1 has been successfully completed\n\n");
+
+        printf("\n\e[0;32mTest No %d\e[0m\n", 2);
+        int tab17[4] = {DEFAULT, DEFAULT, WHITE, DEFAULT};
+        int seq17[2] = {1, 1};
+
+        print_table(tab17, sizeof(tab17) / sizeof(tab17[0]));
+        printf("The sequence is: ");
+        table_content(seq17, sizeof(seq17) / sizeof(seq17[0]));
+        if (color_decision(tab17, seq17, 4, 2) == true)
+        {
+            printf("=>  TRUE\n---------------------\n");
+        }
+        else
+        {
+            printf("=>  FALSE\n---------------------\n");
+        }
+        print_table(tab17, sizeof(tab17) / sizeof(tab17[0]));
+        printf("\nThe test 1.2.1 has been successfully completed\n\n");
+
+        printf("\n\e[0;32mTest No %d\e[0m\n", 3);
+        int tab18[6] = {DEFAULT, WHITE, DEFAULT, WHITE, DEFAULT, DEFAULT};
+        int seq18[2] = {1, 2};
+
+        print_table(tab18, sizeof(tab18) / sizeof(tab18[0]));
+        printf("The sequence is: ");
+        table_content(seq18, sizeof(seq18) / sizeof(seq18[0]));
+        if (color_decision(tab18, seq18, 6, 2) == true)
+        {
+            printf("=>  TRUE\n---------------------\n");
+        }
+        else
+        {
+            printf("=>  FALSE\n---------------------\n");
+        }
+        print_table(tab18, sizeof(tab18) / sizeof(tab18[0]));
+        printf("\nThe test 1.2.1 has been successfully completed\n\n");
     }
     else
     {

@@ -71,8 +71,8 @@ void initialize1D(int *tab, int n)
 int menu_mode()
 {
     char userInput[20];
-    char *msg[1] = {"Choose an option (1.2, 1.3). Your choice: "};
-    char *msg_attention[1] = {"You can only choose from 1.2 or 1.3."};
+    char *msg[1] = {"Choose an option (1.2, 1.3, 1.2.1). Your choice: "};
+    char *msg_attention[1] = {"You can only choose from 1.2, 1.2.1 or 1.3."};
 
     while (true)
     {
@@ -97,7 +97,7 @@ int menu_mode()
         {
             return 3;
         }
-        else if (strcmp(userInput, "exo4") == 0)
+        else if (strcmp(userInput, "1.2.1") == 0)
         {
             return 4;
         }
@@ -378,6 +378,15 @@ void copy_grid(int **grid, int **final, int rows, int columns)
         {
             final[i][j] = grid[i][j];
         }
+    }
+}
+
+/* Copying date from tabA to tabB */
+void copy_tab(int *grid, int *final, int length)
+{
+    for (int i = 0; i < length; i++)
+    {
+        final[i] = grid[i];
     }
 }
 

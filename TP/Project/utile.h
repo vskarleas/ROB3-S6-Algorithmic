@@ -48,6 +48,9 @@ void printing_grid(int **grid, int lines, int columns, int mode);
 /* Copying date from gridA to gridB */
 void copy_grid(int **grid, int **final, int rows, int columns);
 
+/* Copying date from tabA to tabB */
+void copy_tab(int *grid, int *final, int length);
+
 /* Initializing the LignesAVoir abd the ColonnesAVoir tables */
 void init_to_see(bool *tab, int n);
 

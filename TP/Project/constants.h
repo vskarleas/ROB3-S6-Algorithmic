@@ -9,7 +9,7 @@
 
 #define WHITE 1
 #define BLACK 0
-#define DEFAULT -2
+#define DEFAULT -1
 
 enum State {SUCCESS, FAIL, NO_DECISION};
 
