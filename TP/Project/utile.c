@@ -71,8 +71,8 @@ void initialize1D(int *tab, int n)
 int menu_mode()
 {
     char userInput[20];
-    char *msg[1] = {"Choose an option (1.2, 1.3, 1.2.1). Your choice: "};
-    char *msg_attention[1] = {"You can only choose from 1.2, 1.2.1 or 1.3."};
+    char *msg[1] = {"Choose an option (1.2, 1.3, 3). Your choice: "};
+    char *msg_attention[1] = {"You can only choose from 1.2 or 1.3, 3."};
 
     while (true)
     {
@@ -97,7 +97,7 @@ int menu_mode()
         {
             return 3;
         }
-        else if (strcmp(userInput, "1.2.1") == 0)
+        else if (strcmp(userInput, "3") == 0)
         {
             return 4;
         }
@@ -327,6 +327,93 @@ void read_file(char *filename, int **lines, int **columns, int n_rows, int n_col
     }
 }
 
+/* Same as read_file but we set the sequences length to be the same for columsn and lines' sequences */
+void read_file_v2(char *filename, int **lines, int **columns, int n_rows, int n_cols, int maximum)
+{
+    FILE *file = fopen(filename, "r");
+    char ch;
+
+    if (file == NULL)
+    {
+        printf("Erreur lors de l'ouverture du fichier\n");
+        return;
+    }
+
+    int id = 0;
+    int local = 0;
+
+    ch = fgetc(file);
+    while (ch != EOF)
+    {
+        if (ch != '\n' && ch != '\r' && ch != ' ' && ch != '#')
+        {
+            lines[id][local] = ctoi(ch);
+            local++;
+        }
+
+        // Check for new line and increment count
+        if (ch == '\n')
+        {
+            if (local < maximum)
+            {
+                for (int i = local; i < maximum; i++)
+                {
+                    lines[id][i] = 0;
+                }
+            }
+            local = 0;
+            // reverse(0, max_lines-1, lines[id]);
+            id++;
+        }
+
+        // Check for '#' at the beginning of a line
+        if (ch == '#' && fgetc(file) == '\n')
+        {
+            break;
+        }
+
+        // Read the next character
+        ch = fgetc(file);
+    }
+
+    id = 0;
+    local = 0;
+
+    ch = fgetc(file);
+    while (ch != EOF)
+    {
+        if (ch != '\n' && ch != '\r' && ch != ' ' && ch != '#')
+        {
+            columns[id][local] = ctoi(ch);
+            local++;
+        }
+
+        // Check for new line and increment count
+        if (ch == '\n')
+        {
+            if (local < maximum)
+            {
+                for (int i = local; i < maximum; i++)
+                {
+                    columns[id][i] = 0;
+                }
+            }
+            local = 0;
+            // reverse(0, max_lines-1, lines[id]);
+            id++;
+        }
+
+        // Check for '#' at the beginning of a line
+        if (ch == '#' && fgetc(file) == '\n')
+        {
+            break;
+        }
+
+        // Read the next character
+        ch = fgetc(file);
+    }
+}
+
 /* Printing error message for allocating memory with corresponding general */
 void allocation_error_print_general(char reference[512])
 {
@@ -381,15 +468,6 @@ void copy_grid(int **grid, int **final, int rows, int columns)
     }
 }
 
-/* Copying date from tabA to tabB */
-void copy_tab(int *grid, int *final, int length)
-{
-    for (int i = 0; i < length; i++)
-    {
-        final[i] = grid[i];
-    }
-}
-
 /* Initializing the LignesAVoir abd the ColonnesAVoir tables */
 void init_to_see(bool *tab, int n)
 {
@@ -415,7 +493,6 @@ void line_to_grid(int **grid, int line_id, int *line, int length)
     {
         grid[line_id][i] = line[i];
     }
-
 }
 
 /* Values from a seperate table (represents a column here) are copied to the 2D grid */
@@ -437,7 +514,7 @@ void column_isolation(int **grid, int column_id, int length, int *returned)
 }
 
 /* Concatenate two strings */
-char* concat(const char *s1, const char *s2)
+char *concat(const char *s1, const char *s2)
 {
     char *result = malloc(strlen(s1) + strlen(s2) + 1); // +1 for the null-terminator
     // in real code you would check for errors in malloc here
@@ -446,6 +523,7 @@ char* concat(const char *s1, const char *s2)
     return result;
 }
 
+/* For debugging purposes */
 void print_line(int *tab, int n)
 {
     for (int i = 0; i < n; i++)
@@ -453,4 +531,12 @@ void print_line(int *tab, int n)
         printf("%d ", tab[i]);
     }
     printf("\n");
+}
+
+/* Freeing a 2D array */
+void free_2d(int **table, int n)
+{
+    for (int i = 0; i < n; i++)
+        free(table[i]);
+    free(table);
 }

@@ -215,8 +215,8 @@ int main(int argc, char **argv)
 
         /* TEST No 11 (has to return true) */
         printf("\n\e[0;32mTest No %d\e[0m\n", test_id);
-        int tab11[5] = {DEFAULT, DEFAULT, DEFAULT, DEFAULT, DEFAULT};
-        int seq11[1] = {3};
+        int tab11[6] = {DEFAULT, DEFAULT, DEFAULT, DEFAULT, DEFAULT, DEFAULT};
+        int seq11[2] = {3, 2};
 
         print_table(tab11, sizeof(tab11) / sizeof(tab11[0]));
         printf("The sequence is: ");
@@ -229,7 +229,6 @@ int main(int argc, char **argv)
         {
             printf("=>  FALSE\n---------------------\n");
         }
-        print_table(tab11, sizeof(tab11) / sizeof(tab11[0]));
         test_id++;
 
         /* TEST No 12 (has to return true) */
@@ -306,8 +305,8 @@ int main(int argc, char **argv)
 
         /* TEST No 16 (has to return false) */
         printf("\n\e[0;32mTest No %d\e[0m\n", test_id);
-        int tab16[6] = {DEFAULT, DEFAULT, WHITE, DEFAULT, DEFAULT, DEFAULT};
-        int seq16[2] = {3, 2};
+        int tab16[4] = {BLACK, BLACK, BLACK, DEFAULT};
+        int seq16[0] = {};
 
         print_table(tab16, sizeof(tab16) / sizeof(tab16[0]));
         printf("The sequence is: ");
@@ -326,14 +325,14 @@ int main(int argc, char **argv)
     {
         char filename[100];
 
-        printf("What's the instance's file name: ");
+        printf("Partial version of the code. What's the instance's file name: ");
         scanf("%s", filename);
 
         filename[strcspn(filename, "\n")] = '\0'; // make sure that the file is in correct format so that we can start counting nb_lines and nb_columns immediatly
 
         int n_rows, n_cols, max_rows, max_columns;
 
-        // FIrst analysis of the instance
+        /* First analysis of the instance */
         decode_file(filename, &n_rows, &n_cols, &max_rows, &max_columns);
 
         printf("\nNB Lines: %d\n", n_rows);
@@ -341,7 +340,9 @@ int main(int argc, char **argv)
         printf("NB Columns: %d\n", n_cols);
         printf("Max Columns: %d\n\n", max_columns);
 
-        // Memory allocation
+        int maximum = max(max_columns, max_rows);
+
+        /* Main Memory allocation */
         int **rows;
         rows = malloc(n_rows * sizeof(int *));
         if (rows == NULL)
@@ -351,7 +352,7 @@ int main(int argc, char **argv)
 
         for (int i = 0; i < n_rows; i++)
         {
-            rows[i] = malloc(max_rows * sizeof(int));
+            rows[i] = malloc(maximum * sizeof(int));
             if (rows[i] == NULL)
             {
                 allocation_error_print_with_id("rows row", i);
@@ -367,23 +368,38 @@ int main(int argc, char **argv)
 
         for (int i = 0; i < n_cols; i++)
         {
-            columns[i] = malloc(max_columns * sizeof(int));
+            columns[i] = malloc(maximum * sizeof(int));
             if (columns[i] == NULL)
             {
                 allocation_error_print_with_id("columns row", i);
             }
         }
 
-        // Instance decoding
-        read_file(filename, rows, columns, n_rows, n_cols, max_rows, max_columns);
+        /* Instance decoding */
+        read_file_v2(filename, rows, columns, n_rows, n_cols, maximum);
+
+        /* Concatenating rows and columsn sequences in a single table to simplify the treatment process */
+        int **rows_columns = malloc(sizeof(int *) * (n_rows + n_cols));
+
+        for (int i = 0; i < n_rows; i++)
+        {
+            rows_columns[i] = rows[i]; // Copy the entire row pointer
+        }
+
+        for (int i = 0; i < n_cols; i++)
+        {
+            rows_columns[n_rows + i] = columns[i]; // Copy to subsequent rows
+        }
 
         printf("\nLines sequences\n");
-        printing_grid(rows, n_rows, max_rows, 1);
+        // printing_grid(rows, n_rows, max_rows, 1);
+        printing_grid(rows, n_rows, maximum, 1);
 
         printf("\nColumns sequences\n");
-        printing_grid(columns, n_cols, max_columns, 1);
+        // printing_grid(columns, n_cols, max_columns, 1);
+        printing_grid(columns, n_cols, maximum, 1);
 
-        // Grid creation and initialization
+        /* Grid creation and initialization */
         int **grid;
         grid = malloc(n_rows * sizeof(int *));
         if (columns == NULL)
@@ -401,94 +417,143 @@ int main(int argc, char **argv)
         }
 
         initialize2D(grid, n_rows, n_cols);
-        // enum State result;
-        // result = color_grid(grid, n_rows, n_cols, rows, columns, max_rows, max_columns);
 
-        // switch (result)
-        // {
-        // case SUCCESS:
-        //     printf("\n\e[0;32mSUCCESS\e[0m");
-        //     printf("\nThe colourised grid is\n");
-        //     printing_grid(grid, n_rows, n_cols, 2);
-        //     break;
-        // case FAIL:
-        //     printf("\n\e[0;31mThe provided puzzle can NOT BE SOLVED\e[0m\n");
-        //     break;
-        // case NO_DECISION:
-        //     printf("\n\e[0;36mThere is NO DECISION for the provided puzzle\e[0m\n");
-        //     printf("\nThe grid is\n");
-        //     printing_grid(grid, n_rows, n_cols, 2);
-        //     break;
-        // default:
-        //     printf("An error occured on enum State response\n");
-        //     break;
-        // }
+        /* Result */
+        enum State result;
+        // result = color_grid_v1(grid, n_rows, n_cols, rows, columns, maximum);
+        result = color_grid_v2(grid, n_rows, n_cols,rows_columns, maximum);
+        // result = color_grid_v3(grid, n_rows, n_cols, rows_columns, maximum);
 
-        if (color_grid(grid, n_rows, n_cols, rows, columns))
+        switch (result)
         {
-            printf("Solved puzzle:\n");
+        case SUCCESS:
+            printf("\n\e[0;32mSUCCESS\e[0m");
+            printf("\nThe colourised grid is\n");
             printing_grid(grid, n_rows, n_cols, 2);
-        }
-        else
-        {
-            printf("Failed to solve puzzle.\n");
+            break;
+        case FAIL:
+            printf("\n\e[0;31mThe provided puzzle can NOT BE SOLVED\e[0m\n");
+            printing_grid(grid, n_rows, n_cols, 2);
+            break;
+        case NO_DECISION:
+            printf("\n\e[0;36mThere is NO DECISION for the provided puzzle\e[0m\n");
+            printf("\nThe grid is\n");
+            printing_grid(grid, n_rows, n_cols, 2);
+            break;
+        default:
+            printf("An error occured on enum State response\n");
+            break;
         }
     }
     else if (choice == 4)
     {
-        printf("\n\e[0;32mTest No %d\e[0m\n", 1);
-        int tab16[5] = {DEFAULT, DEFAULT, DEFAULT, DEFAULT, DEFAULT};
-        int seq16[1] = {3};
+        char filename[100];
 
-        print_table(tab16, sizeof(tab16) / sizeof(tab16[0]));
-        printf("The sequence is: ");
-        table_content(seq16, sizeof(seq16) / sizeof(seq16[0]));
-        if (color_decision(tab16, seq16, 5, 1) == true)
-        {
-            printf("=>  TRUE\n---------------------\n");
-        }
-        else
-        {
-            printf("=>  FALSE\n---------------------\n");
-        }
-        print_table(tab16, sizeof(tab16) / sizeof(tab16[0]));
-        printf("\nThe test 1.2.1 has been successfully completed\n\n");
+        printf("Complet version of the code. What's the instance's file name: ");
+        scanf("%s", filename);
 
-        printf("\n\e[0;32mTest No %d\e[0m\n", 2);
-        int tab17[4] = {DEFAULT, DEFAULT, WHITE, DEFAULT};
-        int seq17[2] = {1, 1};
+        filename[strcspn(filename, "\n")] = '\0'; // make sure that the file is in correct format so that we can start counting nb_lines and nb_columns immediatly
 
-        print_table(tab17, sizeof(tab17) / sizeof(tab17[0]));
-        printf("The sequence is: ");
-        table_content(seq17, sizeof(seq17) / sizeof(seq17[0]));
-        if (color_decision(tab17, seq17, 4, 2) == true)
-        {
-            printf("=>  TRUE\n---------------------\n");
-        }
-        else
-        {
-            printf("=>  FALSE\n---------------------\n");
-        }
-        print_table(tab17, sizeof(tab17) / sizeof(tab17[0]));
-        printf("\nThe test 1.2.1 has been successfully completed\n\n");
+        int n_rows, n_cols, max_rows, max_columns;
 
-        printf("\n\e[0;32mTest No %d\e[0m\n", 3);
-        int tab18[6] = {DEFAULT, WHITE, DEFAULT, WHITE, DEFAULT, DEFAULT};
-        int seq18[2] = {1, 2};
+        /* First analysis of the instance */
+        decode_file(filename, &n_rows, &n_cols, &max_rows, &max_columns);
 
-        print_table(tab18, sizeof(tab18) / sizeof(tab18[0]));
-        printf("The sequence is: ");
-        table_content(seq18, sizeof(seq18) / sizeof(seq18[0]));
-        if (color_decision(tab18, seq18, 6, 2) == true)
+        int maximum = max(max_columns, max_rows);
+
+        /* Main Memory allocation */
+        int **rows;
+        rows = malloc(n_rows * sizeof(int *));
+        if (rows == NULL)
         {
-            printf("=>  TRUE\n---------------------\n");
+            allocation_error_print_general("rows");
         }
-        else
+
+        for (int i = 0; i < n_rows; i++)
         {
-            printf("=>  FALSE\n---------------------\n");
+            rows[i] = malloc(maximum * sizeof(int));
+            if (rows[i] == NULL)
+            {
+                allocation_error_print_with_id("rows row", i);
+            }
         }
-        print_table(tab18, sizeof(tab18) / sizeof(tab18[0]));
-        printf("\nThe test 1.2.1 has been successfully completed\n\n");
+
+        int **columns;
+        columns = malloc(n_cols * sizeof(int *));
+        if (columns == NULL)
+        {
+            allocation_error_print_general("columns");
+        }
+
+        for (int i = 0; i < n_cols; i++)
+        {
+            columns[i] = malloc(maximum * sizeof(int));
+            if (columns[i] == NULL)
+            {
+                allocation_error_print_with_id("columns row", i);
+            }
+        }
+
+        /* Instance decoding */
+        read_file_v2(filename, rows, columns, n_rows, n_cols, maximum);
+
+        /* Concatenating rows and columsn sequences in a single table to simplify the treatment process */
+        int **rows_columns = malloc(sizeof(int *) * (n_rows + n_cols));
+
+        for (int i = 0; i < n_rows; i++)
+        {
+            rows_columns[i] = rows[i]; // Copy the entire row
+        }
+
+        for (int i = 0; i < n_cols; i++)
+        {
+            rows_columns[n_rows + i] = columns[i]; // Copy to subsequent rows
+        }
+        
+
+        /* Grid creation and initialization */
+        int **grid;
+        grid = malloc(n_rows * sizeof(int *));
+        if (columns == NULL)
+        {
+            allocation_error_print_general("grid");
+        }
+
+        for (int i = 0; i < n_rows; i++)
+        {
+            grid[i] = malloc(n_cols * sizeof(int));
+            if (grid[i] == NULL)
+            {
+                allocation_error_print_with_id("grid row", i);
+            }
+        }
+
+        initialize2D(grid, n_rows, n_cols);
+
+        /* Result */
+        enum State result;
+        result = color_grid_v3(grid, n_rows, n_cols, rows_columns, maximum);
+
+        switch (result)
+        {
+        case SUCCESS:
+            printf("\n\e[0;32mSUCCESS\e[0m");
+            printf("\nThe colourised grid is\n");
+            printing_grid(grid, n_rows, n_cols, 2);
+            break;
+        case FAIL:
+            printf("\n\e[0;31mThe provided puzzle can NOT BE SOLVED\e[0m\n");
+            printing_grid(grid, n_rows, n_cols, 2);
+            break;
+        case NO_DECISION:
+            printf("\n\e[0;36mThere is NO DECISION for the provided puzzle\e[0m\n");
+            printf("\nThe grid is\n");
+            printing_grid(grid, n_rows, n_cols, 2);
+            break;
+        default:
+            printf("An error occured on enum State response\n");
+            break;
+        }
     }
     else
     {

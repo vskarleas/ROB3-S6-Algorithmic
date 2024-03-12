@@ -36,6 +36,8 @@ void reverse(int l, int h, int *arr);
 /* Decoding an instance's file content */
 void read_file(char *filename, int **lines, int **columns, int n_rows, int n_cols, int max_lines, int max_columns);
 
+void read_file_v2(char *filename, int **lines, int **columns, int n_rows, int n_cols, int maximum);
+
 /* Printing error message for allocating memory with corresponding general */
 void allocation_error_print_general(char reference[512]);
 
@@ -47,9 +49,6 @@ void printing_grid(int **grid, int lines, int columns, int mode);
 
 /* Copying date from gridA to gridB */
 void copy_grid(int **grid, int **final, int rows, int columns);
-
-/* Copying date from tabA to tabB */
-void copy_tab(int *grid, int *final, int length);
 
 /* Initializing the LignesAVoir abd the ColonnesAVoir tables */
 void init_to_see(bool *tab, int n);
@@ -66,6 +65,13 @@ void column_to_grid(int **grid, int column_id, int *column, int length);
 /* Isolating a specific column from the grid */
 void column_isolation(int **grid, int column_id, int length, int *returned);
 
+/* Concatenate two strings */
+char* concat(const char *s1, const char *s2);
+
+/* For debugging purposes */
 void print_line(int *tab, int n);
+
+/* Freeing a 2D array */
+void free_2d(int **table, int n);
 
 #endif
