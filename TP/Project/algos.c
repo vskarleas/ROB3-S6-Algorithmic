@@ -535,23 +535,7 @@ enum State color_grid_v3(int **grid, int n_rows, int n_columns, int **rows_colum
 
             int x_updated = -1;
             int y_updated;
-
-            int i = 0, j = 0;
-            while (i < n_rows && x_updated == -1)
-            {
-                for (j = 0; j < n_columns; j++)
-                {
-                    if (grid[i][j] == DEFAULT)
-                    {
-                        x_updated = i;
-                        y_updated = j;
-                        break;
-                    }
-                }
-                i++;
-            }
-
-            // recalculation(grid, n_rows, n_columns, &x_updated, &y_updated);
+            recalculation(grid, n_rows, n_columns, &x_updated, &y_updated);
 
             if (color_grid_complet(grid, rows_columns, n_rows, n_columns, x_updated, y_updated, maximum) == 1)
             {
