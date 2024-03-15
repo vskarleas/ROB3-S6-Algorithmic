@@ -14,8 +14,66 @@
 #include "constants.h"
 #include "algos.h"
 
+bool is_subset(int *arr1, int *arr2, int m, int n)
+{
+
+    // Check if the second array (n) is larger than the first (m)
+    if (n > m)
+    {
+        return false; // By definition, a subset cannot be larger than the set
+    }
+
+    int *duplicate;
+    duplicate = malloc(m * sizeof(int *));
+    if (duplicate == NULL)
+    {
+        allocation_error_print_general("duplicate");
+    }
+
+    // Making a local copy to return back after analysis is completed
+    copy_grid_1d(arr1, duplicate, m);
+
+    // Changing temporarily everything to black fro default cells
+    for (int i = 0; i < m; i++)
+    {
+        if (arr1[i] == DEFAULT)
+        {
+            arr1[i] = BLACK;
+        }
+    }
+
+    //print_line(arr1, m);
+
+    if (n > m)
+    {
+        return 0; // Subarray cannot be larger than main array
+    }
+
+    for (int i = 0; i <= m - n; i++)
+    {
+        int j;
+        for (j = 0; j < n; j++)
+        {
+            if (arr1[i + j] != arr2[j])
+            {
+                break; // Elements don't match, move to next starting point
+            }
+        }
+        if (j == n)
+        { // All elements matched, subarray found
+            copy_grid_1d(duplicate, arr1, m);
+            free(duplicate);
+            return true;
+        }
+    }
+
+    copy_grid_1d(duplicate, arr1, m);
+    free(duplicate);
+    return false; // Subarray not found
+}
+
 /* It verifies the decisions regarding a line according to its sequence and the rules of the puzzle */
-bool T(int j, int l, int *tab, int *seq)
+bool T(int j, int l, int *tab, int *seq, int total_length)
 {
     if (l == 0)
     {
@@ -23,14 +81,13 @@ bool T(int j, int l, int *tab, int *seq)
     }
     if (l >= 1)
     {
-        if (j < seq[l - 1] - 1)
+        if (j < seq[l - 1] - 1) // please consider that is seauence seq the place at seq[0] is never used on our program. It's just initialises on a nunber that we never take into consideration
         {
-            // Position avant le bloc
             return false;
         }
-        else if (j == seq[l - 1] - 1)
+        if (j == seq[l - 1] - 1)
         {
-            // Position à la fin du bloc
+            // checking for any whites on this space
             for (int i = 0; i <= j; i++)
             {
                 if (tab[i] == WHITE)
@@ -38,24 +95,70 @@ bool T(int j, int l, int *tab, int *seq)
                     return false;
                 }
             }
-            return (l == 1);
+            return (l == 1); // the condition that needs to be true in order for that sub case (2b) to be verfied
         }
-        else // j > seq[l - 1] - 1
+        if (j > seq[l - 1] - 1)
         {
-            // Position après le bloc
-            if (tab[j] == WHITE)
+            // Checking if it white as mentioned on Project's subject
+            if (tab[j] == WHITE) // we check the previous combination [I AM NOT SURE FOR THE SECOND CONDITION TO BE] && T(j - seq[l - 1] - 1, l - 1, tab, seq)
             {
-                return T(j - 1, l, tab, seq);
+                return (T(j - 1, l, tab, seq, total_length));
             }
             else
             {
-                return T(j - 1, l, tab, seq) || T(j - seq[l - 1] - 1, l - 1, tab, seq);
+                // Check whether an array is subset of another array
+                int *temp = (int *)malloc(seq[l - 1] * sizeof(int));
+                if (temp == NULL)
+                {
+                    fprintf(stderr, "\nFailed to allocate memory for tab.\n");
+                    exit(-1);
+                }
+
+                // Initialization of the array
+                for (int i = 0; i < seq[l - 1]; i++)
+                {
+                    temp[i] = BLACK;
+                }
+
+                // int index = j;
+                // int counter = 0;
+
+                // for (int i = 0; i < seq[l - 1]; i++)
+                // {
+                //     if (tab[index] == BLACK || tab[index] == DEFAULT)
+                //     {
+                //         counter++;
+                //     }
+                // }
+
+                // if (counter == seq[l-1])
+                // {
+                //     return true;
+                // }
+                // else
+                // {
+                //     T(j - 1, l, tab, seq, total_length);
+                // }
+
+                //print_line(temp, seq[l - 1]);
+
+                int m = total_length;
+                int n = seq[l - 1];
+
+                if (is_subset(tab, temp, m, n))
+                {
+                    return true;
+                }
+                else
+                {
+                    return (T(j - 1, l, tab, seq, total_length));
+                }
+                free(temp);
             }
         }
     }
     return false;
 }
-
 
 /* Returns true if LignesAVoir or ColonnesAVoir are not emtpy yet */
 bool to_see_is_not_empty(bool *table, int n)
@@ -112,7 +215,7 @@ bool color_decision(int *tab, int *seq, int length, int maximum)
 {
     int l = correct_length(seq, maximum);
     // returns false if it's impossible to color this line otherwise it returns true
-    if (T(length - 1, l, tab, seq) == true)
+    if (T(length - 1, l, tab, seq, length) == true)
     {
         color_lineORcolumn(tab, seq, length);
         return true;
@@ -304,33 +407,30 @@ enum State color_grid_v2(int **grid, int n_rows, int n_columns, int **rows_colum
 
                 /* HORIZONTAL test */
                 l = correct_length(rows_columns[x], maximum);
-                white_test = T(n_columns - 1, l, grid[x], rows_columns[x]);
+                white_test = T(n_columns - 1, l, grid[x], rows_columns[x], n_columns);
 
                 /* VERTICAL test */
                 if (white_test)
                 {
-                    l = correct_length(rows_columns[n_rows + y], maximum);        // updating l value
-                    white_test = T(n_rows - 1, l, tab, rows_columns[n_rows + y]); // we need + 1 because y counts from 0, so in order to take the correct sequence for the column, we need n_rows + 0 + 1 to be distinguised
+                    l = correct_length(rows_columns[n_rows + y], maximum);                // updating l value
+                    white_test = T(n_rows - 1, l, tab, rows_columns[n_rows + y], n_rows); // we need + 1 because y counts from 0, so in order to take the correct sequence for the column, we need n_rows + 0 + 1 to be distinguised
                 }
 
                 // ==========================
                 // Local test for black state
                 // ==========================
-                if (l != 0)
-                {
-                }
                 grid[x][y] = BLACK;
                 tab[x] = BLACK; // This step is essential. Previsouly the colourisation in white happened before isolation. Here we have to do it manually because we have already isolated the column
 
                 /* HORIZONTAL test */
                 l = correct_length(rows_columns[x], maximum);
-                black_test = T(n_columns - 1, l, grid[x], rows_columns[x]);
+                black_test = T(n_columns - 1, l, grid[x], rows_columns[x], n_columns);
 
                 /* VERTICAL test */
                 if (black_test)
                 {
-                    l = correct_length(rows_columns[n_rows + y], maximum);        // updating l value
-                    black_test = T(n_rows - 1, l, tab, rows_columns[n_rows + y]); // we need + 1 because y counts from 0, so in order to take the correct sequence for the column, we need n_rows + 0 + 1 to be distinguised
+                    l = correct_length(rows_columns[n_rows + y], maximum);                // updating l value
+                    black_test = T(n_rows - 1, l, tab, rows_columns[n_rows + y], n_rows); // we need + 1 because y counts from 0, so in order to take the correct sequence for the column, we need n_rows + 0 + 1 to be distinguised
                 }
 
                 free(tab);
@@ -404,7 +504,6 @@ int color_grid_complet(int **grid, int **rows_columns, int n_rows, int n_columns
         return 1;
     }
     copy_grid(duplicate, grid, n_rows, n_columns); // going back to previous state
-    
 
     // ==========================
     // Black test
@@ -460,33 +559,30 @@ enum State color_grid_v3(int **grid, int n_rows, int n_columns, int **rows_colum
 
                     /* HORIZONTAL test */
                     l = correct_length(rows_columns[x], maximum);
-                    white_test = T(n_columns - 1, l, grid[x], rows_columns[x]);
+                    white_test = T(n_columns - 1, l, grid[x], rows_columns[x], n_columns);
 
                     /* VERTICAL test */
                     if (white_test)
                     {
-                        l = correct_length(rows_columns[n_rows + y], maximum);        // updating l value
-                        white_test = T(n_rows - 1, l, tab, rows_columns[n_rows + y]); // we need + 1 because y counts from 0, so in order to take the correct sequence for the column, we need n_rows + 0 + 1 to be distinguised
+                        l = correct_length(rows_columns[n_rows + y], maximum);                // updating l value
+                        white_test = T(n_rows - 1, l, tab, rows_columns[n_rows + y], n_rows); // we need + 1 because y counts from 0, so in order to take the correct sequence for the column, we need n_rows + 0 + 1 to be distinguised
                     }
 
                     // ==========================
                     // Local test for black state
                     // ==========================
-                    if (l != 0)
-                    {
-                    }
                     grid[x][y] = BLACK;
                     tab[x] = BLACK; // This step is essential. Previsouly the colourisation in white happened before isolation. Here we have to do it manually because we have already isolated the column
 
                     /* HORIZONTAL test */
                     l = correct_length(rows_columns[x], maximum);
-                    black_test = T(n_columns - 1, l, grid[x], rows_columns[x]);
+                    black_test = T(n_columns - 1, l, grid[x], rows_columns[x], n_columns); // we need + 1 because x counts from 0, so in
 
                     /* VERTICAL test */
                     if (black_test)
                     {
-                        l = correct_length(rows_columns[n_rows + y], maximum);        // updating l value
-                        black_test = T(n_rows - 1, l, tab, rows_columns[n_rows + y]); // we need + 1 because y counts from 0, so in order to take the correct sequence for the column, we need n_rows + 0 + 1 to be distinguised
+                        l = correct_length(rows_columns[n_rows + y], maximum);                // updating l value
+                        black_test = T(n_rows - 1, l, tab, rows_columns[n_rows + y], n_rows); // we need + 1 because y counts from 0, so in order to take the correct sequence for the column, we need n_rows + 0 + 1 to be distinguised
                     }
 
                     free(tab);
@@ -522,6 +618,9 @@ enum State color_grid_v3(int **grid, int n_rows, int n_columns, int **rows_colum
                             return NO_DECISION;
                         }
                     }
+
+                    printing_grid(grid, n_rows, n_columns, 2);
+                    printf("\n\n");
                 }
             }
         }

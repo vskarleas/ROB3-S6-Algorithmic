@@ -9,8 +9,10 @@
 
 #include "constants.h"
 
+bool is_subset(int *arr1, int *arr2, int m, int n);
+
 /* It verifies the decisions regarding a line according to its sequence and the rules of the puzzle */
-bool T(int j, int l, int *tab, int *seq);
+bool T(int j, int l, int *tab, int *seq, int total_length);
 
 /* Returns true if LignesAVoir or ColonnesAVoir are not emtpy yet */
 bool to_see_is_not_empty(bool *table, int n);

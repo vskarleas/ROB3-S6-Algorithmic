@@ -456,6 +456,16 @@ void printing_grid(int **grid, int lines, int columns, int mode)
     }
 }
 
+
+/* Copying date from gridA to gridB (1D)*/
+void copy_grid_1d(int *grid, int *final, int rows)
+{
+    for (int i = 0; i < rows; i++)
+    {
+        final[i] = grid[i];
+    }
+}
+
 /* Copying date from gridA to gridB */
 void copy_grid(int **grid, int **final, int rows, int columns)
 {
