@@ -44,3 +44,4 @@
 * V4.6 The program has been completed in a great percentage
 * V4.7 The color_llineORcolumn needs some corrections for 0.txt and the rest on the logic
 * V4.9 The algorithm (v3 and v2) are much better but they do not return exactly the correct solution. There should be an error somewhere.
+* V4.10 Updated fuction T. We need now to fix the issue with the v3 function doesn't colour correctly all the cases.
