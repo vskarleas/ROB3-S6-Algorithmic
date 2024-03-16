@@ -14,64 +14,6 @@
 #include "constants.h"
 #include "algos.h"
 
-bool is_subset(int *arr1, int *arr2, int m, int n)
-{
-
-    // Check if the second array (n) is larger than the first (m)
-    if (n > m)
-    {
-        return false; // By definition, a subset cannot be larger than the set
-    }
-
-    int *duplicate;
-    duplicate = malloc(m * sizeof(int *));
-    if (duplicate == NULL)
-    {
-        allocation_error_print_general("duplicate");
-    }
-
-    // Making a local copy to return back after analysis is completed
-    copy_grid_1d(arr1, duplicate, m);
-
-    // Changing temporarily everything to black fro default cells
-    for (int i = 0; i < m; i++)
-    {
-        if (arr1[i] == DEFAULT)
-        {
-            arr1[i] = BLACK;
-        }
-    }
-
-    //print_line(arr1, m);
-
-    if (n > m)
-    {
-        return 0; // Subarray cannot be larger than main array
-    }
-
-    for (int i = 0; i <= m - n; i++)
-    {
-        int j;
-        for (j = 0; j < n; j++)
-        {
-            if (arr1[i + j] != arr2[j])
-            {
-                break; // Elements don't match, move to next starting point
-            }
-        }
-        if (j == n)
-        { // All elements matched, subarray found
-            copy_grid_1d(duplicate, arr1, m);
-            free(duplicate);
-            return true;
-        }
-    }
-
-    copy_grid_1d(duplicate, arr1, m);
-    free(duplicate);
-    return false; // Subarray not found
-}
-
 /* It verifies the decisions regarding a line according to its sequence and the rules of the puzzle */
 bool T(int j, int l, int *tab, int *seq, int total_length)
 {
@@ -87,7 +29,7 @@ bool T(int j, int l, int *tab, int *seq, int total_length)
         }
         if (j == seq[l - 1] - 1)
         {
-            // checking for any whites on this space
+
             for (int i = 0; i <= j; i++)
             {
                 if (tab[i] == WHITE)
@@ -95,65 +37,48 @@ bool T(int j, int l, int *tab, int *seq, int total_length)
                     return false;
                 }
             }
+
             return (l == 1); // the condition that needs to be true in order for that sub case (2b) to be verfied
         }
         if (j > seq[l - 1] - 1)
         {
-            // Checking if it white as mentioned on Project's subject
-            if (tab[j] == WHITE) // we check the previous combination [I AM NOT SURE FOR THE SECOND CONDITION TO BE] && T(j - seq[l - 1] - 1, l - 1, tab, seq)
+            if (tab[j] == WHITE) // we check the previous combination
             {
                 return (T(j - 1, l, tab, seq, total_length));
             }
             else
             {
-                // Check whether an array is subset of another array
-                int *temp = (int *)malloc(seq[l - 1] * sizeof(int));
-                if (temp == NULL)
+                int counter = 0;
+                int i;
+
+                for (i = j; i > j - seq[l - 1]; i--)
                 {
-                    fprintf(stderr, "\nFailed to allocate memory for tab.\n");
-                    exit(-1);
+                    if (tab[i] == BLACK || tab[i] == DEFAULT)
+                    {
+                        counter++;
+                    }
                 }
 
-                // Initialization of the array
-                for (int i = 0; i < seq[l - 1]; i++)
+                if (i < total_length)
                 {
-                    temp[i] = BLACK;
-                }
+                    if (tab[i] == BLACK && l > 1)
+                    {
+                        return (T(j - 1, l, tab, seq, total_length));
+                    }
+                    else if (counter == seq[l - 1] && (tab[i] == WHITE || tab[i] == DEFAULT))
+                    {
 
-                // int index = j;
-                // int counter = 0;
-
-                // for (int i = 0; i < seq[l - 1]; i++)
-                // {
-                //     if (tab[index] == BLACK || tab[index] == DEFAULT)
-                //     {
-                //         counter++;
-                //     }
-                // }
-
-                // if (counter == seq[l-1])
-                // {
-                //     return true;
-                // }
-                // else
-                // {
-                //     T(j - 1, l, tab, seq, total_length);
-                // }
-
-                //print_line(temp, seq[l - 1]);
-
-                int m = total_length;
-                int n = seq[l - 1];
-
-                if (is_subset(tab, temp, m, n))
-                {
-                    return true;
+                        return (T(i - 1, l - 1, tab, seq, total_length));
+                    }
+                    else
+                    {
+                        return (T(j - 1, l, tab, seq, total_length));
+                    }
                 }
                 else
                 {
-                    return (T(j - 1, l, tab, seq, total_length));
+                    return false;
                 }
-                free(temp);
             }
         }
     }
@@ -556,10 +481,19 @@ enum State color_grid_v3(int **grid, int n_rows, int n_columns, int **rows_colum
                     }
 
                     column_isolation(grid, y, n_rows, tab);
+                    // print_line(tab, n_rows);
 
                     /* HORIZONTAL test */
                     l = correct_length(rows_columns[x], maximum);
                     white_test = T(n_columns - 1, l, grid[x], rows_columns[x], n_columns);
+                    // if (white_test == true)
+                    // {
+                    //     printf("true\n");
+                    // }
+                    // else
+                    // {
+                    //     printf("false\n");
+                    // }
 
                     /* VERTICAL test */
                     if (white_test)
@@ -574,15 +508,25 @@ enum State color_grid_v3(int **grid, int n_rows, int n_columns, int **rows_colum
                     grid[x][y] = BLACK;
                     tab[x] = BLACK; // This step is essential. Previsouly the colourisation in white happened before isolation. Here we have to do it manually because we have already isolated the column
 
+                    // printf("\n");
+                    // print_line(tab, n_rows);
+
                     /* HORIZONTAL test */
                     l = correct_length(rows_columns[x], maximum);
-                    black_test = T(n_columns - 1, l, grid[x], rows_columns[x], n_columns); // we need + 1 because x counts from 0, so in
-
-                    /* VERTICAL test */
-                    if (black_test)
+                    if (l == 0)
                     {
-                        l = correct_length(rows_columns[n_rows + y], maximum);                // updating l value
-                        black_test = T(n_rows - 1, l, tab, rows_columns[n_rows + y], n_rows); // we need + 1 because y counts from 0, so in order to take the correct sequence for the column, we need n_rows + 0 + 1 to be distinguised
+                        black_test = false; // We know with certainty that we can't colorise that cell in black because theyre is no sequence. It can be white or nothing but no black
+                    }
+                    else
+                    {
+                        black_test = T(n_columns - 1, l, grid[x], rows_columns[x], n_columns); // we need + 1 because x counts from 0, so in
+
+                        /* VERTICAL test */
+                        if (black_test)
+                        {
+                            l = correct_length(rows_columns[n_rows + y], maximum);                // updating l value
+                            black_test = T(n_rows - 1, l, tab, rows_columns[n_rows + y], n_rows); // we need + 1 because y counts from 0, so in order to take the correct sequence for the column, we need n_rows + 0 + 1 to be distinguised
+                        }
                     }
 
                     free(tab);
@@ -619,8 +563,8 @@ enum State color_grid_v3(int **grid, int n_rows, int n_columns, int **rows_colum
                         }
                     }
 
-                    printing_grid(grid, n_rows, n_columns, 2);
-                    printf("\n\n");
+                    // printing_grid(grid, n_rows, n_columns, 2);
+                    // printf("\n\n");
                 }
             }
         }
