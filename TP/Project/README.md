@@ -1,4 +1,11 @@
-# Projet Vasileios Skarleas et Yanis Sadoun
+# Un problème de tomographie discrète S6 2023 - 2024
+
+## Introduction
+
+
+## DEPRECATED notice
+
+Le development de la resolution du jeu a passé par plein differents stages et surtout pleines heures de reflexion selon la methode "try and error". Avec la finalisation du programme, le fonctions qui ne sont pas utilisé pour la resolution du probleme sont tagé comme ` DEPRECATED `.
 
 ## Question 1
 
@@ -161,3 +168,35 @@ Maintenant, on se focalise sur la complexité de ColoreLig et ColoreCol, qui son
 On peut conclure que la complexité totale est O(N * M) * O(N * M) = O((N * M)^2) qui est bien une complexité polynomiale comme attendu.
 
 ## Question 9
+
+## Exit codes
+
+Vous trouverez ci-dessous la définition et l'explication des codes de sortie de nos programmes :
+
+| Code      | Status | Explanation                                                     |
+| --------- | ------ | --------------------------------------------------------------- |
+| exit(-10) | ERROR  | There is a memory allocation error on color_grid_v1 for columns |
+| exit(-11) | ERROR  | There is a memory allocation error on color_grid_v1 for rows    |
+| exit(-1)  | ERROR  | There is a memory allocation error on color_grid_v2 for columns |
+| exit(-2)  | ERROR  | There is a memory allocation error on color_grid_v2 for rows    |
+| exit(-5)  | ERROR  | Wrong option was returned on menu                               |
+| exit(-3)  | ERROR  | allocation_error_print_general retrurned                        |
+| exit(-4)  | ERROR  | allocation_error_print_with_id returend                         |
+
+## Versioning
+
+Le versioning est un élément clé en programmation, assurant la cohérence des modifications et facilitant la collaboration. Il est aussi primordial pour la récupération de données en cas de perte ou corruption. Au fil du projet, nous avons créé différentes versions de notre code, chacune marquant une étape importante de son évolution. Cela nous a permis de suivre les progrès, d'intégrer de nouvelles fonctionnalités et d'effectuer des corrections de manière structurée. 
+
+Voici les differentes versions dévelopées lors de l'evolution du projet :
+
+## Conclusion
+
+Le développement de notre solution du jeu nonogram a été une expérience formatrice et enrichissante, nous offrant des compétences précieuses en programmation et en résolution de problèmes. Toutefois, il reste des possibilités d'amélioration pour augmenter l'attrait et la performance du jeu.
+
+Actuellement, notre jeu fonctionne avec une interface en ligne de commande, mais pour le rendre plus interactif et esthétique, l'ajout d'une interface graphique, via des bibliothèques externes comme GTK+, Qt ou SDL (ouverture des jeu resolu comme une image blanc ou noir), est envisageable. Cette amélioration nécessiterait toutefois des compétences et installations supplémentaires. Par ailleurs, optimiser l'algorithme d'exploration (si possible) augmenterait l'efficacité du jeu.
+
+Bien que ces améliorations soient ambitieuses, elles promettent d'ouvrir des voies passionnantes pour le développement futur de notre jeu.
+
+## Copyright
+
+###### Yanis Sadoun, Vasileios Filippos Skarleas | 2023 - 2024 All rights reserved

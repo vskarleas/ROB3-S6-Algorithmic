@@ -10,6 +10,8 @@
 /* Printing the different arrays for testing purposes */
 void print_table(int *tab, int n);
 
+void print_table_v2(int *tab, int n);
+
 void table_content(int *tab, int n);
 
 /* Initialiazing everything to DEFAULT (nothing) */
@@ -76,5 +78,8 @@ void print_line(int *tab, int n);
 
 /* Freeing a 2D array */
 void free_2d(int **table, int n);
+
+/* Clearing the terminal screen for more optimised visualisations */
+void clearScreen();
 
 #endif

@@ -48,6 +48,26 @@ void print_table(int *tab, int n)
     }
 }
 
+void print_table_v2(int *tab, int n)
+{
+    int i;
+    for (i = 0; i < n; i++)
+    {
+        if (tab[i] == BLACK)
+        {
+            printf("\e[1;30m#\e[0m ");
+        }
+        else if (tab[i] == WHITE)
+        {
+            printf("\e[1;37m#\e[0m ");
+        }
+        else if (tab[i] == DEFAULT) // default case
+        {
+            printf("? ");
+        }
+    }
+}
+
 void table_content(int *tab, int n)
 {
     int i;
@@ -418,14 +438,14 @@ void read_file_v2(char *filename, int **lines, int **columns, int n_rows, int n_
 void allocation_error_print_general(char reference[512])
 {
     fprintf(stderr, "Failed to allocate memory for %s.\n", reference);
-    exit(-1);
+    exit(-3);
 }
 
 /* Printing error message for allocating memory with corresponding ID */
 void allocation_error_print_with_id(char reference[512], int i)
 {
     fprintf(stderr, "Failed to allocate memory for %s %d.\n", reference, i);
-    exit(-1);
+    exit(-4);
 }
 
 /* Simple printing function for visualisations puproses */
@@ -450,12 +470,21 @@ void printing_grid(int **grid, int lines, int columns, int mode)
             printf("\n");
         }
     }
+    else if (mode == 3)
+    {
+        clearScreen();
+        printf("In progress...\n\nLines: %d  |  Columns: %d\n\n", lines, columns);
+        for (int i = 0; i < lines; i++)
+        {
+            print_table_v2(grid[i], columns);
+            printf("\n");
+        }
+    }
     else
     {
         printf("\nAn error occured!\n");
     }
 }
-
 
 /* Copying date from gridA to gridB (1D)*/
 void copy_grid_1d(int *grid, int *final, int rows)
@@ -549,4 +578,12 @@ void free_2d(int **table, int n)
     for (int i = 0; i < n; i++)
         free(table[i]);
     free(table);
+}
+
+/* Clearing the terminal screen for more optimised visualisations */
+void clearScreen()
+{
+    // const char *CLEAR_SCREEN_ANSI = "\e[1;1H\e[2J";
+    // write(STDOUT_FILENO, CLEAR_SCREEN_ANSI, 12);
+    printf("\e[1;1H\e[2J");
 }

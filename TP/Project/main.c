@@ -29,9 +29,9 @@ int main(int argc, char **argv)
         // }
 
         // initialize1D(tab, M);
-        // printf("\n\n\e[0;36mBasic cases\e[0m\n");
+        printf("\n\n\e[0;36mBasic cases\e[0m\n");
 
-        /* TEST No 1 (has to return true) */
+        // /* TEST No 1 (has to return true) */
         printf("\n\e[0;32mTest No %d\e[0m\n", test_id);
         int tab1[1] = {DEFAULT};
         int seq1[1] = {1};
@@ -39,7 +39,7 @@ int main(int argc, char **argv)
         print_table(tab1, sizeof(tab1) / sizeof(tab1[0]));
         printf("The sequence is: ");
         table_content(seq1, sizeof(seq1) / sizeof(seq1[0]));
-        if (T(sizeof(tab1) / sizeof(tab1[0]) - 1, sizeof(seq1) / sizeof(seq1[0]), tab1, seq1, sizeof(tab1) / sizeof(tab1[0])) == true)
+        if (T_v2(sizeof(tab1) / sizeof(tab1[0]) - 1, sizeof(seq1) / sizeof(seq1[0]), tab1, seq1) == true)
         {
             printf("=>  TRUE\n---------------------\n");
         }
@@ -57,7 +57,7 @@ int main(int argc, char **argv)
         print_table(tab2, sizeof(tab2) / sizeof(tab2[0]));
         printf("The sequence is: ");
         table_content(seq2, sizeof(seq2) / sizeof(seq2[0]));
-        if (T(sizeof(tab2) / sizeof(tab2[0]) - 1, sizeof(seq2) / sizeof(seq2[0]), tab2, seq2, sizeof(tab2) / sizeof(tab2[0])) == true)
+        if (T_v2(sizeof(tab2) / sizeof(tab2[0]) - 1, sizeof(seq2) / sizeof(seq2[0]), tab2, seq2) == true)
         {
             printf("=>  TRUE\n---------------------\n");
         }
@@ -75,7 +75,7 @@ int main(int argc, char **argv)
         print_table(tab3, sizeof(tab3) / sizeof(tab3[0]));
         printf("The sequence is: ");
         table_content(seq3, sizeof(seq3) / sizeof(seq3[0]));
-        if (T(sizeof(tab3) / sizeof(tab3[0]) - 1, sizeof(seq3) / sizeof(seq3[0]), tab3, seq3, sizeof(tab3) / sizeof(tab3[0])) == true)
+        if (T_v2(sizeof(tab3) / sizeof(tab3[0]) - 1, sizeof(seq3) / sizeof(seq3[0]), tab3, seq3) == true)
         {
             printf("=>  TRUE\n---------------------\n");
         }
@@ -93,7 +93,7 @@ int main(int argc, char **argv)
         print_table(tab4, sizeof(tab4) / sizeof(tab4[0]));
         printf("The sequence is: ");
         table_content(seq4, sizeof(seq4) / sizeof(seq4[0]));
-        if (T(sizeof(tab4) / sizeof(tab4[0]) - 1, sizeof(seq4) / sizeof(seq4[0]), tab4, seq4, sizeof(tab4) / sizeof(tab4[0])) == true)
+        if (T_v2(sizeof(tab4) / sizeof(tab4[0]) - 1, sizeof(seq4) / sizeof(seq4[0]), tab4, seq4) == true)
         {
             printf("=>  TRUE\n---------------------\n");
         }
@@ -112,7 +112,7 @@ int main(int argc, char **argv)
         print_table(tab5, sizeof(tab5) / sizeof(tab5[0]));
         printf("The sequence is: ");
         table_content(seq5, sizeof(seq5) / sizeof(seq5[0]));
-        if (T(sizeof(tab5) / sizeof(tab5[0]) - 1, sizeof(seq5) / sizeof(seq5[0]), tab5, seq5, sizeof(tab5) / sizeof(tab5[0])) == true)
+        if (T_v2(sizeof(tab5) / sizeof(tab5[0]) - 1, sizeof(seq5) / sizeof(seq5[0]), tab5, seq5) == true)
         {
             printf("=>  TRUE\n---------------------\n");
         }
@@ -130,7 +130,7 @@ int main(int argc, char **argv)
         print_table(tab6, sizeof(tab6) / sizeof(tab6[0]));
         printf("The sequence is: ");
         table_content(seq6, sizeof(seq6) / sizeof(seq6[0]));
-        if (T(sizeof(tab6) / sizeof(tab6[0]) - 1, sizeof(seq6) / sizeof(seq6[0]), tab6, seq6, sizeof(tab6) / sizeof(tab6[0])) == true)
+        if (T_v2(sizeof(tab6) / sizeof(tab6[0]) - 1, sizeof(seq6) / sizeof(seq6[0]), tab6, seq6) == true)
         {
             printf("=>  TRUE\n---------------------\n");
         }
@@ -148,7 +148,7 @@ int main(int argc, char **argv)
         print_table(tab7, sizeof(tab7) / sizeof(tab7[0]));
         printf("The sequence is: ");
         table_content(seq7, sizeof(seq7) / sizeof(seq7[0]));
-        if (T(sizeof(tab7) / sizeof(tab7[0]) - 1, sizeof(seq7) / sizeof(seq7[0]), tab7, seq7, sizeof(tab7) / sizeof(tab7[0])) == true)
+        if (T_v2(sizeof(tab7) / sizeof(tab7[0]) - 1, sizeof(seq7) / sizeof(seq7[0]), tab7, seq7) == true)
         {
             printf("=>  TRUE\n---------------------\n");
         }
@@ -166,7 +166,7 @@ int main(int argc, char **argv)
         print_table(tab8, sizeof(tab8) / sizeof(tab8[0]));
         printf("The sequence is: ");
         table_content(seq8, sizeof(seq8) / sizeof(seq8[0]));
-        if (T(sizeof(tab8) / sizeof(tab8[0]) - 1, sizeof(seq8) / sizeof(seq8[0]), tab8, seq8, sizeof(tab8) / sizeof(tab8[0])) == true)
+        if (T_v2(sizeof(tab8) / sizeof(tab8[0]) - 1, sizeof(seq8) / sizeof(seq8[0]), tab8, seq8) == true)
         {
             printf("=>  TRUE\n---------------------\n");
         }
@@ -184,7 +184,7 @@ int main(int argc, char **argv)
         print_table(tab9, sizeof(tab9) / sizeof(tab9[0]));
         printf("The sequence is: ");
         table_content(seq9, sizeof(seq9) / sizeof(seq9[0]));
-        if (T(sizeof(tab9) / sizeof(tab9[0]) - 1, sizeof(seq9) / sizeof(seq9[0]), tab9, seq9, sizeof(tab9) / sizeof(tab9[0])) == true)
+        if (T_v2(sizeof(tab9) / sizeof(tab9[0]) - 1, sizeof(seq9) / sizeof(seq9[0]), tab9, seq9) == true)
         {
             printf("=>  TRUE\n---------------------\n");
         }
@@ -203,7 +203,7 @@ int main(int argc, char **argv)
         print_table(tab10, sizeof(tab10) / sizeof(tab10[0]));
         printf("The sequence is: ");
         table_content(seq10, sizeof(seq10) / sizeof(seq10[0]));
-        if (T(sizeof(tab10) / sizeof(tab10[0]) - 1, sizeof(seq10) / sizeof(seq10[0]), tab10, seq10, sizeof(tab10) / sizeof(tab10[0])) == true)
+        if (T_v2(sizeof(tab10) / sizeof(tab10[0]) - 1, sizeof(seq10) / sizeof(seq10[0]), tab10, seq10) == true)
         {
             printf("=>  TRUE\n---------------------\n");
         }
@@ -221,7 +221,7 @@ int main(int argc, char **argv)
         print_table(tab11, sizeof(tab11) / sizeof(tab11[0]));
         printf("The sequence is: ");
         table_content(seq11, sizeof(seq11) / sizeof(seq11[0]));
-        if (T(sizeof(tab11) / sizeof(tab11[0]) - 1, sizeof(seq11) / sizeof(seq11[0]), tab11, seq11, sizeof(tab11) / sizeof(tab11[0])) == true)
+        if (T_v2(sizeof(tab11) / sizeof(tab11[0]) - 1, sizeof(seq11) / sizeof(seq11[0]), tab11, seq11) == true)
         {
             printf("=>  TRUE\n---------------------\n");
         }
@@ -239,7 +239,7 @@ int main(int argc, char **argv)
         print_table(tab12, sizeof(tab12) / sizeof(tab12[0]));
         printf("The sequence is: ");
         table_content(seq12, sizeof(seq12) / sizeof(seq12[0]));
-        if (T(sizeof(tab12) / sizeof(tab12[0]) - 1, sizeof(seq12) / sizeof(seq12[0]), tab12, seq12, sizeof(tab12) / sizeof(tab12[0])) == true)
+        if (T_v2(sizeof(tab12) / sizeof(tab12[0]) - 1, sizeof(seq12) / sizeof(seq12[0]), tab12, seq12) == true)
         {
             printf("=>  TRUE\n---------------------\n");
         }
@@ -257,7 +257,7 @@ int main(int argc, char **argv)
         print_table(tab13, sizeof(tab13) / sizeof(tab13[0]));
         printf("The sequence is: ");
         table_content(seq13, sizeof(seq13) / sizeof(seq13[0]));
-        if (T(sizeof(tab13) / sizeof(tab13[0]) - 1, sizeof(seq13) / sizeof(seq13[0]), tab13, seq13, sizeof(tab13) / sizeof(tab13[0])) == true)
+        if (T_v2(sizeof(tab13) / sizeof(tab13[0]) - 1, sizeof(seq13) / sizeof(seq13[0]), tab13, seq13) == true)
         {
             printf("=>  TRUE\n---------------------\n");
         }
@@ -267,7 +267,7 @@ int main(int argc, char **argv)
         }
         test_id++;
 
-        /* TEST No 14 (has to return true) */
+        /* TEST No 14 (has to return true) */  //HERE
         printf("\n\e[0;32mTest No %d\e[0m\n", test_id);
         int tab14[6] = {BLACK, DEFAULT, DEFAULT, WHITE, DEFAULT, BLACK};
         int seq14[2] = {3, 2};
@@ -275,7 +275,7 @@ int main(int argc, char **argv)
         print_table(tab14, sizeof(tab14) / sizeof(tab14[0]));
         printf("The sequence is: ");
         table_content(seq14, sizeof(seq14) / sizeof(seq14[0]));
-        if (T(sizeof(tab14) / sizeof(tab14[0]) - 1, sizeof(seq14) / sizeof(seq14[0]), tab14, seq14, sizeof(tab14) / sizeof(tab14[0])) == true)
+        if (T_v2(sizeof(tab14) / sizeof(tab14[0]) - 1, sizeof(seq14) / sizeof(seq14[0]), tab14, seq14) == true)
         {
             printf("=>  TRUE\n---------------------\n");
         }
@@ -293,7 +293,7 @@ int main(int argc, char **argv)
         print_table(tab15, sizeof(tab15) / sizeof(tab15[0]));
         printf("The sequence is: ");
         table_content(seq15, sizeof(seq15) / sizeof(seq15[0]));
-        if (T(sizeof(tab15) / sizeof(tab15[0]) - 1, sizeof(seq15) / sizeof(seq15[0]), tab15, seq15, sizeof(tab15) / sizeof(tab15[0])) == true)
+        if (T_v2(sizeof(tab15) / sizeof(tab15[0]) - 1, sizeof(seq15) / sizeof(seq15[0]), tab15, seq15) == true)
         {
             printf("=>  TRUE\n---------------------\n");
         }
@@ -311,7 +311,7 @@ int main(int argc, char **argv)
         print_table(tab16, sizeof(tab16) / sizeof(tab16[0]));
         printf("The sequence is: ");
         table_content(seq16, sizeof(seq16) / sizeof(seq16[0]));
-        if (T(sizeof(tab16) / sizeof(tab16[0]) - 1, sizeof(seq16) / sizeof(seq16[0]), tab16, seq16, sizeof(tab16) / sizeof(tab16[0])) == true)
+        if (T_v2(sizeof(tab16) / sizeof(tab16[0]) - 1, sizeof(seq16) / sizeof(seq16[0]), tab16, seq16) == true)
         {
             printf("=>  TRUE\n---------------------\n");
         }
@@ -329,7 +329,7 @@ int main(int argc, char **argv)
         print_table(tab17, sizeof(tab17) / sizeof(tab17[0]));
         printf("The sequence is: ");
         table_content(seq17, sizeof(seq17) / sizeof(seq17[0]));
-        if (T(sizeof(tab17) / sizeof(tab17[0]) - 1, sizeof(seq17) / sizeof(seq17[0]), tab17, seq17, sizeof(tab17) / sizeof(tab17[0])) == true)
+        if (T_v2(sizeof(tab17) / sizeof(tab17[0]) - 1, sizeof(seq17) / sizeof(seq17[0]), tab17, seq17) == true)
         {
             printf("=>  TRUE\n---------------------\n");
         }
@@ -347,7 +347,7 @@ int main(int argc, char **argv)
         print_table(tab18, sizeof(tab18) / sizeof(tab18[0]));
         printf("The sequence is: ");
         table_content(seq18, sizeof(seq18) / sizeof(seq18[0]));
-        if (T(sizeof(tab18) / sizeof(tab18[0]) - 1, sizeof(seq18) / sizeof(seq18[0]), tab18, seq18, sizeof(tab18) / sizeof(tab18[0])) == true)
+        if (T_v2(sizeof(tab18) / sizeof(tab18[0]) - 1, sizeof(seq18) / sizeof(seq18[0]), tab18, seq18) == true)
         {
             printf("=>  TRUE\n---------------------\n");
         }
@@ -365,7 +365,7 @@ int main(int argc, char **argv)
         print_table(tab19, sizeof(tab19) / sizeof(tab19[0]));
         printf("The sequence is: ");
         table_content(seq19, sizeof(seq19) / sizeof(seq19[0]));
-        if (T(sizeof(tab19) / sizeof(tab19[0]) - 1, sizeof(seq19) / sizeof(seq19[0]), tab19, seq19, sizeof(tab19) / sizeof(tab19[0])) == true)
+        if (T_v2(sizeof(tab19) / sizeof(tab19[0]) - 1, sizeof(seq19) / sizeof(seq19[0]), tab19, seq19) == true)
         {
             printf("=>  TRUE\n---------------------\n");
         }
@@ -375,7 +375,7 @@ int main(int argc, char **argv)
         }
         test_id++;
 
-        /* TEST No 20 (has to return true) */
+        /* TEST No 20 (has to return true) */ //HERE
         printf("\n\e[0;32mTest No %d\e[0m\n", test_id);
         int tab20[4] = {BLACK, DEFAULT, DEFAULT, DEFAULT};
         int seq20[1] = {3};
@@ -383,7 +383,7 @@ int main(int argc, char **argv)
         print_table(tab20, sizeof(tab20) / sizeof(tab20[0]));
         printf("The sequence is: ");
         table_content(seq20, sizeof(seq20) / sizeof(seq20[0]));
-        if (T(sizeof(tab20) / sizeof(tab20[0]) - 1, sizeof(seq20) / sizeof(seq20[0]), tab20, seq20, sizeof(tab20) / sizeof(tab20[0])) == true)
+        if (T_v2(sizeof(tab20) / sizeof(tab20[0]) - 1, sizeof(seq20) / sizeof(seq20[0]), tab20, seq20) == true)
         {
             printf("=>  TRUE\n---------------------\n");
         }
@@ -393,7 +393,7 @@ int main(int argc, char **argv)
         }
         test_id++;
 
-        /* TEST No 21 (has to return true) */
+        /* TEST No 21 (has to return true) */  //HERE
         printf("\n\e[0;32mTest No %d\e[0m\n", test_id);
         int tab21[4] = {DEFAULT, WHITE, BLACK, DEFAULT};
         int seq21[2] = {1,1};
@@ -401,7 +401,7 @@ int main(int argc, char **argv)
         print_table(tab21, sizeof(tab21) / sizeof(tab21[0]));
         printf("The sequence is: ");
         table_content(seq21, sizeof(seq21) / sizeof(seq21[0]));
-        if (T(sizeof(tab21) / sizeof(tab21[0]) - 1, sizeof(seq21) / sizeof(seq21[0]), tab21, seq21, sizeof(tab21) / sizeof(tab21[0])) == true)
+        if (T_v2(sizeof(tab21) / sizeof(tab21[0]) - 1, sizeof(seq21) / sizeof(seq21[0]), tab21, seq21) == true)
         {
             printf("=>  TRUE\n---------------------\n");
         }
@@ -644,7 +644,6 @@ int main(int argc, char **argv)
             break;
         case FAIL:
             printf("\n\e[0;31mThe provided puzzle can NOT BE SOLVED\e[0m\n");
-            printing_grid(grid, n_rows, n_cols, 2);
             break;
         case NO_DECISION:
             printf("\n\e[0;36mThere is NO DECISION for the provided puzzle\e[0m\n");
@@ -659,6 +658,7 @@ int main(int argc, char **argv)
     else
     {
         fprintf(stderr, "An error occured with menu_mode. We are sorry for that! \n");
+        exit(-5);
     }
 
     return 0;

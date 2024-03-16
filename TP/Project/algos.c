@@ -15,18 +15,28 @@
 #include "algos.h"
 
 /* It verifies the decisions regarding a line according to its sequence and the rules of the puzzle */
+/* FINAL VERSION IS V2 */
+
+/* This version treats correctly the majority of cases but it doesn't take into consideration the already colourised
+   black cells that are before the section that is tested and returned true. A test of total amount of black cells
+   needs to be performed definitely */
 bool T(int j, int l, int *tab, int *seq, int total_length)
 {
+    // This is the case were everything is possible
     if (l == 0)
     {
         return true;
     }
     if (l >= 1)
     {
-        if (j < seq[l - 1] - 1) // please consider that is seauence seq the place at seq[0] is never used on our program. It's just initialises on a nunber that we never take into consideration
+        // Case 2a: There is no available amount cells for the sequence to be valid
+        if (j < seq[l - 1] - 1)
         {
             return false;
         }
+        // Case 2b: It can be true if and only if there is only one sequence. Otherwise
+        // it's not possible to treat the rest of sequences in that available number of
+        // cells. If it finds a white cell then the sequence is not valid and returns false
         if (j == seq[l - 1] - 1)
         {
 
@@ -38,19 +48,22 @@ bool T(int j, int l, int *tab, int *seq, int total_length)
                 }
             }
 
-            return (l == 1); // the condition that needs to be true in order for that sub case (2b) to be verfied
+            return (l == 1); // The condition that needs to be true in order for that sub case (2b) to be verfied
         }
+        // Case 2c
         if (j > seq[l - 1] - 1)
         {
-            if (tab[j] == WHITE) // we check the previous combination
+            // We check the previous combination
+            if (tab[j] == WHITE)
             {
                 return (T(j - 1, l, tab, seq, total_length));
             }
+            // We check every combination that is possible for a given sequence
             else
             {
                 int counter = 0;
                 int i;
-
+                // The counter will allows us to verify if the sequence was verified
                 for (i = j; i > j - seq[l - 1]; i--)
                 {
                     if (tab[i] == BLACK || tab[i] == DEFAULT)
@@ -61,15 +74,21 @@ bool T(int j, int l, int *tab, int *seq, int total_length)
 
                 if (i < total_length)
                 {
+                    // After the sequence there is a black cell that under normal circomstances
+                    // it should be white for the sequence to be valid in that position. Howeber
+                    // it is not the case and we need to check for the same sequence once step
+                    // on the left before we can conclude
                     if (tab[i] == BLACK && l > 1)
                     {
                         return (T(j - 1, l, tab, seq, total_length));
                     }
+                    // Case where after the sequence the next cell is white or not coloured. In that case we move on for the next seqence
                     else if (counter == seq[l - 1] && (tab[i] == WHITE || tab[i] == DEFAULT))
                     {
 
                         return (T(i - 1, l - 1, tab, seq, total_length));
                     }
+                    // none of the previous cases so we keep searching moving one step on the left for the same sequence
                     else
                     {
                         return (T(j - 1, l, tab, seq, total_length));
@@ -77,14 +96,150 @@ bool T(int j, int l, int *tab, int *seq, int total_length)
                 }
                 else
                 {
-                    return false;
+                    return false; // means that i is greater than the length of the line or column so the response is false
                 }
             }
         }
     }
+
+    // everything fails so the response is false
     return false;
 }
 
+/* It counts the blacks cells in a line or column (mode 1) | it returns the number of black cells that we wish for a given sequence */
+int count_black_cells(int *tab, int length, int mode)
+{
+    int counter = 0;
+    if (mode == 1) // line or column mode
+    {
+        for (int i = 0; i <= length; i++)
+        {
+            if (tab[i] == BLACK)
+            {
+                counter++;
+            }
+        }
+    }
+    else if (mode == 2) // Case 2a: There is no available amount cells for the sequence to be valid
+    {
+        for (int i = 0; i < length; i++)
+        {
+            counter = counter + tab[i];
+        }
+    }
+    else
+    {
+        printf("An error occured. Try again:(\n");
+        exit(-3);
+    }
+
+    return counter;
+}
+
+/* VERSION 2: Black cells test perfomed and simplified tests for j > seq[l] - 1 */
+bool T_v2(int j, int l, int *tab, int *seq)
+{
+    // Checking wheter we have wrong-colorised a cell during a decision that
+    // doesn't respect the maximum amount of cells that can be colorised
+    if (count_black_cells(tab, j, 1) > count_black_cells(seq, l, 2))
+    {
+        return false;
+    }
+
+    // ================
+    // Case 2a
+    // ================
+
+    /* This is the case were everything is possible */
+    if (l == 0)
+    {
+        return true;
+    }
+    if (l >= 1)
+    {
+        if (j < seq[l - 1] - 1) // please consider that is seauence seq the place at seq[0] is never used on our program. It's just initialises on a nunber that we never take into consideration
+        {
+            return false;
+        }
+        // ================
+        // Case 2b:
+        // ================
+
+        /* It can be true if and only if there is only one sequence. Otherwise
+           it's not possible to treat the rest of sequences in that available number of
+           cells. If it finds a white cell then the sequence is not valid and returns false */
+        if (j == seq[l - 1] - 1)
+        {
+
+            for (int i = 0; i <= j; i++)
+            {
+                if (tab[i] == WHITE)
+                {
+                    return false;
+                }
+            }
+
+            return (l == 1);
+        }
+    }
+    // ================
+    // Subcases for 2c
+    // ================
+
+    /* Checking if current index is black and perfom sequence verification */
+    if (tab[j] == BLACK)
+    {
+        // Case where after the sequence the next cell is white or not coloured. In that case we move on for the next seqence (l - 1)
+        if (tab[j - seq[l - 1]] == WHITE)
+        {
+            return (T_v2(j - seq[l - 1] - 1, l - 1, tab, seq));
+        }
+        // Previous condition wasn't verified so we perform a deep local search
+        else
+        {
+            int i;
+            for (i = j; i > j - seq[l - 1]; i--)
+            {
+                if (tab[i] == WHITE)
+                {
+                    return false;
+                }
+            }
+
+            // The sequence was valid for the local search so we move on for the next seqence
+            return (T_v2(j - seq[l - 1] - 1, l - 1, tab, seq));
+        }
+    }
+
+    /* After the sequence there is a black cell that under normal circomstances
+       it should be white for the sequence to be valid in that position. However
+       it is not the case and we need to check for the same sequence once step
+       on the left before we can conclude. */
+    if (tab[j - seq[l - 1]] == BLACK)
+    {
+        return (T_v2(j - 1, l, tab, seq));
+    }
+
+    /* The sequence was valid for the local search that was perfomed on index j and
+       on index j - seq[l] (black exclusivly), so last but not least we need to perform
+       a global test. If there is a white ceel that is found then we move on one step
+       on the left as usual according to question 3. */
+    int i;
+    for (i = j; i > j - seq[l - 1]; i--)
+    {
+        if (tab[i] == WHITE)
+        {
+            return T_v2(i - 1, l, tab, seq);
+        }
+    }
+
+    return (T_v2(j - seq[l - 1] - 1, l - 1, tab, seq) || T_v2(j - 1, l, tab, seq));
+
+    // everything fails so the response is false
+    return false;
+}
+
+// DEPRECATED
 /* Returns true if LignesAVoir or ColonnesAVoir are not emtpy yet */
 bool to_see_is_not_empty(bool *table, int n)
 {
@@ -98,7 +253,7 @@ bool to_see_is_not_empty(bool *table, int n)
     return false;
 }
 
-// TO BE CORRECTED IN ORDER TO BE CAPABLE TO TREAT THE CORRECT COLORISATION PROCESS FOR 0.txt
+// DEPRECATED
 /* Colorizes the line once it knows that it can be colourised correctly */
 void color_lineORcolumn(int *line, int *seq, int length)
 {
@@ -135,12 +290,13 @@ int correct_length(int *seq, int size)
     return count;
 }
 
+// DEPRECATED
 /* Checks if a line or column can be colorised and proceeds to the appropriate action (colorisation or not)  */
 bool color_decision(int *tab, int *seq, int length, int maximum)
 {
     int l = correct_length(seq, maximum);
     // returns false if it's impossible to color this line otherwise it returns true
-    if (T(length - 1, l, tab, seq, length) == true)
+    if (T_v2(length - 1, l, tab, seq) == true)
     {
         color_lineORcolumn(tab, seq, length);
         return true;
@@ -186,7 +342,8 @@ int grid_defaults_count(int **grid, int rows, int columns)
     return count;
 }
 
-/* Coloring the grid - DOESN'T WORK */
+/* Coloring the grid following seperate lines and seperates collumns approach */
+/* FINAL VERSION IS V3 */
 enum State color_grid_v1(int **main_grid, int n_rows, int n_columns, int **rows, int **columns, int maximum)
 {
     bool response;
@@ -207,16 +364,17 @@ enum State color_grid_v1(int **main_grid, int n_rows, int n_columns, int **rows,
         }
     }
 
+    // Local copy of the grid
     copy_grid(main_grid, grid, n_rows, n_columns);
 
+    // Maintaining a list of the lines and columns that need to be explored
     bool lines_to_see[n_rows];
     init_to_see(lines_to_see, n_rows);
     bool columns_to_see[n_columns];
     init_to_see(columns_to_see, n_columns);
 
-    while (to_see_is_not_empty(lines_to_see, n_rows) || to_see_is_not_empty(columns_to_see, n_columns))
+    while (to_see_is_not_empty(lines_to_see, n_rows) || to_see_is_not_empty(columns_to_see, n_columns)) // there are still lines or columns to be explored
     {
-        // TO BE VERFIED WITH EXACT ANNEXE'S ALGORITHM
         for (int i = 0; i < n_rows; i++)
         {
 
@@ -226,7 +384,7 @@ enum State color_grid_v1(int **main_grid, int n_rows, int n_columns, int **rows,
             if (tab == NULL)
             {
                 fprintf(stderr, "\nFailed to allocate memory for tab.\n");
-                exit(-1);
+                exit(-10);
             }
 
             line_isolation(grid, i, n_columns, tab);
@@ -251,7 +409,7 @@ enum State color_grid_v1(int **main_grid, int n_rows, int n_columns, int **rows,
             if (tab == NULL)
             {
                 fprintf(stderr, "\nFailed to allocate memory for tab.\n");
-                exit(-1);
+                exit(-11);
             }
 
             column_isolation(grid, i, n_rows, tab);
@@ -269,7 +427,9 @@ enum State color_grid_v1(int **main_grid, int n_rows, int n_columns, int **rows,
             columns_to_see[i] = false;
         }
     }
-    copy_grid(grid, main_grid, n_rows, n_columns); // Copying the final result back to the main grid
+
+    // Copying the final result back to the main grid
+    copy_grid(grid, main_grid, n_rows, n_columns);
     if (grid_in_color(grid, n_rows, n_columns) == true)
     {
         return SUCCESS;
@@ -304,7 +464,7 @@ void recalculation(int **grid, int rows, int columns, int *i, int *j)
 /* Coloring the grid (partially) and making decisions */
 enum State color_grid_v2(int **grid, int n_rows, int n_columns, int **rows_columns, int maximum)
 {
-
+    // NOTE: x is for horizontal (lines) and y is for vertical (columns) on grid's 2D array
     for (int x = 0; x < n_rows; x++)
     {
         for (int y = 0; y < n_columns; y++)
@@ -320,7 +480,7 @@ enum State color_grid_v2(int **grid, int n_rows, int n_columns, int **rows_colum
                 // ==========================
                 grid[x][y] = WHITE;
 
-                // Analysis of the line in question (in parallel of every column)
+                // Analysis of the line in question (in parallel of every column for this line [this is done with every change of y])
                 int *tab = (int *)malloc(n_rows * sizeof(int)); // The number of rows is the length of the column in question
                 if (tab == NULL)
                 {
@@ -328,17 +488,18 @@ enum State color_grid_v2(int **grid, int n_rows, int n_columns, int **rows_colum
                     exit(-1);
                 }
 
+                // Isolation of the column for the current y
                 column_isolation(grid, y, n_rows, tab);
 
                 /* HORIZONTAL test */
                 l = correct_length(rows_columns[x], maximum);
-                white_test = T(n_columns - 1, l, grid[x], rows_columns[x], n_columns);
+                white_test = T_v2(n_columns - 1, l, grid[x], rows_columns[x]);
 
                 /* VERTICAL test */
                 if (white_test)
                 {
-                    l = correct_length(rows_columns[n_rows + y], maximum);                // updating l value
-                    white_test = T(n_rows - 1, l, tab, rows_columns[n_rows + y], n_rows); // we need + 1 because y counts from 0, so in order to take the correct sequence for the column, we need n_rows + 0 + 1 to be distinguised
+                    l = correct_length(rows_columns[n_rows + y], maximum);           // updating l value
+                    white_test = T_v2(n_rows - 1, l, tab, rows_columns[n_rows + y]); // we need + 1 because y counts from 0, so in order to take the correct sequence for the column, we need n_rows + 0 + 1 to be distinguised
                 }
 
                 // ==========================
@@ -349,13 +510,13 @@ enum State color_grid_v2(int **grid, int n_rows, int n_columns, int **rows_colum
 
                 /* HORIZONTAL test */
                 l = correct_length(rows_columns[x], maximum);
-                black_test = T(n_columns - 1, l, grid[x], rows_columns[x], n_columns);
+                black_test = T_v2(n_columns - 1, l, grid[x], rows_columns[x]);
 
                 /* VERTICAL test */
                 if (black_test)
                 {
-                    l = correct_length(rows_columns[n_rows + y], maximum);                // updating l value
-                    black_test = T(n_rows - 1, l, tab, rows_columns[n_rows + y], n_rows); // we need + 1 because y counts from 0, so in order to take the correct sequence for the column, we need n_rows + 0 + 1 to be distinguised
+                    l = correct_length(rows_columns[n_rows + y], maximum);           // updating l value
+                    black_test = T_v2(n_rows - 1, l, tab, rows_columns[n_rows + y]); // we need + 1 because y counts from 0, so in order to take the correct sequence for the column, we need n_rows + 0 + 1 to be distinguised
                 }
 
                 free(tab);
@@ -417,6 +578,7 @@ int color_grid_complet(int **grid, int **rows_columns, int n_rows, int n_columns
         }
     }
 
+    // Grid -> duplicate
     copy_grid(grid, duplicate, n_rows, n_columns);
 
     // ==========================
@@ -446,11 +608,10 @@ int color_grid_complet(int **grid, int **rows_columns, int n_rows, int n_columns
     return 0;
 }
 
-/* Final version that colourises and calls recursivly in order to examine all the possible cases */
-/* NOTA BENE: Same logic with v2 but more elaborated */
+/* Final version that colourises and calls recursivly in order to examine all the possible cases (complet) */
+/* NOTA BENE: Same logic with v2 but more elaborated and completed */
 enum State color_grid_v3(int **grid, int n_rows, int n_columns, int **rows_columns, int maximum)
 {
-
     enum State result;
     result = SUCCESS;                        // status by default. It will be updated accordingly
     int last_time = 1, before_last_time = 1; // indicators of our not-colourised cells in the puzzle grid in two different times. last_empty happened before after_last_empty in a chronological sequence
@@ -477,7 +638,7 @@ enum State color_grid_v3(int **grid, int n_rows, int n_columns, int **rows_colum
                     if (tab == NULL)
                     {
                         fprintf(stderr, "\nFailed to allocate memory for tab.\n");
-                        exit(-1);
+                        exit(-2);
                     }
 
                     column_isolation(grid, y, n_rows, tab);
@@ -485,21 +646,13 @@ enum State color_grid_v3(int **grid, int n_rows, int n_columns, int **rows_colum
 
                     /* HORIZONTAL test */
                     l = correct_length(rows_columns[x], maximum);
-                    white_test = T(n_columns - 1, l, grid[x], rows_columns[x], n_columns);
-                    // if (white_test == true)
-                    // {
-                    //     printf("true\n");
-                    // }
-                    // else
-                    // {
-                    //     printf("false\n");
-                    // }
+                    white_test = T_v2(n_columns - 1, l, grid[x], rows_columns[x]);
 
                     /* VERTICAL test */
                     if (white_test)
                     {
-                        l = correct_length(rows_columns[n_rows + y], maximum);                // updating l value
-                        white_test = T(n_rows - 1, l, tab, rows_columns[n_rows + y], n_rows); // we need + 1 because y counts from 0, so in order to take the correct sequence for the column, we need n_rows + 0 + 1 to be distinguised
+                        l = correct_length(rows_columns[n_rows + y], maximum);
+                        white_test = T_v2(n_rows - 1, l, tab, rows_columns[n_rows + y]);
                     }
 
                     // ==========================
@@ -519,13 +672,13 @@ enum State color_grid_v3(int **grid, int n_rows, int n_columns, int **rows_colum
                     }
                     else
                     {
-                        black_test = T(n_columns - 1, l, grid[x], rows_columns[x], n_columns); // we need + 1 because x counts from 0, so in
+                        black_test = T_v2(n_columns - 1, l, grid[x], rows_columns[x]); // we need + 1 because x counts from 0, so in
 
                         /* VERTICAL test */
                         if (black_test)
                         {
-                            l = correct_length(rows_columns[n_rows + y], maximum);                // updating l value
-                            black_test = T(n_rows - 1, l, tab, rows_columns[n_rows + y], n_rows); // we need + 1 because y counts from 0, so in order to take the correct sequence for the column, we need n_rows + 0 + 1 to be distinguised
+                            l = correct_length(rows_columns[n_rows + y], maximum);
+                            black_test = T_v2(n_rows - 1, l, tab, rows_columns[n_rows + y]);
                         }
                     }
 
@@ -566,8 +719,17 @@ enum State color_grid_v3(int **grid, int n_rows, int n_columns, int **rows_colum
                     // printing_grid(grid, n_rows, n_columns, 2);
                     // printf("\n\n");
                 }
+
+                // time_t rawtime;
+                // struct tm *timeinfo;
+
+                // time(&rawtime);
+                // timeinfo = localtime(&rawtime);
+                // printf("%s\n", asctime(timeinfo));
             }
         }
+        
+        printing_grid(grid, n_rows, n_columns, 3);
 
         int changes = grid_defaults_count(grid, n_rows, n_columns);
 
