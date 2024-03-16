@@ -1,13 +1,14 @@
 // #############################################################################
 // # File main.c
 // # UE Infomatics for Robotics - Polytech Sorbonne - 2023/2024 - S6
-// # Authors: Yannis Sadoun, Vasileios Filippos Skarleas - All rights reserved.
+// # Authors: Yanis Sadoun, Vasileios Filippos Skarleas - All rights reserved.
 // #############################################################################
 
 #include <string.h>
 #include <stdio.h>
 #include <stdlib.h>
 #include <stdbool.h>
+#include <time.h>
 
 #include "utile.h"
 #include "algos.h"
@@ -267,7 +268,7 @@ int main(int argc, char **argv)
         }
         test_id++;
 
-        /* TEST No 14 (has to return true) */  //HERE
+        /* TEST No 14 (has to return true) */ // HERE
         printf("\n\e[0;32mTest No %d\e[0m\n", test_id);
         int tab14[6] = {BLACK, DEFAULT, DEFAULT, WHITE, DEFAULT, BLACK};
         int seq14[2] = {3, 2};
@@ -324,7 +325,7 @@ int main(int argc, char **argv)
         /* TEST No 17 (has to return false) */
         printf("\n\e[0;32mTest No %d\e[0m\n", test_id);
         int tab17[4] = {BLACK, BLACK, DEFAULT, DEFAULT};
-        int seq17[2] = {1,2};
+        int seq17[2] = {1, 2};
 
         print_table(tab17, sizeof(tab17) / sizeof(tab17[0]));
         printf("The sequence is: ");
@@ -375,7 +376,7 @@ int main(int argc, char **argv)
         }
         test_id++;
 
-        /* TEST No 20 (has to return true) */ //HERE
+        /* TEST No 20 (has to return true) */ // HERE
         printf("\n\e[0;32mTest No %d\e[0m\n", test_id);
         int tab20[4] = {BLACK, DEFAULT, DEFAULT, DEFAULT};
         int seq20[1] = {3};
@@ -393,10 +394,10 @@ int main(int argc, char **argv)
         }
         test_id++;
 
-        /* TEST No 21 (has to return true) */  //HERE
+        /* TEST No 21 (has to return true) */ // HERE
         printf("\n\e[0;32mTest No %d\e[0m\n", test_id);
         int tab21[4] = {DEFAULT, WHITE, BLACK, DEFAULT};
-        int seq21[2] = {1,1};
+        int seq21[2] = {1, 1};
 
         print_table(tab21, sizeof(tab21) / sizeof(tab21[0]));
         printf("The sequence is: ");
@@ -409,7 +410,6 @@ int main(int argc, char **argv)
         {
             printf("=>  FALSE\n---------------------\n");
         }
-
 
         printf("The test 1.2 has been successfully completed\n");
     }
@@ -513,7 +513,7 @@ int main(int argc, char **argv)
         /* Result */
         enum State result;
         // result = color_grid_v1(grid, n_rows, n_cols, rows, columns, maximum);
-        result = color_grid_v2(grid, n_rows, n_cols,rows_columns, maximum);
+        result = color_grid_v2(grid, n_rows, n_cols, rows_columns, maximum);
         // result = color_grid_v3(grid, n_rows, n_cols, rows_columns, maximum);
 
         switch (result)
@@ -521,16 +521,16 @@ int main(int argc, char **argv)
         case SUCCESS:
             printf("\n\e[0;32mSUCCESS\e[0m");
             printf("\nThe colourised grid is\n");
-            printing_grid(grid, n_rows, n_cols, 2);
+            printing_grid(grid, n_rows, n_cols, 4);
             break;
         case FAIL:
             printf("\n\e[0;31mThe provided puzzle can NOT BE SOLVED\e[0m\n");
-            printing_grid(grid, n_rows, n_cols, 2);
+            printing_grid(grid, n_rows, n_cols, 4);
             break;
         case NO_DECISION:
             printf("\n\e[0;36mThere is NO DECISION for the provided puzzle\e[0m\n");
             printf("\nThe grid is\n");
-            printing_grid(grid, n_rows, n_cols, 2);
+            printing_grid(grid, n_rows, n_cols, 4);
             break;
         default:
             printf("An error occured on enum State response\n");
@@ -602,7 +602,6 @@ int main(int argc, char **argv)
             rows_columns[n_rows + i] = columns[i]; // Copy to subsequent rows
         }
 
-
         // printf("\nLines sequences\n");
         // // printing_grid(rows, n_rows, max_rows, 1);
         // printing_grid(rows, n_rows, maximum, 1);
@@ -610,7 +609,6 @@ int main(int argc, char **argv)
         // printf("\nColumns sequences\n");
         // // printing_grid(columns, n_cols, max_columns, 1);
         // printing_grid(columns, n_cols, maximum, 1);
-        
 
         /* Grid creation and initialization */
         int **grid;
@@ -633,7 +631,28 @@ int main(int argc, char **argv)
 
         /* Result */
         enum State result;
-        result = color_grid_v3(grid, n_rows, n_cols, rows_columns, maximum);
+        clock_t temps_initial;
+        clock_t temps_final;
+        float temps_cpu;
+        int time = midle_menu();
+
+        if (time == 1)
+        {
+            temps_initial = clock();
+            result = color_grid_v3(grid, n_rows, n_cols, rows_columns, maximum);
+            temps_final = clock();
+
+            float temps_cpu; // Total time in seconds
+            temps_cpu = (temps_final - temps_initial) * 1e-6;
+        }
+        else if (time == 2)
+        {
+            result = color_grid_v3(grid, n_rows, n_cols, rows_columns, maximum);
+        }
+        else
+        {
+            exit(-6);
+        }
 
         switch (result)
         {
@@ -641,6 +660,10 @@ int main(int argc, char **argv)
             printf("\n\e[0;32mSUCCESS\e[0m");
             printf("\nThe colourised grid is\n");
             printing_grid(grid, n_rows, n_cols, 2);
+            if (time == 1)
+            {
+                printf("The time passed is %f seconds\n",temps_cpu);
+            }
             break;
         case FAIL:
             printf("\n\e[0;31mThe provided puzzle can NOT BE SOLVED\e[0m\n");

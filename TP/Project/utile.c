@@ -1,7 +1,7 @@
 // #############################################################################
 // # File utile.c
 // # UE Infomatics for Robotics - Polytech Sorbonne - 2023/2024 - S6
-// # Authors: Yannis Sadoun, Vasileios Filippos Skarleas - All rights reserved.
+// # Authors: Yanis Sadoun, Vasileios Filippos Skarleas - All rights reserved.
 // #############################################################################
 
 #include <stdlib.h>
@@ -480,6 +480,16 @@ void printing_grid(int **grid, int lines, int columns, int mode)
             printf("\n");
         }
     }
+    else if (mode == 4)
+    {
+        clearScreen();
+        printf("Lines: %d  |  Columns: %d\n\n", lines, columns);
+        for (int i = 0; i < lines; i++)
+        {
+            print_table_v2(grid[i], columns);
+            printf("\n");
+        }
+    }
     else
     {
         printf("\nAn error occured!\n");
@@ -586,4 +596,38 @@ void clearScreen()
     // const char *CLEAR_SCREEN_ANSI = "\e[1;1H\e[2J";
     // write(STDOUT_FILENO, CLEAR_SCREEN_ANSI, 12);
     printf("\e[1;1H\e[2J");
+}
+
+/* Time counting decision menu */
+int midle_menu()
+{
+    
+
+    char userInput[20];
+
+    while (true)
+    {
+        printf("Do you want time counting or not ? (Yes or No) \n");
+        scanf("%s", userInput);
+
+        // Convert input to lowercase for case-insensitive comparison and returns
+        for (int i = 0; i < strlen(userInput); i++)
+        {
+            userInput[i] = tolower(userInput[i]);
+        }
+
+        if (strcmp(userInput, "yes") == 0)
+        {
+            return 1;
+        }
+        else if (strcmp(userInput, "no") == 0)
+        {
+            return 2;
+        }
+        else
+        {
+            clearScreen();
+            printf("\n\033[0;33mATTENTION!\033[1;0m: You can choose between Yes or No\n");
+        }
+    }
 }

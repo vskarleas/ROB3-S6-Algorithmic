@@ -48,6 +48,8 @@ V3.4 Last fixes for TP3
 
 V3.5 TP3 completed
 
+V4.0 Base code was added/created
+
 V4.1 Project started. The 1.1 has been completed partially. The base cases work but when we check for a more complex one, the answers are not the best.
 
 V4.2 Corrections, bug fixes and compte rendu completed until Question 7
@@ -72,4 +74,8 @@ V4.9 The algorithm (v3 and v2) are much better but they do not return exactly th
 
 V4.10 Updated fuction T. We need now to fix the issue with the v3 function doesn't colour correctly all the cases.
 
-* [ ] V4.11 Updated function T but still not finished yet. There are some errors
+V4.11 Updated function T but still not finished yet. There are some errors
+
+V4.12 Code correction on logic
+
+V4.13 Optimization, formalization and completion

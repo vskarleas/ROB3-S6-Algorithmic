@@ -1,14 +1,13 @@
 // #############################################################################
 // # File algos.c
 // # UE Infomatics for Robotics - Polytech Sorbonne - 2023/2024 - S6
-// # Authors: Yannis Sadoun, Vasileios Filippos Skarleas - All rights reserved.
+// # Authors: Yanis Sadoun, Vasileios Filippos Skarleas - All rights reserved.
 // #############################################################################
 
 #include <stdlib.h>
 #include <stdio.h>
 #include <string.h>
 #include <stdbool.h>
-#include <time.h>
 
 #include "utile.h"
 #include "constants.h"
@@ -525,7 +524,6 @@ enum State color_grid_v2(int **grid, int n_rows, int n_columns, int **rows_colum
                 // Reversing any changes
                 // ==========================
                 grid[x][y] = DEFAULT;
-                tab[x] = DEFAULT;
 
                 // ==========================
                 // Decisions and conclusions
@@ -555,7 +553,16 @@ enum State color_grid_v2(int **grid, int n_rows, int n_columns, int **rows_colum
             }
         }
     }
-    return SUCCESS;
+
+    if (grid_in_color(grid, n_rows, n_columns))
+    {
+        return SUCCESS;
+    }
+    else
+    {
+        return NO_DECISION;
+    }
+    
 }
 
 /* Completing the colorisation process with recursion */
@@ -688,7 +695,6 @@ enum State color_grid_v3(int **grid, int n_rows, int n_columns, int **rows_colum
                     // Reversing any changes
                     // ==========================
                     grid[x][y] = DEFAULT;
-                    tab[x] = DEFAULT;
 
                     // ==========================
                     // Decisions and conclusions

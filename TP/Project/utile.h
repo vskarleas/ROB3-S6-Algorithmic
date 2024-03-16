@@ -1,7 +1,7 @@
 // #############################################################################
 // # File utile.h
 // # UE Infomatics for Robotics - Polytech Sorbonne - 2023/2024 - S6
-// # Authors: Yannis Sadoun, Vasileios Filippos Skarleas - All rights reserved.
+// # Authors: Yanis Sadoun, Vasileios Filippos Skarleas - All rights reserved.
 // #############################################################################
 
 #ifndef H_UTIL
@@ -81,5 +81,8 @@ void free_2d(int **table, int n);
 
 /* Clearing the terminal screen for more optimised visualisations */
 void clearScreen();
+
+/* Time counting decision menu */
+int midle_menu();
 
 #endif

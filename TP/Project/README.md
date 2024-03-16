@@ -2,10 +2,9 @@
 
 ## Introduction
 
-
 ## DEPRECATED notice
 
-Le development de la resolution du jeu a passé par plein differents stages et surtout pleines heures de reflexion selon la methode "try and error". Avec la finalisation du programme, le fonctions qui ne sont pas utilisé pour la resolution du probleme sont tagé comme ` DEPRECATED `.
+Le development de la resolution du jeu a passé par plein differents stages et surtout pleines heures de reflexion selon la methode "try and error". Avec la finalisation du programme, le fonctions qui ne sont pas utilisé pour la resolution du probleme sont tagé comme `DEPRECATED`.
 
 ## Question 1
 
@@ -155,9 +154,100 @@ bool T(int j, int l, int *tab, int *seq)
 
 On propose les tests ci-dessous:
 
-![1709490255489](image/README/1709490255489.png)
+```c
+Basic cases
 
-![1709490260390](image/README/1709490260390.png)
+Test No 1
+? The sequence is:  1 =>  TRUE
+---------------------
+
+Test No 2
+# The sequence is:  1 =>  FALSE
+---------------------
+
+Test No 3
+# The sequence is:  1 =>  TRUE
+---------------------
+
+Test No 4
+# | ? | ? The sequence is:  3 =>  TRUE
+---------------------
+
+
+More complex cases
+
+Test No 5
+# | ? | ? The sequence is:  4 =>  FALSE
+---------------------
+
+Test No 6
+# | ? | # The sequence is:  2 =>  TRUE
+---------------------
+
+Test No 7
+# | ? | ? The sequence is:  2 =>  TRUE
+---------------------
+
+Test No 8
+# | ? | ? The sequence is:  3 =>  FALSE
+---------------------
+
+Test No 9
+# | ? | ? The sequence is:  0 =>  TRUE
+---------------------
+
+
+High complexity cases
+
+Test No 10
+? | ? | ? | ? | ? The sequence is:  2 | 1 | 1 =>  FALSE
+---------------------
+
+Test No 11
+? | ? | ? | ? | ? | ? The sequence is:  3 | 2 =>  TRUE
+---------------------
+
+Test No 12
+? | ? | ? | # | ? | ? The sequence is:  3 | 2 =>  TRUE
+---------------------
+
+Test No 13
+# | ? | ? | # | ? | ? The sequence is:  3 | 2 =>  FALSE
+---------------------
+
+Test No 14
+# | ? | ? | # | ? | # The sequence is:  3 | 2 =>  TRUE
+---------------------
+
+Test No 15
+# | # | ? | # | ? | # The sequence is:  3 | 2 =>  FALSE
+---------------------
+
+Test No 16
+# | ? | # | ? | ? The sequence is:  3 =>  FALSE
+---------------------
+
+Test No 17
+# | # | ? | ? The sequence is:  1 | 2 =>  FALSE
+---------------------
+
+Test No 18
+? | ? | ? | ? | ? The sequence is:  3 =>  TRUE
+---------------------
+
+Test No 19
+? | ? | # | # | ? The sequence is:  3 =>  TRUE
+---------------------
+
+Test No 20
+# | ? | ? | ? The sequence is:  3 =>  TRUE
+---------------------
+
+Test No 21
+? | # | # | ? The sequence is:  1 | 1 =>  TRUE
+```
+
+Ces tests nous avos permis de conclure si la fonction T etait capable de passer par plein differents scenarios extremes et perturbants.
 
 ## Question 8
 
@@ -168,6 +258,172 @@ Maintenant, on se focalise sur la complexité de ColoreLig et ColoreCol, qui son
 On peut conclure que la complexité totale est O(N * M) * O(N * M) = O((N * M)^2) qui est bien une complexité polynomiale comme attendu.
 
 ## Question 9
+
+L'implementation de l'agorithm incomplet est le suivant:
+
+```c
+enum State color_grid_v2(int **grid, int n_rows, int n_columns, int **rows_columns, int maximum)
+{
+    // NOTE: x is for horizontal (lines) and y is for vertical (columns) on grid's 2D array
+    for (int x = 0; x < n_rows; x++)
+    {
+        for (int y = 0; y < n_columns; y++)
+        {
+            /* If no color is aplied yet to the specific cell */
+            if (grid[x][y] == DEFAULT)
+            {
+                int l;
+                bool white_test, black_test;
+
+                // ==========================
+                // Local test for white state
+                // ==========================
+                grid[x][y] = WHITE;
+
+                // Analysis of the line in question (in parallel of every column for this line [this is done with every change of y])
+                int *tab = (int *)malloc(n_rows * sizeof(int)); // The number of rows is the length of the column in question
+                if (tab == NULL)
+                {
+                    fprintf(stderr, "\nFailed to allocate memory for tab.\n");
+                    exit(-1);
+                }
+
+                // Isolation of the column for the current y
+                column_isolation(grid, y, n_rows, tab);
+
+                /* HORIZONTAL test */
+                l = correct_length(rows_columns[x], maximum);
+                white_test = T_v2(n_columns - 1, l, grid[x], rows_columns[x]);
+
+                /* VERTICAL test */
+                if (white_test)
+                {
+                    l = correct_length(rows_columns[n_rows + y], maximum);           // updating l value
+                    white_test = T_v2(n_rows - 1, l, tab, rows_columns[n_rows + y]); // we need + 1 because y counts from 0, so in order to take the correct sequence for the column, we need n_rows + 0 + 1 to be distinguised
+                }
+
+                // ==========================
+                // Local test for black state
+                // ==========================
+                grid[x][y] = BLACK;
+                tab[x] = BLACK; // This step is essential. Previsouly the colourisation in white happened before isolation. Here we have to do it manually because we have already isolated the column
+
+                /* HORIZONTAL test */
+                l = correct_length(rows_columns[x], maximum);
+                black_test = T_v2(n_columns - 1, l, grid[x], rows_columns[x]);
+
+                /* VERTICAL test */
+                if (black_test)
+                {
+                    l = correct_length(rows_columns[n_rows + y], maximum);           // updating l value
+                    black_test = T_v2(n_rows - 1, l, tab, rows_columns[n_rows + y]); // we need + 1 because y counts from 0, so in order to take the correct sequence for the column, we need n_rows + 0 + 1 to be distinguised
+                }
+
+                free(tab);
+
+                // ==========================
+                // Reversing any changes
+                // ==========================
+                grid[x][y] = DEFAULT;
+
+                // ==========================
+                // Decisions and conclusions
+                // ==========================
+                if (white_test == false)
+                {
+                    if (black_test == false)
+                    {
+                        return FAIL;
+                    }
+                    else
+                    {
+                        grid[x][y] = BLACK;
+                    }
+                }
+                else if (black_test == false)
+                {
+                    if (white_test == true)
+                    {
+                        grid[x][y] = WHITE;
+                    }
+                    else
+                    {
+                        return NO_DECISION;
+                    }
+                }
+            }
+        }
+    }
+
+    if (grid_in_color(grid, n_rows, n_columns))
+    {
+        return SUCCESS;
+    }
+    else
+    {
+        return NO_DECISION;
+    }
+  
+}
+```
+
+## Q10
+
+En faisant une implimentation sur les instances 1.txt à 10.txt on obtiens les resultats ci-dessous: **WAITING**
+
+| Instance | Temps de resolution |
+| -------- | ------------------- |
+| 1.txt    |                     |
+| 2.txt    |                     |
+| 3.txt    |                     |
+| 4.txt    |                     |
+| 5.txt    |                     |
+| 6.txt    |                     |
+| 7.txt    |                     |
+| 8.txt    |                     |
+| 9.txt    |                     |
+| 10.txt   |                     |
+
+De plus, la grille obtenu pour l'instance 9.txt est la suivante: **WAITING**
+
+## Q11
+
+L'pplication de l'alorithme sur l'instance 11 retourne le resultat suivante:
+
+```
+There is NO DECISION for the provided puzzle
+The colourised grid is
+? | ? | ? | ? 
+? | ? | ? | ? 
+```
+
+En fait comme ca, l'agorithme ne peut pas conclure à cause d'un chauvechement des incertitudes.
+
+## Q12
+
+Pendant chaque appel récursif de `color_grid_complet`, il peut y avoir plusieurs sous-appels en fonction du résultat de l'attribution de couleur de la cellule en question. Dans le pire des cas, l'algorithme devra peut-être essayer à la fois BLANC et NOIR pour chaque cellule, ce qui conduit à une profondeur de 2 pour chaque cellule. En outre, il y aura des scenarios ou une choix verifié va etre annulé parce que elle n'etait pas optimale pour le resultat totale de la resultation. Dans ce cas, l'algorithm reviens à cette etape et il reprend.
+
+En combinant le nombre d'appels récursifs (n_rows * n_columns) et la profondeur de récursivité (2), la complexité temporelle globale devient : T(n) = n_lignes * n_colonnes * 2^n_lignes * n_colonnes ou encore T(n) = O(n^(lignes * colonnes)).
+
+## Q13
+
+Cette fois on obtiens la bonne reponse pour l'instance 11.txt
+
+![1710629904173](image/README/1710629904173.png)
+
+## Q14
+
+### **Commentaires**
+
+Commentaires... **WAITING**
+
+### Instance 15
+
+Pour l'instance 15 on obtiens les resultats ci-dessous:
+
+| Algorithm 1.3 (version 2)                                                           | Algorithm 2 (version 3)                        |
+| ----------------------------------------------------------------------------------- | ---------------------------------------------- |
+| ![1710630347369](image/README/1710630347369.png)<br />TO BE REPLACED WITH THE CORRECT | ![1710630187055](image/README/1710630187055.png) |
 
 ## Exit codes
 
@@ -182,12 +438,34 @@ Vous trouverez ci-dessous la définition et l'explication des codes de sortie de
 | exit(-5)  | ERROR  | Wrong option was returned on menu                               |
 | exit(-3)  | ERROR  | allocation_error_print_general retrurned                        |
 | exit(-4)  | ERROR  | allocation_error_print_with_id returend                         |
+| exit(-6)  | ERROR  | midle_menu function did not return the correct result           |
 
 ## Versioning
 
-Le versioning est un élément clé en programmation, assurant la cohérence des modifications et facilitant la collaboration. Il est aussi primordial pour la récupération de données en cas de perte ou corruption. Au fil du projet, nous avons créé différentes versions de notre code, chacune marquant une étape importante de son évolution. Cela nous a permis de suivre les progrès, d'intégrer de nouvelles fonctionnalités et d'effectuer des corrections de manière structurée. 
+Le versioning est un élément clé en programmation, assurant la cohérence des modifications et facilitant la collaboration. Il est aussi primordial pour la récupération de données en cas de perte ou corruption. Au fil du projet, nous avons créé différentes versions de notre code, chacune marquant une étape importante de son évolution. Cela nous a permis de suivre les progrès, d'intégrer de nouvelles fonctionnalités et d'effectuer des corrections de manière structurée.
 
 Voici les differentes versions dévelopées lors de l'evolution du projet :
+
+
+* **V4.0** Base code was added/created
+* **V4.1** Project started. The 1.1 has been completed partially. The base cases work but when we check for a more complex one, the answers are not the best.
+* **V4.2** Corrections, bug fixes and compte rendu completed until Question 7
+* **V4.3** Question 8 answered and we started the read_file function for the propagation program asked on question 9. Many things need to be done in order for 1st stage of the project to be completed:
+
+* [ ] Finish the read_file function (and its organisation)
+* [ ] Write the colorization's algorithm logic in C[ ]  Use the T function maybe to analyse line by line
+* [ ] Create an initialization function for the gred according to the M and N read from the file (setting every case to DEFAULT because in the beginning it's not colorised)
+* [ ] See how to treat the colorisation in general
+
+* **V4.4** Tests for file's decodation have been passed. AN initialisation function of grid and main program for part 1.3 have been completed. Only the treating algorithm remains
+* **V4.5** Algorithm for Q9 has been completed but it's not working properly. Probably there is an index issue or something. Needs to be tested with the debuging tools. Moreover needs to be checked the case where we input a file name that is not at all acppeted (it doesn't exist) but the program instead of doing what it is supposed to do (say that opening the file is imposisble), instead it prints the rest of the UI.
+* **V4.6** The program has been completed in a great percentage
+* **V4.7** The color_llineORcolumn needs some corrections for 0.txt and the rest on the logic
+* **V4.9** The algorithm (v3 and v2) are much better but they do not return exactly the correct solution. There should be an error somewhere.
+* **V4.10** Updated fuction T. We need now to fix the issue with the v3 function doesn't colour correctly all the cases.
+* **V4.11** Updated function T but still not finished yet. There are some errors
+* **V4.12** Code correction on logic
+* **V4.13** Optimization, formalization and completion
 
 ## Conclusion
 
