@@ -23,11 +23,11 @@ void print_table(int *tab, int n)
     {
         if (tab[i] == BLACK)
         {
-            printf("\e[1;30m#\e[0m ");
+            printf("\e[40m  \e[0m");
         }
         else if (tab[i] == WHITE)
         {
-            printf("\e[1;37m#\e[0m ");
+            printf("\e[47m  \e[0m");
         }
         else if (tab[i] == DEFAULT) // default case
         {
@@ -36,11 +36,11 @@ void print_table(int *tab, int n)
     }
     if (tab[n - 1] == BLACK)
     {
-        printf("\e[1;30m#\e[0m ");
+        printf("\e[40m  \e[0m");
     }
     else if (tab[n - 1] == WHITE)
     {
-        printf("\e[1;37m#\e[0m ");
+        printf("\e[47m  \e[0m");
     }
     else if (tab[i] == DEFAULT) // default case
     {
@@ -347,11 +347,23 @@ void read_file(char *filename, int **lines, int **columns, int n_rows, int n_col
     }
 }
 
+bool is_digit(char ch)
+{
+    if (ch == '1' || ch == '2' || ch == '3' || ch == '4' || ch == '5' || ch == '6' || ch == '7' || ch == '8' || ch == '9')
+    {
+        return true;
+    }
+    else
+    {
+        return false;
+    }
+}
+
 /* Same as read_file but we set the sequences length to be the same for columsn and lines' sequences */
 void read_file_v2(char *filename, int **lines, int **columns, int n_rows, int n_cols, int maximum)
 {
     FILE *file = fopen(filename, "r");
-    char ch;
+    char ch, next_ch;
 
     if (file == NULL)
     {
@@ -362,10 +374,31 @@ void read_file_v2(char *filename, int **lines, int **columns, int n_rows, int n_
     int id = 0;
     int local = 0;
 
+    char num_buffer[32] = "";  // Buffer to hold multi-digit numbers
+    int num_buffer_pos = 0;
+
     ch = fgetc(file);
     while (ch != EOF)
     {
-        if (ch != '\n' && ch != '\r' && ch != ' ' && ch != '#')
+        if(is_digit(ch))
+        {
+            num_buffer[num_buffer_pos++] = ch;
+            next_ch = fgetc(file);
+            while (isdigit(next_ch))  // Read multiple digits
+            {
+                num_buffer[num_buffer_pos++] = next_ch;
+                next_ch = fgetc(file);
+            }
+
+            num_buffer[num_buffer_pos] = '\0';
+            ungetc(next_ch, file);
+
+            lines[id][local] = atoi(num_buffer);  // Convert using atoi
+            num_buffer[0] = '\0'; //Empting the char array num_buffer
+            num_buffer_pos = 0;
+            local++;
+        }
+        else if (ch != '\n' && ch != '\r' && ch != ' ' && ch != '#')
         {
             lines[id][local] = ctoi(ch);
             local++;
@@ -398,11 +431,30 @@ void read_file_v2(char *filename, int **lines, int **columns, int n_rows, int n_
 
     id = 0;
     local = 0;
+    num_buffer_pos = 0;
 
     ch = fgetc(file);
     while (ch != EOF)
     {
-        if (ch != '\n' && ch != '\r' && ch != ' ' && ch != '#')
+        if(is_digit(ch))
+        {
+            num_buffer[num_buffer_pos++] = ch;
+            next_ch = fgetc(file);
+            while (isdigit(next_ch))  // Read multiple digits
+            {
+                num_buffer[num_buffer_pos++] = next_ch;
+                next_ch = fgetc(file);
+            }
+
+            num_buffer[num_buffer_pos] = '\0';
+            ungetc(next_ch, file);
+
+            columns[id][local] = atoi(num_buffer);  // Convert using atoi
+            num_buffer[0] = '\0'; //Empting the char array num_buffer
+            num_buffer_pos = 0;
+            local++;
+        }
+        else if (ch != '\n' && ch != '\r' && ch != ' ' && ch != '#')
         {
             columns[id][local] = ctoi(ch);
             local++;

@@ -378,8 +378,8 @@ int main(int argc, char **argv)
 
         /* TEST No 20 (has to return true) */ // HERE
         printf("\n\e[0;32mTest No %d\e[0m\n", test_id);
-        int tab20[4] = {BLACK, DEFAULT, DEFAULT, DEFAULT};
-        int seq20[1] = {3};
+        int tab20[13] = {DEFAULT, DEFAULT, DEFAULT, DEFAULT, DEFAULT, BLACK, WHITE, DEFAULT, DEFAULT, DEFAULT, DEFAULT, DEFAULT, DEFAULT};
+        int seq20[3] = {1, 6, 1};
 
         print_table(tab20, sizeof(tab20) / sizeof(tab20[0]));
         printf("The sequence is: ");
@@ -396,8 +396,8 @@ int main(int argc, char **argv)
 
         /* TEST No 21 (has to return true) */ // HERE
         printf("\n\e[0;32mTest No %d\e[0m\n", test_id);
-        int tab21[5] = {WHITE, WHITE, BLACK, BLACK, WHITE};
-        int seq21[1] = {3};
+        int tab21[37] = {DEFAULT, DEFAULT, DEFAULT, DEFAULT, DEFAULT, DEFAULT, DEFAULT, DEFAULT, DEFAULT, DEFAULT, DEFAULT, DEFAULT, DEFAULT, DEFAULT, DEFAULT, DEFAULT, DEFAULT, BLACK, DEFAULT, DEFAULT, DEFAULT, DEFAULT, DEFAULT, DEFAULT, DEFAULT, DEFAULT, BLACK, DEFAULT, BLACK, DEFAULT, BLACK, BLACK, DEFAULT, DEFAULT, DEFAULT, DEFAULT};
+        int seq21[2] = {15, 11};
 
         print_table(tab21, sizeof(tab21) / sizeof(tab21[0]));
         printf("The sequence is: ");
@@ -524,7 +524,7 @@ int main(int argc, char **argv)
             temps_final = clock();
 
             temps_cpu = (temps_final - temps_initial) * 1e-6; // Total time in seconds
-            //clearScreen();
+            clearScreen();
             printf("\nThe time passed is %f seconds\n", temps_cpu);
         }
         else if (time == 2)
@@ -546,8 +546,8 @@ int main(int argc, char **argv)
             break;
         case FAIL:
             printf("\n\e[0;31mThe provided puzzle can NOT BE SOLVED\e[0m\n");
-            printf("\nThe grid is:\n");
-            printing_grid(grid, n_rows, n_cols, 4);
+            // printf("\nThe grid is:\n");
+            // printing_grid(grid, n_rows, n_cols, 4);
             break;
         case NO_DECISION:
             printf("\n\e[0;36mThere is NO DECISION for the provided puzzle\e[0m\n");
