@@ -396,8 +396,8 @@ int main(int argc, char **argv)
 
         /* TEST No 21 (has to return true) */ // HERE
         printf("\n\e[0;32mTest No %d\e[0m\n", test_id);
-        int tab21[4] = {DEFAULT, WHITE, BLACK, DEFAULT};
-        int seq21[2] = {1, 1};
+        int tab21[5] = {WHITE, WHITE, BLACK, BLACK, WHITE};
+        int seq21[1] = {3};
 
         print_table(tab21, sizeof(tab21) / sizeof(tab21[0]));
         printf("The sequence is: ");
