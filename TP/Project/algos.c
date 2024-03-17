@@ -111,7 +111,7 @@ int count_black_cells(int *tab, int length, int mode)
     int counter = 0;
     if (mode == 1) // line or column mode
     {
-        for (int i = 0; i <= length; i++)
+        for (int i = 0; i < length; i++)
         {
             if (tab[i] == BLACK)
             {
@@ -140,13 +140,13 @@ bool T_v2(int j, int l, int *tab, int *seq)
 {
     // Checking wheter we have wrong-colorised a cell during a decision that
     // doesn't respect the maximum amount of cells that can be colorised
-    if (count_black_cells(tab, j, 1) > count_black_cells(seq, l, 2))
+    if (count_black_cells(tab, j + 1, 1) > count_black_cells(seq, l, 2))
     {
         return false;
     }
 
     // ================
-    // Case 2a
+    // Case 1
     // ================
 
     /* This is the case were everything is possible */
@@ -154,33 +154,43 @@ bool T_v2(int j, int l, int *tab, int *seq)
     {
         return true;
     }
-    if (l >= 1)
+
+    // ================
+    // Case 2a
+    // ================
+
+    if (j < seq[l - 1] - 1) // please consider that is seauence seq the place at seq[0] is never used on our program. It's just initialises on a nunber that we never take into consideration
     {
-        if (j < seq[l - 1] - 1) // please consider that is seauence seq the place at seq[0] is never used on our program. It's just initialises on a nunber that we never take into consideration
-        {
-            return false;
-        }
-        // ================
-        // Case 2b:
-        // ================
+        return false;
+    }
 
-        /* It can be true if and only if there is only one sequence. Otherwise
-           it's not possible to treat the rest of sequences in that available number of
-           cells. If it finds a white cell then the sequence is not valid and returns false */
-        if (j == seq[l - 1] - 1)
-        {
+    // ================
+    // Case 2b
+    // ================
 
-            for (int i = 0; i <= j; i++)
+    /* It can be true if and only if there is only one sequence. Otherwise
+       it's not possible to treat the rest of sequences in that available number of
+       cells. If it finds a white cell then the sequence is not valid and returns false */
+    if (j == seq[l - 1] - 1)
+    {
+        if (l == 1)
+        {
+            for (int i = 0; i < seq[l-1]; i++)
             {
-                if (tab[i] == WHITE)
+                if (tab[j - i] == WHITE)
                 {
                     return false;
                 }
             }
 
-            return (l == 1);
+            return true;
+        }
+        else
+        {
+            return false;
         }
     }
+
     // ================
     // Subcases for 2c
     // ================
@@ -252,7 +262,6 @@ bool to_see_is_not_empty(bool *table, int n)
     return false;
 }
 
-// DEPRECATED
 /* Colorizes the line once it knows that it can be colourised correctly */
 void color_lineORcolumn(int *line, int *seq, int length)
 {
@@ -429,6 +438,9 @@ enum State color_grid_v1(int **main_grid, int n_rows, int n_columns, int **rows,
 
     // Copying the final result back to the main grid
     copy_grid(grid, main_grid, n_rows, n_columns);
+
+    free_2d(grid, n_rows);
+
     if (grid_in_color(grid, n_rows, n_columns) == true)
     {
         return SUCCESS;
@@ -466,166 +478,17 @@ enum State color_grid_v2(int **grid, int n_rows, int n_columns, int **rows_colum
     // NOTE: x is for horizontal (lines) and y is for vertical (columns) on grid's 2D array
     for (int x = 0; x < n_rows; x++)
     {
-        for (int y = 0; y < n_columns; y++)
+        // This first test checks whether we need to proceed to line analysis or not.
+        //  If the sequence can be applied directly with any cells uncolorised,
+        //  then we coulorise them and we move on to the next line
+        int pre_l = correct_length(rows_columns[x], maximum);
+        int nb_blacks = count_black_cells(rows_columns[x], pre_l, 2);
+        int nb_whites = pre_l - 1;
+        if ((nb_blacks + nb_whites) == n_columns)
         {
-            /* If no color is aplied yet to the specific cell */
-            if (grid[x][y] == DEFAULT)
-            {
-                int l;
-                bool white_test, black_test;
-
-                // ==========================
-                // Local test for white state
-                // ==========================
-                grid[x][y] = WHITE;
-
-                // Analysis of the line in question (in parallel of every column for this line [this is done with every change of y])
-                int *tab = (int *)malloc(n_rows * sizeof(int)); // The number of rows is the length of the column in question
-                if (tab == NULL)
-                {
-                    fprintf(stderr, "\nFailed to allocate memory for tab.\n");
-                    exit(-1);
-                }
-
-                // Isolation of the column for the current y
-                column_isolation(grid, y, n_rows, tab);
-
-                /* HORIZONTAL test */
-                l = correct_length(rows_columns[x], maximum);
-                white_test = T_v2(n_columns - 1, l, grid[x], rows_columns[x]);
-
-                /* VERTICAL test */
-                if (white_test)
-                {
-                    l = correct_length(rows_columns[n_rows + y], maximum);           // updating l value
-                    white_test = T_v2(n_rows - 1, l, tab, rows_columns[n_rows + y]); // we need + 1 because y counts from 0, so in order to take the correct sequence for the column, we need n_rows + 0 + 1 to be distinguised
-                }
-
-                // ==========================
-                // Local test for black state
-                // ==========================
-                grid[x][y] = BLACK;
-                tab[x] = BLACK; // This step is essential. Previsouly the colourisation in white happened before isolation. Here we have to do it manually because we have already isolated the column
-
-                /* HORIZONTAL test */
-                l = correct_length(rows_columns[x], maximum);
-                black_test = T_v2(n_columns - 1, l, grid[x], rows_columns[x]);
-
-                /* VERTICAL test */
-                if (black_test)
-                {
-                    l = correct_length(rows_columns[n_rows + y], maximum);           // updating l value
-                    black_test = T_v2(n_rows - 1, l, tab, rows_columns[n_rows + y]); // we need + 1 because y counts from 0, so in order to take the correct sequence for the column, we need n_rows + 0 + 1 to be distinguised
-                }
-
-                free(tab);
-
-                // ==========================
-                // Reversing any changes
-                // ==========================
-                grid[x][y] = DEFAULT;
-
-                // ==========================
-                // Decisions and conclusions
-                // ==========================
-                if (white_test == false)
-                {
-                    if (black_test == false)
-                    {
-                        return FAIL;
-                    }
-                    else
-                    {
-                        grid[x][y] = BLACK;
-                    }
-                }
-                else if (black_test == false)
-                {
-                    if (white_test == true)
-                    {
-                        grid[x][y] = WHITE;
-                    }
-                    else
-                    {
-                        return NO_DECISION;
-                    }
-                }
-            }
+            color_lineORcolumn(grid[x], rows_columns[x], n_columns);
         }
-    }
-
-    if (grid_in_color(grid, n_rows, n_columns))
-    {
-        return SUCCESS;
-    }
-    else
-    {
-        return NO_DECISION;
-    }
-    
-}
-
-/* Completing the colorisation process with recursion */
-int color_grid_complet(int **grid, int **rows_columns, int n_rows, int n_columns, int i, int j, int maximum)
-{
-    /* Making a temporary copy of the grid for returning_back porpuses */
-    int **duplicate;
-    duplicate = malloc(n_rows * sizeof(int *));
-    if (duplicate == NULL)
-    {
-        allocation_error_print_general("duplicate");
-    }
-
-    for (int i = 0; i < n_rows; i++)
-    {
-        duplicate[i] = malloc(n_columns * sizeof(int));
-        if (duplicate[i] == NULL)
-        {
-            allocation_error_print_with_id("duplicate row", i);
-        }
-    }
-
-    // Grid -> duplicate
-    copy_grid(grid, duplicate, n_rows, n_columns);
-
-    // ==========================
-    // White test
-    // ==========================
-    grid[i][j] = WHITE;
-    if (color_grid_v3(grid, n_rows, n_columns, rows_columns, maximum) == SUCCESS)
-    {
-        free_2d(duplicate, n_rows);
-        return 1;
-    }
-    copy_grid(duplicate, grid, n_rows, n_columns); // going back to previous state
-
-    // ==========================
-    // Black test
-    // ==========================
-    grid[i][j] = BLACK;
-    if (color_grid_v3(grid, n_rows, n_columns, rows_columns, maximum) == SUCCESS)
-    {
-        free_2d(duplicate, n_rows);
-        return 1;
-    }
-    copy_grid(duplicate, grid, n_rows, n_columns); // going back to previous state
-
-    // Otherwise
-    free_2d(duplicate, n_rows);
-    return 0;
-}
-
-/* Final version that colourises and calls recursivly in order to examine all the possible cases (complet) */
-/* NOTA BENE: Same logic with v2 but more elaborated and completed */
-enum State color_grid_v3(int **grid, int n_rows, int n_columns, int **rows_columns, int maximum)
-{
-    enum State result;
-    result = SUCCESS;                        // status by default. It will be updated accordingly
-    int last_time = 1, before_last_time = 1; // indicators of our not-colourised cells in the puzzle grid in two different times. last_empty happened before after_last_empty in a chronological sequence
-
-    while (last_time > 0 && result == SUCCESS)
-    {
-        for (int x = 0; x < n_rows; x++)
+        else
         {
             for (int y = 0; y < n_columns; y++)
             {
@@ -640,16 +503,16 @@ enum State color_grid_v3(int **grid, int n_rows, int n_columns, int **rows_colum
                     // ==========================
                     grid[x][y] = WHITE;
 
-                    // Analysis of the line in question (in parallel of every column)
+                    // Analysis of the line in question (in parallel of every column for this line [this is done with every change of y])
                     int *tab = (int *)malloc(n_rows * sizeof(int)); // The number of rows is the length of the column in question
                     if (tab == NULL)
                     {
                         fprintf(stderr, "\nFailed to allocate memory for tab.\n");
-                        exit(-2);
+                        exit(-1);
                     }
 
+                    // Isolation of the column for the current y
                     column_isolation(grid, y, n_rows, tab);
-                    // print_line(tab, n_rows);
 
                     /* HORIZONTAL test */
                     l = correct_length(rows_columns[x], maximum);
@@ -658,8 +521,8 @@ enum State color_grid_v3(int **grid, int n_rows, int n_columns, int **rows_colum
                     /* VERTICAL test */
                     if (white_test)
                     {
-                        l = correct_length(rows_columns[n_rows + y], maximum);
-                        white_test = T_v2(n_rows - 1, l, tab, rows_columns[n_rows + y]);
+                        l = correct_length(rows_columns[n_rows + y], maximum);           // updating l value
+                        white_test = T_v2(n_rows - 1, l, tab, rows_columns[n_rows + y]); // we need + 1 because y counts from 0, so in order to take the correct sequence for the column, we need n_rows + 0 + 1 to be distinguised
                     }
 
                     // ==========================
@@ -668,25 +531,15 @@ enum State color_grid_v3(int **grid, int n_rows, int n_columns, int **rows_colum
                     grid[x][y] = BLACK;
                     tab[x] = BLACK; // This step is essential. Previsouly the colourisation in white happened before isolation. Here we have to do it manually because we have already isolated the column
 
-                    // printf("\n");
-                    // print_line(tab, n_rows);
-
                     /* HORIZONTAL test */
                     l = correct_length(rows_columns[x], maximum);
-                    if (l == 0)
-                    {
-                        black_test = false; // We know with certainty that we can't colorise that cell in black because theyre is no sequence. It can be white or nothing but no black
-                    }
-                    else
-                    {
-                        black_test = T_v2(n_columns - 1, l, grid[x], rows_columns[x]); // we need + 1 because x counts from 0, so in
+                    black_test = T_v2(n_columns - 1, l, grid[x], rows_columns[x]);
 
-                        /* VERTICAL test */
-                        if (black_test)
-                        {
-                            l = correct_length(rows_columns[n_rows + y], maximum);
-                            black_test = T_v2(n_rows - 1, l, tab, rows_columns[n_rows + y]);
-                        }
+                    /* VERTICAL test */
+                    if (black_test)
+                    {
+                        l = correct_length(rows_columns[n_rows + y], maximum);           // updating l value
+                        black_test = T_v2(n_rows - 1, l, tab, rows_columns[n_rows + y]); // we need + 1 because y counts from 0, so in order to take the correct sequence for the column, we need n_rows + 0 + 1 to be distinguised
                     }
 
                     free(tab);
@@ -721,20 +574,207 @@ enum State color_grid_v3(int **grid, int n_rows, int n_columns, int **rows_colum
                             return NO_DECISION;
                         }
                     }
-
-                    // printing_grid(grid, n_rows, n_columns, 2);
-                    // printf("\n\n");
                 }
-
-                // time_t rawtime;
-                // struct tm *timeinfo;
-
-                // time(&rawtime);
-                // timeinfo = localtime(&rawtime);
-                // printf("%s\n", asctime(timeinfo));
             }
         }
-        
+    }
+
+    if (grid_in_color(grid, n_rows, n_columns))
+    {
+        return SUCCESS;
+    }
+    else
+    {
+        return NO_DECISION;
+    }
+}
+
+/* Completing the colorisation process with recursion */
+int color_grid_complet(int **grid, int **rows_columns, int n_rows, int n_columns, int i, int j, int maximum)
+{
+    /* Making a temporary copy of the grid for returning_back porpuses */
+    int **duplicate;
+    duplicate = malloc(n_rows * sizeof(int *));
+    if (duplicate == NULL)
+    {
+        allocation_error_print_general("duplicate");
+    }
+
+    for (int i = 0; i < n_rows; i++)
+    {
+        duplicate[i] = malloc(n_columns * sizeof(int));
+        if (duplicate[i] == NULL)
+        {
+            allocation_error_print_with_id("duplicate row", i);
+        }
+    }
+
+    // Grid -> duplicate
+    copy_grid(grid, duplicate, n_rows, n_columns);
+
+
+    // ==========================
+    // White test
+    // ==========================
+    grid[i][j] = WHITE;
+    if (color_grid_v3(grid, n_rows, n_columns, rows_columns, maximum) == SUCCESS)
+    {
+        free_2d(duplicate, n_rows);
+        return 1;
+    }
+    copy_grid(duplicate, grid, n_rows, n_columns); // going back to previous state
+
+
+    // ==========================
+    // Black test
+    // ==========================
+    grid[i][j] = BLACK;
+    if (color_grid_v3(grid, n_rows, n_columns, rows_columns, maximum) == SUCCESS)
+    {
+        free_2d(duplicate, n_rows);
+        return 1;
+    }
+    copy_grid(duplicate, grid, n_rows, n_columns); // going back to previous state
+
+    // Otherwise
+    free_2d(duplicate, n_rows);
+    return 0;
+}
+
+/* Final version that colourises and calls recursivly in order to examine all the possible cases (complet) */
+/* NOTA BENE: Same logic with v2 but more elaborated and completed */
+enum State color_grid_v3(int **grid, int n_rows, int n_columns, int **rows_columns, int maximum)
+{
+    enum State result;
+    result = SUCCESS;                        // status by default. It will be updated accordingly
+    int last_time = 1, before_last_time = 1; // indicators of our not-colourised cells in the puzzle grid in two different times. last_empty happened before after_last_empty in a chronological sequence
+
+    while (last_time > 0 && result == SUCCESS)
+    {
+        for (int x = 0; x < n_rows; x++)
+        {
+            // This first test checks whether we need to proceed to line analysis or not.
+            //  If the sequence can be applied directly with any cells uncolorised,
+            //  then we coulorise them and we move on to the next line
+
+            int pre_l = correct_length(rows_columns[x], maximum);
+            int nb_blacks = count_black_cells(rows_columns[x], pre_l, 2);
+            int nb_whites = pre_l - 1;
+            if ((nb_blacks + nb_whites) == n_columns)
+            {
+                color_lineORcolumn(grid[x], rows_columns[x], n_columns);
+            }
+            else
+            {
+                for (int y = 0; y < n_columns; y++)
+                {
+                    /* If no color is aplied yet to the specific cell */
+                    if (grid[x][y] == DEFAULT)
+                    {
+                        int l;
+                        bool white_test, black_test;
+
+                        // ==========================
+                        // Local test for white state
+                        // ==========================
+                        grid[x][y] = WHITE;
+
+                        // Analysis of the line in question (in parallel of every column)
+                        int *tab = (int *)malloc(n_rows * sizeof(int)); // The number of rows is the length of the column in question
+                        if (tab == NULL)
+                        {
+                            fprintf(stderr, "\nFailed to allocate memory for tab.\n");
+                            exit(-2);
+                        }
+
+                        column_isolation(grid, y, n_rows, tab);
+                        // print_line(tab, n_rows);
+
+                        /* HORIZONTAL test */
+                        l = correct_length(rows_columns[x], maximum);
+                        white_test = T_v2(n_columns - 1, l, grid[x], rows_columns[x]);
+
+                        /* VERTICAL test */
+                        if (white_test)
+                        {
+                            l = correct_length(rows_columns[n_rows + y], maximum);
+                            white_test = T_v2(n_rows - 1, l, tab, rows_columns[n_rows + y]);
+                        }
+
+                        // ==========================
+                        // Local test for black state
+                        // ==========================
+                        grid[x][y] = BLACK;
+                        tab[x] = BLACK; // This step is essential. Previsouly the colourisation in white happened before isolation. Here we have to do it manually because we have already isolated the column
+
+                        // printf("\n");
+                        // print_line(tab, n_rows);
+
+                        /* HORIZONTAL test */
+                        l = correct_length(rows_columns[x], maximum);
+                        if (l == 0)
+                        {
+                            black_test = false; // We know with certainty that we can't colorise that cell in black because theyre is no sequence. It can be white or nothing but no black
+                        }
+                        else
+                        {
+                            black_test = T_v2(n_columns - 1, l, grid[x], rows_columns[x]); // we need + 1 because x counts from 0, so in
+
+                            /* VERTICAL test */
+                            if (black_test)
+                            {
+                                l = correct_length(rows_columns[n_rows + y], maximum);
+                                black_test = T_v2(n_rows - 1, l, tab, rows_columns[n_rows + y]);
+                            }
+                        }
+
+                        free(tab);
+
+                        // ==========================
+                        // Reversing any changes
+                        // ==========================
+                        grid[x][y] = DEFAULT;
+
+                        // ==========================
+                        // Decisions and conclusions
+                        // ==========================
+                        if (white_test == false)
+                        {
+                            if (black_test == false)
+                            {
+                                return FAIL;
+                            }
+                            else
+                            {
+                                grid[x][y] = BLACK;
+                            }
+                        }
+                        else if (black_test == false)
+                        {
+                            if (white_test == true)
+                            {
+                                grid[x][y] = WHITE;
+                            }
+                            else
+                            {
+                                return NO_DECISION;
+                            }
+                        }
+
+                        // printing_grid(grid, n_rows, n_columns, 2);
+                        // printf("\n\n");
+                    }
+
+                    // time_t rawtime;
+                    // struct tm *timeinfo;
+
+                    // time(&rawtime);
+                    // timeinfo = localtime(&rawtime);
+                    // printf("%s\n", asctime(timeinfo));
+                }
+            }
+        }
+
         printing_grid(grid, n_rows, n_columns, 3);
 
         int changes = grid_defaults_count(grid, n_rows, n_columns);

@@ -23,15 +23,15 @@ void print_table(int *tab, int n)
     {
         if (tab[i] == BLACK)
         {
-            printf("\e[1;30m#\e[0m | ");
+            printf("\e[1;30m#\e[0m ");
         }
         else if (tab[i] == WHITE)
         {
-            printf("\e[1;37m#\e[0m | ");
+            printf("\e[1;37m#\e[0m ");
         }
         else if (tab[i] == DEFAULT) // default case
         {
-            printf("? | ");
+            printf("  ");
         }
     }
     if (tab[n - 1] == BLACK)
@@ -44,7 +44,7 @@ void print_table(int *tab, int n)
     }
     else if (tab[i] == DEFAULT) // default case
     {
-        printf("? ");
+        printf("  ");
     }
 }
 
@@ -63,7 +63,7 @@ void print_table_v2(int *tab, int n)
         }
         else if (tab[i] == DEFAULT) // default case
         {
-            printf("? ");
+            printf("  ");
         }
     }
 }
@@ -91,8 +91,8 @@ void initialize1D(int *tab, int n)
 int menu_mode()
 {
     char userInput[20];
-    char *msg[1] = {"Choose an option (1.2, 1.3, 3). Your choice: "};
-    char *msg_attention[1] = {"You can only choose from 1.2 or 1.3, 3."};
+    char *msg[1] = {"Choose an option (1.2, 1.3, 2). Your choice: "};
+    char *msg_attention[1] = {"You can only choose from 1.2 or 1.3, 2."};
 
     while (true)
     {
@@ -117,7 +117,7 @@ int menu_mode()
         {
             return 3;
         }
-        else if (strcmp(userInput, "3") == 0)
+        else if (strcmp(userInput, "2") == 0)
         {
             return 4;
         }
@@ -482,7 +482,6 @@ void printing_grid(int **grid, int lines, int columns, int mode)
     }
     else if (mode == 4)
     {
-        clearScreen();
         printf("Lines: %d  |  Columns: %d\n\n", lines, columns);
         for (int i = 0; i < lines; i++)
         {
@@ -601,13 +600,11 @@ void clearScreen()
 /* Time counting decision menu */
 int midle_menu()
 {
-    
-
     char userInput[20];
 
     while (true)
     {
-        printf("Do you want time counting or not ? (Yes or No) \n");
+        printf("\nDo you want time counting or not ? (Yes or No) \n");
         scanf("%s", userInput);
 
         // Convert input to lowercase for case-insensitive comparison and returns

@@ -417,7 +417,7 @@ int main(int argc, char **argv)
     {
         char filename[100];
 
-        printf("Partial version of the code. What's the instance's file name: ");
+        printf("Partial version of the code (propagation test). What's the instance's file name: ");
         scanf("%s", filename);
 
         filename[strcspn(filename, "\n")] = '\0'; // make sure that the file is in correct format so that we can start counting nb_lines and nb_columns immediatly
@@ -512,24 +512,44 @@ int main(int argc, char **argv)
 
         /* Result */
         enum State result;
-        // result = color_grid_v1(grid, n_rows, n_cols, rows, columns, maximum);
-        result = color_grid_v2(grid, n_rows, n_cols, rows_columns, maximum);
-        // result = color_grid_v3(grid, n_rows, n_cols, rows_columns, maximum);
+        clock_t temps_initial;
+        clock_t temps_final;
+        float temps_cpu = 0.0;
+        int time = midle_menu();
+
+        if (time == 1)
+        {
+            temps_initial = clock();
+            result = color_grid_v2(grid, n_rows, n_cols, rows_columns, maximum);
+            temps_final = clock();
+
+            temps_cpu = (temps_final - temps_initial) * 1e-6; // Total time in seconds
+            clearScreen();
+            printf("\nThe time passed is %f seconds\n", temps_cpu);
+        }
+        else if (time == 2)
+        {
+            result = color_grid_v2(grid, n_rows, n_cols, rows_columns, maximum);
+            clearScreen();
+        }
+        else
+        {
+            exit(-6);
+        }
 
         switch (result)
         {
         case SUCCESS:
             printf("\n\e[0;32mSUCCESS\e[0m");
-            printf("\nThe colourised grid is\n");
+            printf("\nThe colourised grid is:\n");
             printing_grid(grid, n_rows, n_cols, 4);
             break;
         case FAIL:
             printf("\n\e[0;31mThe provided puzzle can NOT BE SOLVED\e[0m\n");
-            printing_grid(grid, n_rows, n_cols, 4);
             break;
         case NO_DECISION:
             printf("\n\e[0;36mThere is NO DECISION for the provided puzzle\e[0m\n");
-            printf("\nThe grid is\n");
+            printf("\nThe grid is:\n");
             printing_grid(grid, n_rows, n_cols, 4);
             break;
         default:
@@ -633,7 +653,7 @@ int main(int argc, char **argv)
         enum State result;
         clock_t temps_initial;
         clock_t temps_final;
-        float temps_cpu;
+        float temps_cpu = 0.0;
         int time = midle_menu();
 
         if (time == 1)
@@ -642,12 +662,14 @@ int main(int argc, char **argv)
             result = color_grid_v3(grid, n_rows, n_cols, rows_columns, maximum);
             temps_final = clock();
 
-            float temps_cpu; // Total time in seconds
-            temps_cpu = (temps_final - temps_initial) * 1e-6;
+            temps_cpu = (temps_final - temps_initial) * 1e-6; // Total time in seconds
+            clearScreen();
+            printf("The time passed is %f seconds\n", temps_cpu);
         }
         else if (time == 2)
         {
             result = color_grid_v3(grid, n_rows, n_cols, rows_columns, maximum);
+            clearScreen();
         }
         else
         {
@@ -658,19 +680,15 @@ int main(int argc, char **argv)
         {
         case SUCCESS:
             printf("\n\e[0;32mSUCCESS\e[0m");
-            printf("\nThe colourised grid is\n");
+            printf("\nThe colourised grid is:\n");
             printing_grid(grid, n_rows, n_cols, 2);
-            if (time == 1)
-            {
-                printf("The time passed is %f seconds\n",temps_cpu);
-            }
             break;
         case FAIL:
             printf("\n\e[0;31mThe provided puzzle can NOT BE SOLVED\e[0m\n");
             break;
         case NO_DECISION:
             printf("\n\e[0;36mThere is NO DECISION for the provided puzzle\e[0m\n");
-            printf("\nThe grid is\n");
+            printf("\nThe grid is:\n");
             printing_grid(grid, n_rows, n_cols, 2);
             break;
         default:

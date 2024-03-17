@@ -369,22 +369,24 @@ enum State color_grid_v2(int **grid, int n_rows, int n_columns, int **rows_colum
 
 ## Q10
 
-En faisant une implimentation sur les instances 1.txt à 10.txt on obtiens les resultats ci-dessous: **WAITING**
+En faisant une implimentation sur les instances 1.txt à 10.txt on obtiens les resultats ci-dessous:
 
 | Instance | Temps de resolution |
 | -------- | ------------------- |
-| 1.txt    |                     |
-| 2.txt    |                     |
-| 3.txt    |                     |
-| 4.txt    |                     |
-| 5.txt    |                     |
-| 6.txt    |                     |
-| 7.txt    |                     |
-| 8.txt    |                     |
-| 9.txt    |                     |
-| 10.txt   |                     |
+| 1.txt    | 0.000065 seconds    |
+| 2.txt    | 0.000770 seconds    |
+| 3.txt    | 0.002406 seconds    |
+| 4.txt    | 0.001972 seconds    |
+| 5.txt    | 0.001641 seconds    |
+| 6.txt    | 0.002400 seconds    |
+| 7.txt    | 0.004824 seconds    |
+| 8.txt    | 0.006191 seconds    |
+| 9.txt    | 0.013365 seconds    |
+| 10.txt   | 0.179830 seconds    |
 
-De plus, la grille obtenu pour l'instance 9.txt est la suivante: **WAITING**
+De plus, la grille obtenu pour l'instance 9.txt est toute inconnus. **CORRECTION**
+
+Il faut noter qu'on a appliqué un timeout à 2 minutes car le program et l'agorithm sont basés sur la logique des algorithmes de retour en arrière. La résolution de nonogrammes implique généralement un algorithme de retour en arrière, qui explore de multiples possibilités et se répète de manière approfondie, créant potentiellement un grand nombre de piles d'appels de fonctions. Chaque appel récursif nécessite de la mémoire pour les paramètres de fonction, les variables locales et les adresses de retour. C'est pourquoi, la consommation de la memoire augmente chaque fois qu'une combinaison choisi n'est pas validé les consignes des sequences.
 
 ## Q11
 
@@ -421,9 +423,9 @@ Commentaires... **WAITING**
 
 Pour l'instance 15 on obtiens les resultats ci-dessous:
 
-| Algorithm 1.3 (version 2)                                                           | Algorithm 2 (version 3)                        |
-| ----------------------------------------------------------------------------------- | ---------------------------------------------- |
-| ![1710630347369](image/README/1710630347369.png)<br />TO BE REPLACED WITH THE CORRECT | ![1710630187055](image/README/1710630187055.png) |
+| Algorithm 1.3 (version 2)                      | Algorithm 2 (version 3)                        |
+| ---------------------------------------------- | ---------------------------------------------- |
+| ![1710680785670](image/README/1710680785670.png) | ![1710680794355](image/README/1710680794355.png) |
 
 ## Exit codes
 
@@ -445,7 +447,6 @@ Vous trouverez ci-dessous la définition et l'explication des codes de sortie de
 Le versioning est un élément clé en programmation, assurant la cohérence des modifications et facilitant la collaboration. Il est aussi primordial pour la récupération de données en cas de perte ou corruption. Au fil du projet, nous avons créé différentes versions de notre code, chacune marquant une étape importante de son évolution. Cela nous a permis de suivre les progrès, d'intégrer de nouvelles fonctionnalités et d'effectuer des corrections de manière structurée.
 
 Voici les differentes versions dévelopées lors de l'evolution du projet :
-
 
 * **V4.0** Base code was added/created
 * **V4.1** Project started. The 1.1 has been completed partially. The base cases work but when we check for a more complex one, the answers are not the best.
