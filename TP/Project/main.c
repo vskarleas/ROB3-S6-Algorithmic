@@ -524,7 +524,7 @@ int main(int argc, char **argv)
             temps_final = clock();
 
             temps_cpu = (temps_final - temps_initial) * 1e-6; // Total time in seconds
-            clearScreen();
+            //clearScreen();
             printf("\nThe time passed is %f seconds\n", temps_cpu);
         }
         else if (time == 2)
@@ -546,6 +546,8 @@ int main(int argc, char **argv)
             break;
         case FAIL:
             printf("\n\e[0;31mThe provided puzzle can NOT BE SOLVED\e[0m\n");
+            printf("\nThe grid is:\n");
+            printing_grid(grid, n_rows, n_cols, 4);
             break;
         case NO_DECISION:
             printf("\n\e[0;36mThere is NO DECISION for the provided puzzle\e[0m\n");

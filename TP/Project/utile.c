@@ -31,7 +31,7 @@ void print_table(int *tab, int n)
         }
         else if (tab[i] == DEFAULT) // default case
         {
-            printf("  ");
+            printf("? ");
         }
     }
     if (tab[n - 1] == BLACK)
@@ -44,7 +44,7 @@ void print_table(int *tab, int n)
     }
     else if (tab[i] == DEFAULT) // default case
     {
-        printf("  ");
+        printf("? ");
     }
 }
 
@@ -63,7 +63,7 @@ void print_table_v2(int *tab, int n)
         }
         else if (tab[i] == DEFAULT) // default case
         {
-            printf("  ");
+            printf("? ");
         }
     }
 }
