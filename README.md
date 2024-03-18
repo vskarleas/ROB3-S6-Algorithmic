@@ -2,6 +2,7 @@
 
 1. 7/2/2024 TP1 started
 2. 11/2/2024 TP1 corrigé sent to tuteur and TP2 started
+3. 17/3/2024 Projet completé
 
 # Goals
 
