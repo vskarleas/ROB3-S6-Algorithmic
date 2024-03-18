@@ -525,7 +525,7 @@ int main(int argc, char **argv)
 
             temps_cpu = (temps_final - temps_initial) * 1e-6; // Total time in seconds
             clearScreen();
-            printf("\nThe time passed is %f seconds\n", temps_cpu);
+            printf("\nThe operation took %f seconds\n", temps_cpu);
         }
         else if (time == 2)
         {
@@ -666,7 +666,7 @@ int main(int argc, char **argv)
 
             temps_cpu = (temps_final - temps_initial) * 1e-6; // Total time in seconds
             clearScreen();
-            printf("The time passed is %f seconds\n", temps_cpu);
+            printf("The operation took %f seconds\n", temps_cpu);
         }
         else if (time == 2)
         {
