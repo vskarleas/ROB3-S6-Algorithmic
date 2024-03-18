@@ -71,12 +71,42 @@ utile.o:  utile.c utile.h constants.h
 	@echo "---------------------------------------------"
 	$(CC) -c $(COMPILOPTS) $<
 
-algos.o : algos.c algos.h utile.h constants.h
+algos.o : algos.c algos.h constants.h api.h memory.h tables.h ui.h
 	@echo ""
 	@echo "---------------------------------------------"
 	$(CC) -c $(COMPILOPTS) $<
 
-main.o : main.c utile.h algos.h constants.h
+api.o : api.c api.h algos.h constants.h memory.h tables.h
+	@echo ""
+	@echo "---------------------------------------------"
+	$(CC) -c $(COMPILOPTS) $<
+
+bitmap.o : bitmap.c bitmap.h
+	@echo ""
+	@echo "---------------------------------------------"
+	$(CC) -c $(COMPILOPTS) $<
+
+decode.o : decode.c decode.h utile.h
+	@echo ""
+	@echo "---------------------------------------------"
+	$(CC) -c $(COMPILOPTS) $<
+
+memory.o : memory.c memory.h
+	@echo ""
+	@echo "---------------------------------------------"
+	$(CC) -c $(COMPILOPTS) $<
+
+tables.o : tables.c tables.h constants.h
+	@echo ""
+	@echo "---------------------------------------------"
+	$(CC) -c $(COMPILOPTS) $<
+
+ui.o : ui.c ui.h constants.h
+	@echo ""
+	@echo "---------------------------------------------"
+	$(CC) -c $(COMPILOPTS) $<
+
+main.o : main.c utile.h algos.h constants.h decode.h memory.h tables.h ui.h bitmap.h
 	@echo ""
 	@echo "---------------------------------------------"
 	$(CC) -c $(COMPILOPTS) $<
@@ -84,7 +114,7 @@ main.o : main.c utile.h algos.h constants.h
 ########################################################
 # regles explicites de creation des executables
 
-main : algos.o main.o utile.o
+main : main.o utile.o ui.o tables.o memory.o decode.o bitmap.o api.o algos.o
 	@echo ""
 	@echo "---------------------------------------------"
 	@echo "Creation de l'executable "$@

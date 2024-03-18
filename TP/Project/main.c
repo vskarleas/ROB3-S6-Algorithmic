@@ -13,6 +13,11 @@
 #include "utile.h"
 #include "algos.h"
 #include "constants.h"
+#include "decode.h"
+#include "memory.h"
+#include "tables.h"
+#include "ui.h"
+#include "bitmap.h"
 
 int main(int argc, char **argv)
 {
@@ -415,12 +420,21 @@ int main(int argc, char **argv)
     }
     else if (choice == 3)
     {
-        char filename[100];
+        char file_name[100];
 
         printf("Partial version of the code (propagation test). What's the instance's file name: ");
-        scanf("%s", filename);
+        scanf("%s", file_name);
+
+        char *no_extension = strtok(file_name, ".");
+
+        char *filename = malloc(strlen("instances/") + strlen(no_extension) + 4); // Allocate enough space for "instances/", name, and ".txt"
+        strcpy(filename, "instances/");                                           // Add the "instances/" prefix
+        strcat(filename, no_extension);                                           // Append the name without extension
+        strcat(filename, ".txt");                                                 // Append the ".txt" extension
 
         filename[strcspn(filename, "\n")] = '\0'; // make sure that the file is in correct format so that we can start counting nb_lines and nb_columns immediatly
+
+        printf("%s\n", filename);
 
         int n_rows, n_cols, max_rows, max_columns;
 
@@ -542,7 +556,7 @@ int main(int argc, char **argv)
         case SUCCESS:
             printf("\n\e[0;32mSUCCESS\e[0m");
             printf("\nThe colourised grid is:\n");
-            printing_grid(grid, n_rows, n_cols, 4);
+            printing_grid(grid, n_rows, n_cols, 2);
             break;
         case FAIL:
             printf("\n\e[0;31mThe provided puzzle can NOT BE SOLVED\e[0m\n");
@@ -552,7 +566,7 @@ int main(int argc, char **argv)
         case NO_DECISION:
             printf("\n\e[0;36mThere is NO DECISION for the provided puzzle\e[0m\n");
             printf("\nThe grid is:\n");
-            printing_grid(grid, n_rows, n_cols, 4);
+            printing_grid(grid, n_rows, n_cols, 2);
             break;
         default:
             printf("An error occured on enum State response\n");
@@ -561,10 +575,17 @@ int main(int argc, char **argv)
     }
     else if (choice == 4)
     {
-        char filename[100];
+        char file_name[100];
 
         printf("Complet version of the code. What's the instance's file name: ");
-        scanf("%s", filename);
+        scanf("%s", file_name);
+
+        char *no_extension = strtok(file_name, ".");
+
+        char *filename = malloc(strlen("instances/") + strlen(no_extension) + 4); // Allocate enough space for "instances/", name, and ".txt"
+        strcpy(filename, "instances/");                                           // Add the "instances/" prefix
+        strcat(filename, no_extension);                                           // Append the name without extension
+        strcat(filename, ".txt");                                                 // Append the ".txt" extension
 
         filename[strcspn(filename, "\n")] = '\0'; // make sure that the file is in correct format so that we can start counting nb_lines and nb_columns immediatly
 

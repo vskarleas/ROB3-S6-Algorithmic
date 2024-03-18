@@ -9,9 +9,12 @@
 #include <string.h>
 #include <stdbool.h>
 
-#include "utile.h"
 #include "constants.h"
 #include "algos.h"
+#include "api.h"
+#include "memory.h"
+#include "tables.h"
+#include "ui.h"
 
 /* It verifies the decisions regarding a line according to its sequence and the rules of the puzzle */
 /* FINAL VERSION IS V2 */
@@ -103,36 +106,6 @@ bool T(int j, int l, int *tab, int *seq, int total_length)
 
     // everything fails so the response is false
     return false;
-}
-
-/* It counts the blacks cells in a line or column (mode 1) | it returns the number of black cells that we wish for a given sequence */
-int count_black_cells(int *tab, int length, int mode)
-{
-    int counter = 0;
-    if (mode == 1) // line or column mode
-    {
-        for (int i = 0; i < length; i++)
-        {
-            if (tab[i] == BLACK)
-            {
-                counter++;
-            }
-        }
-    }
-    else if (mode == 2) // Case 2a: There is no available amount cells for the sequence to be valid
-    {
-        for (int i = 0; i < length; i++)
-        {
-            counter = counter + tab[i];
-        }
-    }
-    else
-    {
-        printf("An error occured. Try again:(\n");
-        exit(-3);
-    }
-
-    return counter;
 }
 
 /* VERSION 2: Black cells test perfomed and simplified tests for j > seq[l] - 1 */
@@ -249,227 +222,106 @@ bool T_v2(int j, int l, int *tab, int *seq)
     return false;
 }
 
-// DEPRECATED
-/* Returns true if LignesAVoir or ColonnesAVoir are not emtpy yet */
-bool to_see_is_not_empty(bool *table, int n)
-{
-    for (int i = 0; i < n; i++)
-    {
-        if (table[i] == true)
-        {
-            return true;
-        }
-    }
-    return false;
-}
 
-/* Colorizes the line once it knows that it can be colourised correctly */
-void color_lineORcolumn(int *line, int *seq, int length)
-{
-    int k = 0;
-    int current = 0;
-    while (seq[k] != 0)
-    {
-        for (int i = 0; i < seq[k]; i++)
-        {
-            line[current] = BLACK;
-            current++;
-        }
-        if (current < length)
-        {
-            line[current] = WHITE;
-            current++;
-        }
-        k++;
-    }
-}
-
-/* Retruns the correct length of a sequence and not the maximum one */
-int correct_length(int *seq, int size)
-{
-    int count = 0;
-
-    for (int i = 0; i < size; i++)
-    {
-        if (seq[i] != 0)
-        {
-            count++;
-        }
-    }
-    return count;
-}
-
-// DEPRECATED
-/* Checks if a line or column can be colorised and proceeds to the appropriate action (colorisation or not)  */
-bool color_decision(int *tab, int *seq, int length, int maximum)
-{
-    int l = correct_length(seq, maximum);
-    // returns false if it's impossible to color this line otherwise it returns true
-    if (T_v2(length - 1, l, tab, seq) == true)
-    {
-        color_lineORcolumn(tab, seq, length);
-        return true;
-    }
-    else
-    {
-        return false;
-    }
-}
-
-/* Returns true if every cell of the grid is colorised */
-bool grid_in_color(int **grid, int rows, int columns)
-{
-    for (int i = 0; i < rows; i++)
-    {
-        for (int j = 0; j < columns; j++)
-        {
-            if (grid[i][j] == DEFAULT)
-            {
-                return false;
-            }
-        }
-    }
-    return true;
-}
-
-/* Counts how many cells exist on the grid that are not colourised yet */
-int grid_defaults_count(int **grid, int rows, int columns)
-{
-    int count = 0;
-
-    for (int i = 0; i < rows; i++)
-    {
-        for (int j = 0; j < columns; j++)
-        {
-            if (grid[i][j] == DEFAULT)
-            {
-                count++;
-            }
-        }
-    }
-
-    return count;
-}
 
 /* Coloring the grid following seperate lines and seperates collumns approach */
 /* FINAL VERSION IS V3 */
-// enum State color_grid_v1(int **main_grid, int n_rows, int n_columns, int **rows, int **columns, int maximum)
-// {
-//     bool response;
-
-//     int **grid;
-//     grid = malloc(n_rows * sizeof(int *));
-//     if (grid == NULL)
-//     {
-//         allocation_error_print_general("grid");
-//     }
-
-//     for (int i = 0; i < n_rows; i++)
-//     {
-//         grid[i] = malloc(n_columns * sizeof(int));
-//         if (grid[i] == NULL)
-//         {
-//             allocation_error_print_with_id("grid row", i);
-//         }
-//     }
-
-//     // Local copy of the grid
-//     copy_grid(main_grid, grid, n_rows, n_columns);
-
-//     // Maintaining a list of the lines and columns that need to be explored
-//     bool lines_to_see[n_rows];
-//     init_to_see(lines_to_see, n_rows);
-//     bool columns_to_see[n_columns];
-//     init_to_see(columns_to_see, n_columns);
-
-//     while (to_see_is_not_empty(lines_to_see, n_rows) || to_see_is_not_empty(columns_to_see, n_columns)) // there are still lines or columns to be explored
-//     {
-//         for (int i = 0; i < n_rows; i++)
-//         {
-
-//             // Analysis of the line in question
-//             int *tab;
-//             tab = malloc(n_columns * sizeof(int)); // The number of columns is the length of the line in question
-//             if (tab == NULL)
-//             {
-//                 fprintf(stderr, "\nFailed to allocate memory for tab.\n");
-//                 exit(-10);
-//             }
-
-//             line_isolation(grid, i, n_columns, tab);
-//             response = color_decision(tab, rows[i], n_columns, maximum); // we take the ieme table of seqeunces for the ieme line in the analysis process
-
-//             if (response == false)
-//             {
-//                 return FAIL;
-//             }
-
-//             line_to_grid(grid, i, tab, n_columns);
-//             free(tab);
-
-//             // setting that the current line was treated
-//             lines_to_see[i] = false;
-//         }
-//         for (int i = 0; i < n_columns; i++)
-//         {
-//             // Analysis of the line in question
-//             int *tab;
-//             tab = malloc(n_rows * sizeof(int)); // The number of rows is the length of the column in question
-//             if (tab == NULL)
-//             {
-//                 fprintf(stderr, "\nFailed to allocate memory for tab.\n");
-//                 exit(-11);
-//             }
-
-//             column_isolation(grid, i, n_rows, tab);
-//             response = color_decision(tab, columns[i], n_rows, maximum);
-
-//             if (response == false)
-//             {
-//                 return FAIL;
-//             }
-
-//             column_to_grid(grid, i, tab, n_rows);
-//             free(tab);
-
-//             // setting that the current column was treated
-//             columns_to_see[i] = false;
-//         }
-//     }
-
-//     // Copying the final result back to the main grid
-//     copy_grid(grid, main_grid, n_rows, n_columns);
-
-//     free_2d(grid, n_rows);
-
-//     if (grid_in_color(grid, n_rows, n_columns) == true)
-//     {
-//         return SUCCESS;
-//     }
-//     else
-//     {
-//         return NO_DECISION;
-//     }
-// }
-
-/* Finding the next not-colorised cell */
-void recalculation(int **grid, int rows, int columns, int *i, int *j)
+enum State color_grid_v1(int **main_grid, int n_rows, int n_columns, int **rows, int **columns, int maximum)
 {
-    int x = 0;
-    int y = 0;
+    bool response;
 
-    while (x < rows && (*i) == -1)
+    int **grid;
+    grid = malloc(n_rows * sizeof(int *));
+    if (grid == NULL)
     {
-        for (y = 0; y < columns; y++)
+        allocation_error_print_general("grid");
+    }
+
+    for (int i = 0; i < n_rows; i++)
+    {
+        grid[i] = malloc(n_columns * sizeof(int));
+        if (grid[i] == NULL)
         {
-            if (grid[x][y] == DEFAULT)
-            {
-                (*i) = x;
-                (*j) = y;
-                break;
-            }
+            allocation_error_print_with_id("grid row", i);
         }
-        x++;
+    }
+
+    // Local copy of the grid
+    copy_grid(main_grid, grid, n_rows, n_columns);
+
+    // Maintaining a list of the lines and columns that need to be explored
+    bool lines_to_see[n_rows];
+    init_to_see(lines_to_see, n_rows);
+    bool columns_to_see[n_columns];
+    init_to_see(columns_to_see, n_columns);
+
+    while (to_see_is_not_empty(lines_to_see, n_rows) || to_see_is_not_empty(columns_to_see, n_columns)) // there are still lines or columns to be explored
+    {
+        for (int i = 0; i < n_rows; i++)
+        {
+
+            // Analysis of the line in question
+            int *tab;
+            tab = malloc(n_columns * sizeof(int)); // The number of columns is the length of the line in question
+            if (tab == NULL)
+            {
+                fprintf(stderr, "\nFailed to allocate memory for tab.\n");
+                exit(-10);
+            }
+
+            line_isolation(grid, i, n_columns, tab);
+            response = color_decision(tab, rows[i], n_columns, maximum); // we take the ieme table of seqeunces for the ieme line in the analysis process
+
+            if (response == false)
+            {
+                return FAIL;
+            }
+
+            line_to_grid(grid, i, tab, n_columns);
+            free(tab);
+
+            // setting that the current line was treated
+            lines_to_see[i] = false;
+        }
+        for (int i = 0; i < n_columns; i++)
+        {
+            // Analysis of the line in question
+            int *tab;
+            tab = malloc(n_rows * sizeof(int)); // The number of rows is the length of the column in question
+            if (tab == NULL)
+            {
+                fprintf(stderr, "\nFailed to allocate memory for tab.\n");
+                exit(-11);
+            }
+
+            column_isolation(grid, i, n_rows, tab);
+            response = color_decision(tab, columns[i], n_rows, maximum);
+
+            if (response == false)
+            {
+                return FAIL;
+            }
+
+            column_to_grid(grid, i, tab, n_rows);
+            free(tab);
+
+            // setting that the current column was treated
+            columns_to_see[i] = false;
+        }
+    }
+
+    // Copying the final result back to the main grid
+    copy_grid(grid, main_grid, n_rows, n_columns);
+
+    free_2d(grid, n_rows);
+
+    if (grid_in_color(grid, n_rows, n_columns) == true)
+    {
+        return SUCCESS;
+    }
+    else
+    {
+        return NO_DECISION;
     }
 }
 
@@ -594,57 +446,6 @@ enum State color_grid_v2(int **grid, int n_rows, int n_columns, int **rows_colum
     {
         return NO_DECISION;
     }
-}
-
-/* Completing the colorisation process with recursion */
-// Logic inspired by Manu Guerinel
-int color_grid_complet(int **grid, int **rows_columns, int n_rows, int n_columns, int i, int j, int maximum)
-{
-    /* Making a temporary copy of the grid for returning_back porpuses */
-    int **duplicate;
-    duplicate = malloc(n_rows * sizeof(int *));
-    if (duplicate == NULL)
-    {
-        allocation_error_print_general("duplicate");
-    }
-
-    for (int i = 0; i < n_rows; i++)
-    {
-        duplicate[i] = malloc(n_columns * sizeof(int));
-        if (duplicate[i] == NULL)
-        {
-            allocation_error_print_with_id("duplicate row", i);
-        }
-    }
-
-    // Grid -> duplicate
-    copy_grid(grid, duplicate, n_rows, n_columns);
-
-    // ==========================
-    // White test
-    // ==========================
-    grid[i][j] = WHITE;
-    if (color_grid_v3(grid, n_rows, n_columns, rows_columns, maximum) == SUCCESS)
-    {
-        free_2d(duplicate, n_rows);
-        return 1;
-    }
-    copy_grid(duplicate, grid, n_rows, n_columns); // going back to previous state
-
-    // ==========================
-    // Black test
-    // ==========================
-    grid[i][j] = BLACK;
-    if (color_grid_v3(grid, n_rows, n_columns, rows_columns, maximum) == SUCCESS)
-    {
-        free_2d(duplicate, n_rows);
-        return 1;
-    }
-    copy_grid(duplicate, grid, n_rows, n_columns); // going back to previous state
-
-    // Otherwise
-    free_2d(duplicate, n_rows);
-    return 0;
 }
 
 /* Final version that colourises and calls recursivly in order to examine all the possible cases (complet) */
@@ -798,6 +599,7 @@ enum State color_grid_v3(int **grid, int n_rows, int n_columns, int **rows_colum
         last_time = changes;
     }
 
+    /* Final test that determines if there is a final SUCCESS decision or NO_DECISION because not every cell was colorised */
     if (grid_in_color(grid, n_rows, n_columns))
     {
         return SUCCESS;
@@ -806,6 +608,4 @@ enum State color_grid_v3(int **grid, int n_rows, int n_columns, int **rows_colum
     {
         return NO_DECISION;
     }
-
-    // return result;
 }
