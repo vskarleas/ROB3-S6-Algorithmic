@@ -79,3 +79,5 @@ V4.11 Updated function T but still not finished yet. There are some errors
 V4.12 Code correction on logic
 
 V4.13 Optimization, formalization and completion
+
+V4.16 Final optimisations before complete formalisation 
