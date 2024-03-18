@@ -597,6 +597,7 @@ enum State color_grid_v2(int **grid, int n_rows, int n_columns, int **rows_colum
 }
 
 /* Completing the colorisation process with recursion */
+// Logic inspired by Manu Guerinel
 int color_grid_complet(int **grid, int **rows_columns, int n_rows, int n_columns, int i, int j, int maximum)
 {
     /* Making a temporary copy of the grid for returning_back porpuses */
