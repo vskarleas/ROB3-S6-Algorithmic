@@ -87,4 +87,4 @@ V5.1 Added multiple files on project for clarity
 
 V5.2 More elements were added, as well as automation techniques
 
-V5.3 repository change for the
+V5.3 repository change for the project
