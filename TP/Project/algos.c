@@ -19,7 +19,9 @@
 /* It verifies the decisions regarding a line according to its sequence and the rules of the puzzle */
 /* FINAL VERSION IS V2 */
 
-/* This version treats correctly the majority of cases but it doesn't take into consideration the already colourised
+
+//DEPRECATED
+/* VERSION 0: This version treats correctly the majority of cases but it doesn't take into consideration the already colourised
    black cells that are before the section that is tested and returned true. A test of total amount of black cells
    needs to be performed definitely */
 bool T(int j, int l, int *tab, int *seq, int total_length)
@@ -103,6 +105,114 @@ bool T(int j, int l, int *tab, int *seq, int total_length)
             }
         }
     }
+
+    // everything fails so the response is false
+    return false;
+}
+
+//DEPRECATED
+/* VERSION 1 */
+bool T_v1(int j, int l, int *tab, int *seq)
+{
+    // Checking wheter we have wrong-colorised a cell during a decision that
+    // doesn't respect the maximum amount of cells that can be colorised
+    if (count_black_cells(tab, j + 1, 1) > count_black_cells(seq, l, 2))
+    {
+        return false;
+    }
+
+    // ================
+    // Case 1
+    // ================
+
+    /* This is the case were everything is possible */
+    if (l == 0)
+    {
+        return true;
+    }
+
+    // ================
+    // Case 2a
+    // ================
+
+    if (j < seq[l - 1] - 1) // please consider that is seauence seq the place at seq[0] is never used on our program. It's just initialises on a nunber that we never take into consideration
+    {
+        return false;
+    }
+
+    // ================
+    // Case 2b
+    // ================
+
+    /* It can be true if and only if there is only one sequence. Otherwise
+       it's not possible to treat the rest of sequences in that available number of
+       cells. If it finds a white cell then the sequence is not valid and returns false */
+    if (j == seq[l - 1] - 1)
+    {
+        if (l == 1)
+        {
+            for (int i = 0; i < seq[l-1]; i++)
+            {
+                if (tab[j - i] == WHITE)
+                {
+                    return false;
+                }
+            }
+
+            return true;
+        }
+        else
+        {
+            return false;
+        }
+    }
+
+    // ================
+    // Subcases for 2c
+    // ================
+
+    /* Checking if current index is black and perfom sequence verification */
+    if (tab[j] == BLACK)
+    {
+        // Case where after the sequence the next cell is white or not coloured. In that case we move on for the next seqence (l - 1)
+        if (tab[j - seq[l - 1]] == WHITE)
+        {
+            int i;
+            for (i = j; i > j - seq[l - 1]; i--)
+            {
+                if (tab[i] == WHITE)
+                {
+                    return false;
+                }
+            }
+            return (T_v1(j - seq[l - 1] - 1, l - 1, tab, seq));
+        }
+        
+    }
+
+    /* After the sequence there is a black cell that under normal circomstances
+       it should be white for the sequence to be valid in that position. However
+       it is not the case and we need to check for the same sequence once step
+       on the left before we can conclude. */
+    if (tab[j - seq[l - 1]] == BLACK)
+    {
+        return (T_v1(j - 1, l, tab, seq));
+    }
+
+    /* The sequence was valid for the local search that was perfomed on index j and
+       on index j - seq[l] (black exclusivly), so last but not least we need to perform
+       a global test. If there is a white ceel that is found then we move on one step
+       on the left as usual according to question 3. */
+    int i;
+    for (i = j; i > j - seq[l - 1]; i--)
+    {
+        if (tab[i] == WHITE)
+        {
+            return T_v1(i - 1, l, tab, seq);
+        }
+    }
+
+    return (T_v1(j - seq[l - 1] - 1, l - 1, tab, seq) || T_v1(j - 1, l, tab, seq));
 
     // everything fails so the response is false
     return false;
@@ -450,7 +560,7 @@ enum State color_grid_v2(int **grid, int n_rows, int n_columns, int **rows_colum
 
 /* Final version that colourises and calls recursivly in order to examine all the possible cases (complet) */
 /* NOTA BENE: Same logic with v2 but more elaborated and completed */
-enum State color_grid_v3(int **grid, int n_rows, int n_columns, int **rows_columns, int maximum)
+enum State color_grid_v3(int **grid, int n_rows, int n_columns, int **rows_columns, int maximum, int mode)
 {
     enum State result;
     result = SUCCESS;                        // status by default. It will be updated accordingly
@@ -576,8 +686,11 @@ enum State color_grid_v3(int **grid, int n_rows, int n_columns, int **rows_colum
             }
         }
 
-        printing_grid(grid, n_rows, n_columns, 3);
-
+        if (mode == 1)
+        {
+            printing_grid(grid, n_rows, n_columns, 3);
+        }
+        
         int changes = grid_defaults_count(grid, n_rows, n_columns);
 
         if (changes == last_time && changes == before_last_time)
@@ -589,7 +702,7 @@ enum State color_grid_v3(int **grid, int n_rows, int n_columns, int **rows_colum
             int y_updated;
             recalculation(grid, n_rows, n_columns, &x_updated, &y_updated);
 
-            if (color_grid_complet(grid, rows_columns, n_rows, n_columns, x_updated, y_updated, maximum) == 1)
+            if (color_grid_complet(grid, rows_columns, n_rows, n_columns, x_updated, y_updated, maximum, mode) == 1)
             {
                 return SUCCESS;
             }

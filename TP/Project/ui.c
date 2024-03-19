@@ -19,8 +19,8 @@
 int menu_mode()
 {
     char userInput[20];
-    char *msg[1] = {"Choose an option (1.2, 1.3, 2). Your choice: "};
-    char *msg_attention[1] = {"You can only choose from 1.2 or 1.3, 2."};
+    char *msg[1] = {"Choose an option (1.2, 1.3, 2, automatic). Your choice: "};
+    char *msg_attention[1] = {"You can only choose from 1.2 or 1.3, 2, or automatic."};
 
     while (true)
     {
@@ -49,7 +49,7 @@ int menu_mode()
         {
             return 4;
         }
-        else if (strcmp(userInput, "exo5") == 0)
+        else if (strcmp(userInput, "automatic") == 0)
         {
             return 5;
         }

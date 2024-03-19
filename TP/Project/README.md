@@ -112,40 +112,116 @@ Effectivement, il y a des scenarios ou l'algorithme finis plus rapidement que pr
 ### L'algorithme
 
 ```c
-bool T(int j, int l, int *tab, int *seq)
+bool T_v2(int j, int l, int *tab, int *seq)
 {
+    // Checking wheter we have wrong-colorised a cell during a decision that
+    // doesn't respect the maximum amount of cells that can be colorised
+    if (count_black_cells(tab, j + 1, 1) > count_black_cells(seq, l, 2))
+    {
+        return false;
+    }
+
+    // ================
+    // Case 1
+    // ================
+
+    /* This is the case were everything is possible */
     if (l == 0)
     {
         return true;
     }
-    if (l >= 1)
+
+    // ================
+    // Case 2a
+    // ================
+
+    if (j < seq[l - 1] - 1) // please consider that is seauence seq the place at seq[0] is never used on our program. It's just initialises on a nunber that we never take into consideration
     {
-        if (j < seq[l-1] - 1) // please consider that is seauence seq the place at seq[0] is never used on our program. It's just initialises on a nunber that we never take into consideration
+        return false;
+    }
+
+    // ================
+    // Case 2b
+    // ================
+
+    /* It can be true if and only if there is only one sequence. Otherwise
+       it's not possible to treat the rest of sequences in that available number of
+       cells. If it finds a white cell then the sequence is not valid and returns false */
+    if (j == seq[l - 1] - 1)
+    {
+        if (l == 1)
+        {
+            for (int i = 0; i < seq[l - 1]; i++)
+            {
+                if (tab[j - i] == WHITE)
+                {
+                    return false;
+                }
+            }
+
+            return true;
+        }
+        else
         {
             return false;
         }
-        if (j == seq[l-1] - 1)
+    }
+
+    // ================
+    // Subcases for 2c
+    // ================
+
+    /* Checking if current index is black and perfom sequence verification */
+    if (tab[j] == BLACK)
+    {
+        // Case where after the sequence the next cell is white or not coloured. In that case we move on for the next seqence (l - 1)
+        if (tab[j - seq[l - 1]] == WHITE || tab[j - seq[l - 1]] == DEFAULT)
         {
-            //checking for any whites on this space
-            for (int i = 0; i <= j; i++)
+            int i;
+            for (i = j; i > j - seq[l - 1]; i--)
             {
                 if (tab[i] == WHITE)
                 {
                     return false;
                 }
             }
-            return (l == 1); //the condition that needs to be true in order for that sub case (2b) to be verfied
+
+            return (T_v2(j - seq[l - 1] - 1, l - 1, tab, seq));
         }
-        if (j > seq[l-1] - 1)
+
+        /* After the sequence there is a black cell that under normal circomstances
+       it should be white for the sequence to be valid in that position. So it's false in that case. */
+        if (tab[j - seq[l - 1]] == BLACK)
         {
-            //Checking if it white as mentioned on Project's subject
-            if (tab[j] == WHITE && T(j - seq[l-1] - 1, l - 1, tab, seq)) // we check the previous combination [I AM NOT SURE FOR THE SECOND CONDITION]
-            {
-                return (T(j - 1, l, tab, seq));
-            }
-            return (T(j - 1, l, tab, seq) || T(j - seq[l-1] - 1, l - 1, tab, seq));
+            return false;
         }
     }
+
+    /* After the sequence there is a black cell that under normal circomstances
+       it should be white for the sequence to be valid in that position. However
+       it is not the case and we need to check for the same sequence once step
+       on the left before we can conclude. */
+    if (tab[j - seq[l - 1]] == BLACK)
+    {
+        return (T_v2(j - 1, l, tab, seq));
+    }
+
+    /* The sequence was valid for the local search that was perfomed on index j and
+       on index j - seq[l] (black exclusivly), so last but not least we need to perform
+       a global test. If there is a white cell that is found then we move on one step
+       on the left as usual according to question 3. */
+    int i;
+    for (i = j; i > j - seq[l - 1]; i--)
+    {
+        if (tab[i] == WHITE)
+        {
+            return T_v2(i - 1, l, tab, seq);
+        }
+    }
+
+    return (T_v2(j - seq[l - 1] - 1, l - 1, tab, seq) || T_v2(j - 1, l, tab, seq));
+
+    // everything fails so the response is false
     return false;
 }
 ```
@@ -265,92 +341,111 @@ L'implementation de l'agorithm incomplet est le suivant:
 enum State color_grid_v2(int **grid, int n_rows, int n_columns, int **rows_columns, int maximum)
 {
     // NOTE: x is for horizontal (lines) and y is for vertical (columns) on grid's 2D array
-    for (int x = 0; x < n_rows; x++)
+    while (grid_defaults_count(grid, n_rows, n_columns) != 0)
     {
-        for (int y = 0; y < n_columns; y++)
+        for (int x = 0; x < n_rows; x++)
         {
-            /* If no color is aplied yet to the specific cell */
-            if (grid[x][y] == DEFAULT)
+            // This first test checks whether we need to proceed to line analysis or not.
+            //  If the sequence can be applied directly with any cells uncolorised,
+            //  then we coulorise them and we move on to the next line
+            int pre_l = correct_length(rows_columns[x], maximum);
+            int nb_blacks = count_black_cells(rows_columns[x], pre_l, 2);
+            int nb_whites = pre_l - 1;
+            if ((nb_blacks + nb_whites) == n_columns)
             {
-                int l;
-                bool white_test, black_test;
-
-                // ==========================
-                // Local test for white state
-                // ==========================
-                grid[x][y] = WHITE;
-
-                // Analysis of the line in question (in parallel of every column for this line [this is done with every change of y])
-                int *tab = (int *)malloc(n_rows * sizeof(int)); // The number of rows is the length of the column in question
-                if (tab == NULL)
+                color_lineORcolumn(grid[x], rows_columns[x], n_columns);
+            }
+            else
+            {
+                for (int y = 0; y < n_columns; y++)
                 {
-                    fprintf(stderr, "\nFailed to allocate memory for tab.\n");
-                    exit(-1);
-                }
-
-                // Isolation of the column for the current y
-                column_isolation(grid, y, n_rows, tab);
-
-                /* HORIZONTAL test */
-                l = correct_length(rows_columns[x], maximum);
-                white_test = T_v2(n_columns - 1, l, grid[x], rows_columns[x]);
-
-                /* VERTICAL test */
-                if (white_test)
-                {
-                    l = correct_length(rows_columns[n_rows + y], maximum);           // updating l value
-                    white_test = T_v2(n_rows - 1, l, tab, rows_columns[n_rows + y]); // we need + 1 because y counts from 0, so in order to take the correct sequence for the column, we need n_rows + 0 + 1 to be distinguised
-                }
-
-                // ==========================
-                // Local test for black state
-                // ==========================
-                grid[x][y] = BLACK;
-                tab[x] = BLACK; // This step is essential. Previsouly the colourisation in white happened before isolation. Here we have to do it manually because we have already isolated the column
-
-                /* HORIZONTAL test */
-                l = correct_length(rows_columns[x], maximum);
-                black_test = T_v2(n_columns - 1, l, grid[x], rows_columns[x]);
-
-                /* VERTICAL test */
-                if (black_test)
-                {
-                    l = correct_length(rows_columns[n_rows + y], maximum);           // updating l value
-                    black_test = T_v2(n_rows - 1, l, tab, rows_columns[n_rows + y]); // we need + 1 because y counts from 0, so in order to take the correct sequence for the column, we need n_rows + 0 + 1 to be distinguised
-                }
-
-                free(tab);
-
-                // ==========================
-                // Reversing any changes
-                // ==========================
-                grid[x][y] = DEFAULT;
-
-                // ==========================
-                // Decisions and conclusions
-                // ==========================
-                if (white_test == false)
-                {
-                    if (black_test == false)
+                    /* If no color is aplied yet to the specific cell */
+                    if (grid[x][y] == DEFAULT)
                     {
-                        return FAIL;
-                    }
-                    else
-                    {
-                        grid[x][y] = BLACK;
-                    }
-                }
-                else if (black_test == false)
-                {
-                    if (white_test == true)
-                    {
+                        int l;
+                        bool white_test, black_test;
+
+                        // ==========================
+                        // Local test for white state
+                        // ==========================
                         grid[x][y] = WHITE;
+
+                        // Analysis of the line in question (in parallel of every column for this line [this is done with every change of y])
+                        int *tab = (int *)malloc(n_rows * sizeof(int)); // The number of rows is the length of the column in question
+                        if (tab == NULL)
+                        {
+                            fprintf(stderr, "\nFailed to allocate memory for tab.\n");
+                            exit(-1);
+                        }
+
+                        // Isolation of the column for the current y
+                        column_isolation(grid, y, n_rows, tab);
+
+                        /* HORIZONTAL test */
+                        l = correct_length(rows_columns[x], maximum);
+                        white_test = T_v2(n_columns - 1, l, grid[x], rows_columns[x]);
+
+                        /* VERTICAL test */
+                        if (white_test)
+                        {
+                            l = correct_length(rows_columns[n_rows + y], maximum);           // updating l value
+                            white_test = T_v2(n_rows - 1, l, tab, rows_columns[n_rows + y]); // we need + 1 because y counts from 0, so in order to take the correct sequence for the column, we need n_rows + 0 + 1 to be distinguised
+                        }
+
+                        // ==========================
+                        // Local test for black state
+                        // ==========================
+                        grid[x][y] = BLACK;
+                        tab[x] = BLACK; // This step is essential. Previsouly the colourisation in white happened before isolation. Here we have to do it manually because we have already isolated the column
+
+                        /* HORIZONTAL test */
+                        l = correct_length(rows_columns[x], maximum);
+                        black_test = T_v2(n_columns - 1, l, grid[x], rows_columns[x]);
+
+                        /* VERTICAL test */
+                        if (black_test)
+                        {
+                            l = correct_length(rows_columns[n_rows + y], maximum);           // updating l value
+                            black_test = T_v2(n_rows - 1, l, tab, rows_columns[n_rows + y]); // we need + 1 because y counts from 0, so in order to take the correct sequence for the column, we need n_rows + 0 + 1 to be distinguised
+                        }
+
+                        free(tab);
+
+                        // ==========================
+                        // Reversing any changes
+                        // ==========================
+                        grid[x][y] = DEFAULT;
+
+                        // ==========================
+                        // Decisions and conclusions
+                        // ==========================
+                        if (white_test == false)
+                        {
+                            if (black_test == false)
+                            {
+                                //printf("\n%d,  %d\n", x, y);
+                                return FAIL;
+                            }
+                            else
+                            {
+                                grid[x][y] = BLACK;
+                            }
+                        }
+                        else if (black_test == false)
+                        {
+                            if (white_test == true)
+                            {
+                                grid[x][y] = WHITE;
+                            }
+                            else
+                            {
+                                return NO_DECISION;
+                            }
+                        }
                     }
-                    else
-                    {
-                        return NO_DECISION;
-                    }
+                    //printing_grid(grid, n_rows, n_columns, 3);
                 }
+                printing_grid(grid, n_rows, n_columns, 3);
             }
         }
     }
@@ -363,36 +458,37 @@ enum State color_grid_v2(int **grid, int n_rows, int n_columns, int **rows_colum
     {
         return NO_DECISION;
     }
-  
 }
 ```
 
 ## Q10
 
-En faisant une implimentation sur les instances 1.txt à 10.txt on obtiens les resultats ci-dessous:
+En faisant une implimentation sur les instances 1.txt à 10.txt on obtiens les resultats ci-dessous (pour l'algorithme incomplet):
 
-| Instance | Temps de resolution |
-| -------- | ------------------- |
-| 1.txt    | 0.000065 seconds    |
-| 2.txt    | 0.000770 seconds    |
-| 3.txt    | 0.002406 seconds    |
-| 4.txt    | 0.001972 seconds    |
-| 5.txt    | 0.001641 seconds    |
-| 6.txt    | 0.002400 seconds    |
-| 7.txt    | 0.004824 seconds    |
-| 8.txt    | 0.006191 seconds    |
-| 9.txt    | 0.013365 seconds    |
-| 10.txt   | 0.179830 seconds    |
+### Algorithme Incomplet
 
-De plus, la grille obtenu pour l'instance 9.txt est toute inconnus. **CORRECTION**
+| Instance | Temps de resolution (T_v1) | Temps de resolution (T_v2)<br />OPTIMISÉ | Resultat                                       |
+| -------- | -------------------------- | ----------------------------------------- | ---------------------------------------------- |
+| 1.txt    | 0.00026125 seconds        | 0.000209 seconds                          | ![1710813850775](image/README/1710813850775.png) |
+| *2.txt   | 0.04201625 seconds         | 0.033613 seconds                          | ![1710813858508](image/README/1710813858508.png) |
+| 3.txt    | 0.01847375 seconds         | 0.014779 seconds                          | ![1710813862678](image/README/1710813862678.png) |
+| 4.txt    | 0.04183375 seconds         | 0.033467 seconds                          | ![1710813867300](image/README/1710813867300.png) |
+| 5.txt    | 0.04461875 seconds         | 0.035695 seconds                          | ![1710813871534](image/README/1710813871534.png) |
+| 6.txt    | 0.15211125 seconds        | 0.121689 seconds                          | ![1710813880832](image/README/1710813880832.png) |
+| 7.txt    | 0.05928625 seconds         | 0.047429 seconds                          | ![1710813885492](image/README/1710813885492.png) |
+| 8.txt    | 0.19354125 seconds        | 0.154833 seconds                          | ![1710813893315](image/README/1710813893315.png) |
+| *9.txt   | 173.42733375seconds        | 138.741867 seconds                        | ![1710813900832](image/README/1710813900832.png) |
+| *10.txt  | 471.59015625 seconds       | 377.272125 seconds                        | ![1710813905126](image/README/1710813905126.png) |
 
-Il faut noter qu'on a appliqué un timeout à 2 minutes car le program et l'agorithm sont basés sur la logique des algorithmes de retour en arrière. La résolution de nonogrammes implique généralement un algorithme de retour en arrière, qui explore de multiples possibilités et se répète de manière approfondie, créant potentiellement un grand nombre de piles d'appels de fonctions. Chaque appel récursif nécessite de la mémoire pour les paramètres de fonction, les variables locales et les adresses de retour. C'est pourquoi, la consommation de la memoire augmente chaque fois qu'une combinaison choisi n'est pas validé les consignes des sequences.
+Les instances avec * etait incomplet en utilisant la methode incplpet de l'algorithm. En outre, il faut noter qu'on onbserve une diminuation du temps de traitment par 25% en comparant les deux differents fonctions T.
+
+Il faut noter que l'agorithms sont basés sur la logique des algorithmes de retour en arrière. La résolution de nonogrammes implique généralement un algorithme de retour en arrière, qui explore de multiples possibilités et se répète de manière approfondie, créant potentiellement un grand nombre de piles d'appels de fonctions. Chaque appel récursif nécessite de la mémoire pour les paramètres de fonction, les variables locales et les adresses de retour. C'est pourquoi, la consommation de la memoire augmente chaque fois qu'une combinaison choisi n'est pas validé les consignes des sequences.
 
 ## Q11
 
 L'pplication de l'alorithme sur l'instance 11 retourne le resultat suivante:
 
-```
+```c
 There is NO DECISION for the provided puzzle
 The colourised grid is
 ? | ? | ? | ? 
@@ -411,13 +507,45 @@ En combinant le nombre d'appels récursifs (n_rows * n_columns) et la profondeur
 
 Cette fois on obtiens la bonne reponse pour l'instance 11.txt
 
-![1710629904173](image/README/1710629904173.png)
+![1710814031918](image/README/1710814031918.png)
 
 ## Q14
 
+Ci-dessous on va livrer la representation des images seulment pour les instances qui n'etait pas examiné à la question 10.
+
+### Algorithme Complet
+
+
+| Instance    | Temps de resolution (T_v2) | Resultat                                       |
+| ----------- | -------------------------- | ---------------------------------------------- |
+| 1.txt       | 0.000052 seconds           | -//-                                           |
+| 2.txt       | 0.029618 seconds           | -//-                                           |
+| 3.txt       | 0.003238 seconds           | -//-                                           |
+| 4.txt       | 0.009310 seconds           | -//-                                           |
+| 5.txt       | 0.009822 seconds           | -//-                                           |
+| 6.txt       | 0.034539 seconds           | -//-                                           |
+| 7.txt       | 0.011148 seconds           | -//-                                           |
+| 8.txt       | 0.046059 seconds           | -//-                                           |
+| 9.txt       | 112.841438 seconds         | -//-                                           |
+| 10.txt      | 408.873291 seconds         | -//-                                           |
+| 11.txt      | 0.000012 seconds           | -//-                                           |
+| 12.txt      | 0.033768 seconds           | ![1710815791037](image/README/1710815791037.png) |
+| 13.txt      | 0.544291 seconds           | ![1710815786920](image/README/1710815786920.png) |
+| 14.txt      | 0.022434 seconds           | ![1710815778016](image/README/1710815778016.png) |
+| 15.txt      | 0.082423 seconds           | ![1710815445517](image/README/1710815445517.png) |
+| 16.txt      | 530.418396 seconds         | ![1710815439151](image/README/1710815439151.png) |
+| **flag.txt  | 3.631973 seconds           | ![1710815961396](image/README/1710815961396.png) |
+| **photo.txt | 15.876246 seconds          | ![1710815952835](image/README/1710815952835.png) |
+
+**Voir la paragraph pour aler plus loin
+
 ### **Commentaires**
 
-Commentaires... **WAITING**
+On observe observe que le temps de resolution a diminue par rapport la methode de resolution incomplet. Maintenant, en ce qui concerne nos observations pour les instances 12 à 16 tout en essayant les executer en utilisant la methode incomplet, on a:
+
+* Il sont bloques sur une boucle infinies sans qu'il change quelque chose...
+* ....
+* ....
 
 ### Instance 15
 
@@ -425,7 +553,43 @@ Pour l'instance 15 on obtiens les resultats ci-dessous:
 
 | Algorithm 1.3 (version 2)                      | Algorithm 2 (version 3)                        |
 | ---------------------------------------------- | ---------------------------------------------- |
-| ![1710680785670](image/README/1710680785670.png) | ![1710680794355](image/README/1710680794355.png) |
+| ![1710819488073](image/README/1710819488073.png) | ![1710816364235](image/README/1710816364235.png) |
+
+## Pour aller plus loin
+
+On essayé de creer notre nonogram personalise avec deux differents objectifs:
+
+1. Affichage de numeros et des texts sur la grille
+2. Representation d'une image par un nonogram
+
+Le premier objectif est assez simpple à reasiler. Pour la deuxieme voici les etapes qu'on a suivi:
+
+1. Selectioner une image et faire un crop carré 1x1
+2. Utiliser un outil en ligne permetant de le rendre uniquement en pixels noir et blanchs (https://www.resizepixel.com/convert-image-to-black-white/)
+3. Pour obtenir les sequences du jeu on a:
+   1. Sur le dossier image_encoding il y a un program MATLAB `main_program.m` qui accepte n'importe quelle image PNG
+   2. On choisi le ratio de division (si on veut diminuer la taille du nonogram et le simplifier en general)
+   3. Le script va creer un fichier excel qui contiens les sequences
+   4. Il suffit de faire un copier coller des sequences des lignes et des collognes sur un fichier .txt tout en resepctant la syntaxe introduit au sujet
+   5. Vue que les instances sont separe par un dash '-', on a develope un program sur python `encoding.py` qui viens de finir l'encodage du fichier pour qu'il soit utilisable par le code. Il faut noter que le fichier .txt faut etre sur le repertoir instances pour qu'il soir detectable par le program.
+      ```python
+      def replace_hyphens(filename):
+        """Reads a text file, replaces hyphens with spaces, and saves the modified content to the same file."""
+        with open(filename, 'r') as f:
+          content = f.read()
+        modified_content = content.replace('-', ' ')
+        with open(filename, 'w') as f:
+          f.write(modified_content)
+
+      # Example usage
+      filename = "instances/photo.txt"
+      replace_hyphens(filename)
+      print(f"Replaced hyphens with spaces in {filename}")
+
+      ```
+4. Mainteant on peut utiliser le fichier .txt de l'instance construit.
+
+Nos deux insatnces construits suivant les deux objectifs sont **flag.txt** et **photo.txt** respectivement. Effectivement à cause des simplifcations et des limitations des fichiers PBM (utilése pour sauvegarder les donnes comme des images pixeléses sur la machine), le fichier photo.pbm (disponible sur le repertoire tests) n'est pas une image claire mais c'est proche à l'image originale.
 
 ## Exit codes
 
@@ -441,6 +605,9 @@ Vous trouverez ci-dessous la définition et l'explication des codes de sortie de
 | exit(-3)  | ERROR  | allocation_error_print_general retrurned                        |
 | exit(-4)  | ERROR  | allocation_error_print_with_id returend                         |
 | exit(-6)  | ERROR  | midle_menu function did not return the correct result           |
+| exit(-8)  | ERROR  | PBM file creation failed                                        |
+| exit(1)   | ERROR  | EPS file creation failed                                        |
+| exit(-9)  | ERROR  | Couldn't open the tests file                                    |
 
 ## Versioning
 

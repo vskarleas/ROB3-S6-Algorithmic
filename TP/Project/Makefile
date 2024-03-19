@@ -40,7 +40,7 @@ INCLUDEOPTS = -I$(INCDIR)
 COMPILOPTS = -g -Wall $(INCLUDEOPTS)
 
 # liste des executables
-EXECUTABLES = main
+EXECUTABLES = main complet partial t_tests automatic
 
 #############################################################################
 # definition des regles
@@ -110,11 +110,59 @@ main.o : main.c utile.h algos.h constants.h decode.h memory.h tables.h ui.h bitm
 	@echo ""
 	@echo "---------------------------------------------"
 	$(CC) -c $(COMPILOPTS) $<
+
+automatic.o : automatic.c utile.h algos.h constants.h decode.h memory.h tables.h ui.h bitmap.h
+	@echo ""
+	@echo "---------------------------------------------"
+	$(CC) -c $(COMPILOPTS) $<
+
+complet.o : complet.c utile.h algos.h constants.h decode.h memory.h tables.h ui.h bitmap.h
+	@echo ""
+	@echo "---------------------------------------------"
+	$(CC) -c $(COMPILOPTS) $<
+
+partial.o : partial.c utile.h algos.h constants.h decode.h memory.h tables.h ui.h bitmap.h
+	@echo ""
+	@echo "---------------------------------------------"
+	$(CC) -c $(COMPILOPTS) $<
+
+t_tests.o : t_tests.c utile.h algos.h constants.h decode.h memory.h tables.h ui.h bitmap.h
+	@echo ""
+	@echo "---------------------------------------------"
+	$(CC) -c $(COMPILOPTS) $<
 		
 ########################################################
 # regles explicites de creation des executables
 
 main : main.o utile.o ui.o tables.o memory.o decode.o bitmap.o api.o algos.o
+	@echo ""
+	@echo "---------------------------------------------"
+	@echo "Creation de l'executable "$@
+	@echo "---------------------------------------------"
+	$(CC) $^ $(LDOPTS) -o $@
+
+complet : complet.o utile.o ui.o tables.o memory.o decode.o bitmap.o api.o algos.o
+	@echo ""
+	@echo "---------------------------------------------"
+	@echo "Creation de l'executable "$@
+	@echo "---------------------------------------------"
+	$(CC) $^ $(LDOPTS) -o $@
+
+partial : partial.o utile.o ui.o tables.o memory.o decode.o bitmap.o api.o algos.o
+	@echo ""
+	@echo "---------------------------------------------"
+	@echo "Creation de l'executable "$@
+	@echo "---------------------------------------------"
+	$(CC) $^ $(LDOPTS) -o $@
+
+t_tests : t_tests.o utile.o ui.o tables.o memory.o decode.o api.o algos.o
+	@echo ""
+	@echo "---------------------------------------------"
+	@echo "Creation de l'executable "$@
+	@echo "---------------------------------------------"
+	$(CC) $^ $(LDOPTS) -o $@
+
+automatic : automatic.o utile.o ui.o tables.o memory.o decode.o bitmap.o api.o algos.o
 	@echo ""
 	@echo "---------------------------------------------"
 	@echo "Creation de l'executable "$@

@@ -12,7 +12,7 @@
 #include "memory.h"
 
 /* Freeing a 2D array */
-void free_2d(int **table, int n)
+void free_2d(int **table, int n) // n = rows = lignes
 {
     for (int i = 0; i < n; i++)
         free(table[i]);

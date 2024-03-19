@@ -84,3 +84,5 @@ V4.13 Optimization, formalization and completion
 V4.16 Final optimisations before complete formalisation
 
 V5.1 Added multiple files on project for clarity
+
+V5.2 More elements were added, as well as automation techniques

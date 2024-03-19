@@ -12,6 +12,7 @@
         "constants.h": "c",
         "cctype": "c",
         "locale": "c",
-        "unistd.h": "c"
+        "unistd.h": "c",
+        "sstream": "c"
     }
 }
